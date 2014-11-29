@@ -7,6 +7,7 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:inputType="textPersonName"
         android:text="Player 1"
         android:ems="10"
@@ -16,6 +17,8 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/round_button_drawable"
         android:text="P"
         android:id="@+id/button" />
 </LinearLayout>

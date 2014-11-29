@@ -53,14 +53,13 @@ public class PlayerChoiceAdapter extends ArrayAdapter {
                 if(s.length() == 0)
                     button.setText("X");
                 else
-                    button.setText(playerName.getText().toString().substring(0,1));
+                    button.setText(playerName.getText().toString().substring(0,1).toUpperCase());
             }
             public void beforeTextChanged(CharSequence s, int start, int count, int after){}
             public void onTextChanged(CharSequence s, int start, int before, int count){}
         });
 
         return convertView ;
-        //return inflater.inflate(R.layout.player_choice, parent, false);
     }
 
 }
