@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -14,7 +15,11 @@ import android.widget.AdapterView.OnItemSelectedListener;
 
 public class ChoosePlayersActivity extends Activity implements OnItemSelectedListener {
     private Spinner spinner;
-    TextView box;
+    private TextView box;
+    private ListView playerListView;
+    private String[] stringArray ;
+    private ArrayAdapter playerArrayAdapter;
+    private int numberOfPlayers = 4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +37,8 @@ public class ChoosePlayersActivity extends Activity implements OnItemSelectedLis
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
+
+        setUpPlayerList();
     }
 
 
@@ -62,11 +69,32 @@ public class ChoosePlayersActivity extends Activity implements OnItemSelectedLis
         spinner.setSelection(position);
         String selState = (String) spinner.getSelectedItem();
         box.setText("# players: " + selState);
+        setUpPlayerList(Integer.parseInt(selState));
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> arg0) {
         // TODO Auto-generated method stub
 
+    }
+
+    private void setUpPlayerList() {
+        stringArray = new String[4];
+        for(int i=0; i < stringArray.length; i++){
+            stringArray[i] = "String " + i;
+        }
+        playerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, stringArray);
+        playerListView = (ListView) findViewById(R.id.playerList);
+        playerListView.setAdapter(playerArrayAdapter);
+    }
+
+    private void setUpPlayerList(int numberOfPlayers) {
+        stringArray = new String[numberOfPlayers];
+        for(int i=0; i < stringArray.length; i++){
+            stringArray[i] = "String " + i;
+        }
+        playerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, stringArray);
+        playerListView = (ListView) findViewById(R.id.playerList);
+        playerListView.setAdapter(playerArrayAdapter);
     }
 }
