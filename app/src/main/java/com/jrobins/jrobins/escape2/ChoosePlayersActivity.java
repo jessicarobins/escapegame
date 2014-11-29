@@ -22,6 +22,7 @@ public class ChoosePlayersActivity extends Activity implements OnItemSelectedLis
     private TextView box;
     private ListView playerListView;
     private ArrayList<Player> players;
+    private int [] colors;
 
     private ArrayAdapter playerArrayAdapter;
     private int numberOfPlayers = 4;
@@ -35,8 +36,8 @@ public class ChoosePlayersActivity extends Activity implements OnItemSelectedLis
         spinner = (Spinner) findViewById(R.id.spinner);
 
 
-
-        initializePlayerList();
+        intializeColorList();
+        setPlayerList(4);
         setUpPlayerListView();
         setUpSpinner();
         setUpPlayButton();
@@ -86,6 +87,7 @@ public class ChoosePlayersActivity extends Activity implements OnItemSelectedLis
     private void setUpPlayerListView(int numberOfPlayers) {
 
         //playerArrayAdapter = new PlayerChoiceAdapter(this, new String[numberOfPlayers]);
+        setPlayerList(numberOfPlayers);
         playerArrayAdapter = new PlayerChoiceAdapter(this, players);
         playerListView = (ListView) findViewById(R.id.playerList);
         playerListView.setAdapter(playerArrayAdapter);
@@ -140,5 +142,29 @@ public class ChoosePlayersActivity extends Activity implements OnItemSelectedLis
         player.setColor(getResources().getColor(android.R.color.holo_red_light));
         players.add(player);
 
+    }
+
+    private void setPlayerList(int numberOfPlayers){
+        players = new ArrayList<Player>();
+        Player player;
+        for (int i = 0; i < numberOfPlayers; i++){
+            player = new Player();
+            player.setName("Player " + (i+1));
+            player.setColor(colors[i]);
+            players.add(player);
+        }
+
+    }
+
+    private void intializeColorList(){
+        colors = new int[8];
+        colors[0] = getResources().getColor(android.R.color.holo_purple);
+        colors[1] = getResources().getColor(android.R.color.holo_blue_bright);
+        colors[2] = getResources().getColor(android.R.color.holo_green_light);
+        colors[3] = getResources().getColor(android.R.color.holo_red_light);
+        colors[4] = getResources().getColor(android.R.color.holo_orange_light);
+        colors[5] = getResources().getColor(android.R.color.holo_blue_dark);
+        colors[6] = getResources().getColor(android.R.color.darker_gray);
+        colors[7] = getResources().getColor(android.R.color.holo_green_dark);
     }
 }
