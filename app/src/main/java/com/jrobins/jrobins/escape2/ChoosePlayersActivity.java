@@ -7,16 +7,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemSelectedListener;
 
+import java.util.ArrayList;
+
 
 public class ChoosePlayersActivity extends Activity implements OnItemSelectedListener {
     private Spinner spinner;
+    private Button playButton;
     private TextView box;
     private ListView playerListView;
+    private ArrayList<Player> players;
 
     private ArrayAdapter playerArrayAdapter;
     private int numberOfPlayers = 4;
@@ -29,16 +34,12 @@ public class ChoosePlayersActivity extends Activity implements OnItemSelectedLis
         box = (TextView) findViewById(R.id.numberOfPlayers);
         spinner = (Spinner) findViewById(R.id.spinner);
 
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.players_array, android.R.layout.simple_spinner_item);
-        // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(this);
 
-        setUpPlayerList();
+
+        initializePlayerList();
+        setUpPlayerListView();
+        setUpSpinner();
+        setUpPlayButton();
     }
 
 
@@ -69,7 +70,7 @@ public class ChoosePlayersActivity extends Activity implements OnItemSelectedLis
         spinner.setSelection(position);
         String selState = (String) spinner.getSelectedItem();
         box.setText("# players: " + selState);
-        setUpPlayerList(Integer.parseInt(selState));
+        setUpPlayerListView(Integer.parseInt(selState));
     }
 
     @Override
@@ -78,14 +79,66 @@ public class ChoosePlayersActivity extends Activity implements OnItemSelectedLis
 
     }
 
-    private void setUpPlayerList() {
-        setUpPlayerList(4);
+    private void setUpPlayerListView() {
+        setUpPlayerListView(4);
     }
 
-    private void setUpPlayerList(int numberOfPlayers) {
+    private void setUpPlayerListView(int numberOfPlayers) {
 
-        playerArrayAdapter = new PlayerChoiceAdapter(this, new String[numberOfPlayers]);
+        //playerArrayAdapter = new PlayerChoiceAdapter(this, new String[numberOfPlayers]);
+        playerArrayAdapter = new PlayerChoiceAdapter(this, players);
         playerListView = (ListView) findViewById(R.id.playerList);
         playerListView.setAdapter(playerArrayAdapter);
+    }
+
+    private void setUpPlayButton(){
+        playButton = ( Button ) findViewById(R.id.play);
+        playButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //This is a comment which does no good to your code. Feel free to remove it after you copy paste.
+                //When the button is clicked, the control will come to this method.
+                //To demonstrate this, let us try changing the label of the Button from 'Login' to 'I am clicked'
+
+                playButton.setText("I am Clicked");}
+
+        });
+    }
+
+    private void setUpSpinner(){
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.players_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
+    }
+
+    private void initializePlayerList(){
+        players = new ArrayList<Player>();
+        Player player;
+
+        player = new Player();
+        player.setName("Player 1");
+        player.setColor(getResources().getColor(android.R.color.holo_blue_bright));
+        players.add(player);
+
+        player = new Player();
+        player.setName("Player 2");
+        player.setColor(getResources().getColor(android.R.color.holo_purple));
+        players.add(player);
+
+        player = new Player();
+        player.setName("Player 3");
+        player.setColor(getResources().getColor(android.R.color.holo_green_light));
+        players.add(player);
+
+        player = new Player();
+        player.setName("Player 4");
+        player.setColor(getResources().getColor(android.R.color.holo_red_light));
+        players.add(player);
+
     }
 }

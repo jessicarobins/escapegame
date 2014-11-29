@@ -1,6 +1,9 @@
 package com.jrobins.jrobins.escape2;
 
 import android.app.Activity;
+import android.app.LauncherActivity;
+import android.app.LauncherActivity.ListItem;
+import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -13,12 +16,32 @@ import android.widget.LinearLayout;
 
 import com.jrobins.jrobins.escape2.R;
 
-public class PlayerChoiceAdapter extends ArrayAdapter {
+import java.util.ArrayList;
+import java.util.List;
+
+public class PlayerChoiceAdapter extends ArrayAdapter<Player> {
     private LayoutInflater inflater;
 
+    Context context;
+    ArrayList<Player> players;
+
+    /*
     public PlayerChoiceAdapter(Activity activity, String[] items){
         super(activity, R.layout.player_choice, items);
         inflater = activity.getWindow().getLayoutInflater();
+    }*/
+
+    public PlayerChoiceAdapter(Activity activity, List<Player> players){
+        super(activity, R.layout.player_choice, players);
+        this.players = (ArrayList<Player>) players;
+        inflater = activity.getWindow().getLayoutInflater();
+    }
+
+    public PlayerChoiceAdapter(Context context, int textViewResourceId,
+                          List<Player> players) {
+        super(context, textViewResourceId, players);
+        this.players = (ArrayList<Player>) players;
+        this.context = context;
     }
 
     @Override
@@ -46,7 +69,10 @@ public class PlayerChoiceAdapter extends ArrayAdapter {
         });*/
 
         final EditText playerName = (EditText) convertView.findViewById(R.id.playerName);
+        //playerName.setText("Player " + position);
+        playerName.setText(players.get(position).name());
         final Button button = (Button) convertView.findViewById(R.id.button);
+        button.setBackgroundColor(players.get(position).color());
 
         playerName.addTextChangedListener(new TextWatcher(){
             public void afterTextChanged(Editable s) {
