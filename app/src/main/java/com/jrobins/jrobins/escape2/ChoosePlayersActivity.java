@@ -17,7 +17,7 @@ public class ChoosePlayersActivity extends Activity implements OnItemSelectedLis
     private Spinner spinner;
     private TextView box;
     private ListView playerListView;
-    private String[] stringArray ;
+
     private ArrayAdapter playerArrayAdapter;
     private int numberOfPlayers = 4;
 
@@ -79,21 +79,12 @@ public class ChoosePlayersActivity extends Activity implements OnItemSelectedLis
     }
 
     private void setUpPlayerList() {
-        stringArray = new String[4];
-        for(int i=0; i < stringArray.length; i++){
-            stringArray[i] = "String " + i;
-        }
-        playerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, stringArray);
-        playerListView = (ListView) findViewById(R.id.playerList);
-        playerListView.setAdapter(playerArrayAdapter);
+        setUpPlayerList(4);
     }
 
     private void setUpPlayerList(int numberOfPlayers) {
-        stringArray = new String[numberOfPlayers];
-        for(int i=0; i < stringArray.length; i++){
-            stringArray[i] = "String " + i;
-        }
-        playerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, stringArray);
+
+        playerArrayAdapter = new PlayerChoiceAdapter(this, new String[numberOfPlayers]);
         playerListView = (ListView) findViewById(R.id.playerList);
         playerListView.setAdapter(playerArrayAdapter);
     }
