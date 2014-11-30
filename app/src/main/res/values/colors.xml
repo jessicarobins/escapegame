@@ -1,9 +1,16 @@
 <resources>
 
     <color name="black_overlay">#66000000</color>
+    <!-- halo colors-->
     <color name ="human">#DC143C</color>
     <color name="alien">#008B8B</color>
     <color name="neutral">#FFFFFF</color>
     <color name="current_turn">#FFD700</color>
-
+    <!--hexagon colors -->
+    <color name="alien_start">#008B8B</color>
+    <color name="human_start">#DC143C</color>
+    <color name="safe">#FFFFFF</color>
+    <color name="unsafe">#C0C0C0</color>
+    <color name="invalid">#000000</color>
+    <color name="escape_hatch">#A0A0A0</color>
 </resources>
