@@ -1,6 +1,7 @@
 package com.jrobins.jrobins.escape2;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -140,13 +141,20 @@ public class ChoosePlayersActivity extends Activity implements OnItemSelectedLis
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //This is a comment which does no good to your code. Feel free to remove it after you copy paste.
-                //When the button is clicked, the control will come to this method.
-                //To demonstrate this, let us try changing the label of the Button from 'Login' to 'I am clicked'
+                players = new ArrayList<Player>();
+                Player p;
                 for(int i = 0; i<playerArrayAdapter.getCount();i++){
-                    System.out.println("name = " + playerArrayAdapter.getItem(i).toString() + " i = " +i);
+                    p = (Player)playerArrayAdapter.getItem(i);
+                    p.setColor(colors[i]);
+                    //System.out.println("name = " + playerArrayAdapter.getItem(i).toString() + " i = " +i);
+                    players.add(p);
                 }
-                playButton.setText("I am Clicked");
+                for(int i = 0; i< players.size(); i++){
+                    System.out.println("player " + i + " = " + players.get(i).name());
+                }
+                Intent intent = new Intent(ChoosePlayersActivity.this, GamePlay.class);
+                intent.putParcelableArrayListExtra("players", players);
+                startActivity(intent);
             }
 
         });

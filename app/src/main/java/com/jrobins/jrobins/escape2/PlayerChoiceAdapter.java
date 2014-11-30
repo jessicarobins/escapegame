@@ -56,6 +56,7 @@ public class PlayerChoiceAdapter extends ArrayAdapter<Player> {
         button.setBackgroundColor(players.get(position).color());
 
         playerName.setTag("theFirstEditTextAtPos:"+position);
+        //playerNameValues.put(playerName.getTag().toString(), playerName.getText().toString());
 
         playerName.addTextChangedListener(new TextWatcher(){
             public void afterTextChanged(Editable s) {

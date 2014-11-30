@@ -27,6 +27,8 @@
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="5dp"
         android:id="@+id/playerList"
         android:layout_below="@+id/linearLayout"
         android:layout_alignParentLeft="true"
@@ -35,7 +37,7 @@
     <Button
         android:layout_width="220dp"
         android:layout_height="wrap_content"
-        android:text="Play"
+        android:text="Play!"
         android:id="@+id/play"
         android:layout_below="@+id/playerList"
         android:layout_centerHorizontal="true" />
