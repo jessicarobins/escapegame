@@ -2,6 +2,7 @@ package com.jrobins.jrobins.escape2;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,9 +36,8 @@ public class ChoosePlayersActivity extends Activity implements OnItemSelectedLis
         box = (TextView) findViewById(R.id.numberOfPlayers);
         spinner = (Spinner) findViewById(R.id.spinner);
 
-
-        intializeColorList();
-        setPlayerList(4);
+        initializeColorList();
+        initializePlayerList();
         setUpPlayerListView();
         setUpSpinner();
         setUpPlayButton();
@@ -72,6 +72,7 @@ public class ChoosePlayersActivity extends Activity implements OnItemSelectedLis
         String selState = (String) spinner.getSelectedItem();
         box.setText("# players: " + selState);
         setUpPlayerListView(Integer.parseInt(selState));
+        //changePlayerListView(Integer.parseInt(selState));
     }
 
     @Override
@@ -87,10 +88,51 @@ public class ChoosePlayersActivity extends Activity implements OnItemSelectedLis
     private void setUpPlayerListView(int numberOfPlayers) {
 
         //playerArrayAdapter = new PlayerChoiceAdapter(this, new String[numberOfPlayers]);
+
+        //You can also directly modify the underlying data structure and call the
+        // notifyDataSetChanged() method on the adapter to notify it about the changes in data.
+
         setPlayerList(numberOfPlayers);
         playerArrayAdapter = new PlayerChoiceAdapter(this, players);
         playerListView = (ListView) findViewById(R.id.playerList);
         playerListView.setAdapter(playerArrayAdapter);
+    }
+
+    private void changePlayerListView(int numberOfPlayers) {
+
+        Player p;
+        players = new ArrayList<Player>();
+        if (numberOfPlayers >= playerArrayAdapter.getCount()) {
+            for (int i = 0; i < playerArrayAdapter.getCount(); i++) {
+                p = (Player) playerArrayAdapter.getItem(i);
+                p.setColor(colors[i]);
+
+                //System.out.println("player name = " +p.name());
+                players.add(p);
+            }
+            addPlayers(numberOfPlayers-players.size());
+        }
+        else {
+            for (int i = 0; i < numberOfPlayers; i++) {
+                p = (Player) playerArrayAdapter.getItem(i);
+                players.add(p);
+            }
+        }
+        //playerArrayAdapter.notifyDataSetChanged();
+        playerArrayAdapter = new PlayerChoiceAdapter(this, players);
+        playerListView = (ListView) findViewById(R.id.playerList);
+        playerListView.setAdapter(playerArrayAdapter);
+    }
+
+    private void addPlayers(int numberOfPlayers){
+        //number of players to add
+        Player player;
+        for (int i = 0; i < numberOfPlayers; i++){
+            player = new Player();
+            player.setName("Player " + (players.size()+i+1));
+            player.setColor(colors[players.size()]);
+            players.add(player);
+        }
     }
 
     private void setUpPlayButton(){
@@ -101,8 +143,11 @@ public class ChoosePlayersActivity extends Activity implements OnItemSelectedLis
                 //This is a comment which does no good to your code. Feel free to remove it after you copy paste.
                 //When the button is clicked, the control will come to this method.
                 //To demonstrate this, let us try changing the label of the Button from 'Login' to 'I am clicked'
-
-                playButton.setText("I am Clicked");}
+                for(int i = 0; i<playerArrayAdapter.getCount();i++){
+                    System.out.println("name = " + playerArrayAdapter.getItem(i).toString() + " i = " +i);
+                }
+                playButton.setText("I am Clicked");
+            }
 
         });
     }
@@ -118,32 +163,6 @@ public class ChoosePlayersActivity extends Activity implements OnItemSelectedLis
         spinner.setOnItemSelectedListener(this);
     }
 
-    private void initializePlayerList(){
-        players = new ArrayList<Player>();
-        Player player;
-
-        player = new Player();
-        player.setName("Player 1");
-        player.setColor(getResources().getColor(android.R.color.holo_blue_bright));
-        players.add(player);
-
-        player = new Player();
-        player.setName("Player 2");
-        player.setColor(getResources().getColor(android.R.color.holo_purple));
-        players.add(player);
-
-        player = new Player();
-        player.setName("Player 3");
-        player.setColor(getResources().getColor(android.R.color.holo_green_light));
-        players.add(player);
-
-        player = new Player();
-        player.setName("Player 4");
-        player.setColor(getResources().getColor(android.R.color.holo_red_light));
-        players.add(player);
-
-    }
-
     private void setPlayerList(int numberOfPlayers){
         players = new ArrayList<Player>();
         Player player;
@@ -156,7 +175,7 @@ public class ChoosePlayersActivity extends Activity implements OnItemSelectedLis
 
     }
 
-    private void intializeColorList(){
+    private void initializeColorList(){
         colors = new int[8];
         colors[0] = getResources().getColor(android.R.color.holo_purple);
         colors[1] = getResources().getColor(android.R.color.holo_blue_bright);
@@ -167,4 +186,17 @@ public class ChoosePlayersActivity extends Activity implements OnItemSelectedLis
         colors[6] = getResources().getColor(android.R.color.darker_gray);
         colors[7] = getResources().getColor(android.R.color.holo_green_dark);
     }
+
+    private void initializePlayerList(){
+        players = new ArrayList<Player>();
+        Player player;
+        for (int i = 0; i < 4; i++){
+            player = new Player();
+            player.setName("Player " + (i+1));
+            player.setColor(colors[i]);
+            players.add(player);
+        }
+    }
+
+
 }

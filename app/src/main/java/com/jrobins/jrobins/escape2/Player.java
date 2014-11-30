@@ -7,6 +7,19 @@ public class Player {
     private String name;
     private int color;
 
+    Player(){
+
+    }
+
+    Player (String name){
+        setName(name);
+    }
+
+    Player (String name, int color){
+        setName(name);
+        setColor(color);
+    }
+
     public String name(){
         return name;
     }
