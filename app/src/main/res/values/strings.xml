@@ -3,7 +3,6 @@
 
     <string name="app_name">Escape2</string>
     <string name="choose_players_text">Select number of players: </string>
-    <string name="number_of_players_text">Number of players: 3</string>
     <string name="action_settings">Settings</string>
 
     <string-array name="players_array">

@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class ChoosePlayersActivity extends Activity implements OnItemSelectedListener {
     private Spinner spinner;
     private Button playButton;
-    private TextView box;
+
     private ListView playerListView;
     private ArrayList<Player> players;
     private int [] colors;
@@ -33,7 +33,7 @@ public class ChoosePlayersActivity extends Activity implements OnItemSelectedLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_players);
 
-        box = (TextView) findViewById(R.id.numberOfPlayers);
+
         spinner = (Spinner) findViewById(R.id.spinner);
 
         initializeColorList();
@@ -70,7 +70,7 @@ public class ChoosePlayersActivity extends Activity implements OnItemSelectedLis
                                long id) {
         spinner.setSelection(position);
         String selState = (String) spinner.getSelectedItem();
-        box.setText("# players: " + selState);
+
         setUpPlayerListView(Integer.parseInt(selState));
         //changePlayerListView(Integer.parseInt(selState));
     }
