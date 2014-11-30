@@ -6,12 +6,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 
 
 public class GamePlay extends Activity {
     ArrayList<Player> players;
+    PlayerSidebarAdapter playerSidebarAdapter;
+    private ListView playerListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +30,10 @@ public class GamePlay extends Activity {
         for(int i = 0; i< players.size(); i++){
             System.out.println("player " + i + " = " + players.get(i).name());
         }
+
+        playerSidebarAdapter = new PlayerSidebarAdapter(this, players);
+        playerListView = (ListView) findViewById(R.id.playerList);
+        playerListView.setAdapter(playerSidebarAdapter);
     }
 
 
