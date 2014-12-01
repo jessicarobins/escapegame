@@ -4,17 +4,20 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AbsoluteLayout;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 
 
-public class GamePlay extends Activity {
+public class GamePlay extends Activity implements MapView.OnCellClickListener {
     ArrayList<Player> players;
     PlayerSidebarAdapter playerSidebarAdapter;
     private ListView playerListView;
+    MapView hexagonMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,22 @@ public class GamePlay extends Activity {
         playerSidebarAdapter = new PlayerSidebarAdapter(this, players);
         playerListView = (ListView) findViewById(R.id.playerList);
         playerListView.setAdapter(playerSidebarAdapter);
+
+
+
+
+        hexagonMap = new MapView(this);
+        hexagonMap.initialize(4, 8);
+        hexagonMap.setOnCellClickListener(this);
+        setContentView(hexagonMap);
+        /*
+        AbsoluteLayout layout = (AbsoluteLayout) findViewById(R.id.sectorGrid);
+        HexagonView sector1 = new HexagonView(this);
+        layout.addView(sector1);
+        HexagonView sector2 = new HexagonView(this);
+        layout.addView(sector2);
+        */
+
     }
 
 
@@ -57,5 +76,11 @@ public class GamePlay extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onCellClick(int column, int row)
+    {
+        hexagonMap.setCell(column, row, !hexagonMap.isCellSet(column, row));
     }
 }
