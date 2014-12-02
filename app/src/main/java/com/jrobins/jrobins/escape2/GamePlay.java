@@ -38,6 +38,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
 
 
         initializePlayers();
+        createTestMap(6,5);
         initializeHexagonMap();
 
 
@@ -75,7 +76,8 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
 
     private void initializeHexagonMap(){
         hexagonMap = (MapView) findViewById(R.id.hexagonMap);
-        hexagonMap.initialize(4, 8);
+        //hexagonMap.initialize(3, 5);
+        hexagonMap.initialize(sectors);
         hexagonMap.setOnCellClickListener(this);
     }
 
@@ -94,6 +96,12 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
 
     private void createTestMap(int x, int y){
         //create an x by y test map of sectors
-
+        System.out.println("creating a new grid with x = " + x + " & y = " + y);
+        sectors = new Sector[x][y];
+        for(int i = 0; i<x; i++){
+            for (int j = 0; j<y; j++){
+                sectors[i][j] = new Sector(x,y,j%5);
+            }
+        }
     }
 }

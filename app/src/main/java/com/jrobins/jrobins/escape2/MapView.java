@@ -29,6 +29,8 @@ public class MapView extends View {
     private OnCellClickListener listener;
 
     private int cellColor;
+    private Sector[][] sectors;
+
 
     public MapView(Context context)
     {
@@ -47,6 +49,15 @@ public class MapView extends View {
         cachePaint.setStyle(Paint.Style.FILL);
 
         cellColor = Color.MAGENTA;
+    }
+
+    public void initialize(Sector[][] sectors){
+        System.out.println("creating a new grid with rows = " + sectors.length + " & columns = " + sectors[0].length);
+        this.sectors = sectors;
+        this.rows = sectors.length;
+        this.columns = sectors[0].length;
+        this.cellSet = new boolean[columns][rows];
+        System.out.println("creating a new grid with rows = " + rows + " & columns = " + columns);
     }
 
     public void initialize(int columns, int rows)
@@ -110,6 +121,7 @@ public class MapView extends View {
             {
                 if (!(oddRow && c == columns - 1))
                 {
+                    cellColor = getResources().getColor(sectors[r][c].color());
                     fillPaint.setColor(cellSet[c][r] ? Color.RED : cellColor);
                     canvas.drawPath(combPath, fillPaint);
 

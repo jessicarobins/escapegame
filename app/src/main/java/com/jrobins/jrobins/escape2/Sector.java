@@ -1,5 +1,7 @@
 package com.jrobins.jrobins.escape2;
 
+import android.graphics.Color;
+
 import java.util.ArrayList;
 
 /**
@@ -43,6 +45,16 @@ public class Sector {
         moves = new ArrayList<Move>();
     }
 
+    public Sector(char x, int y, int sectorType){
+        String newX = x+"";
+        newX = newX.toUpperCase();
+        char c = newX.charAt(0);
+        this.x = ((int)c)-65;
+        this.y = y;
+        this.sectorType = sectorType;
+        moves = new ArrayList<Move>();
+    }
+
     public int xCoordinate(){
         return x;
     }
@@ -63,6 +75,29 @@ public class Sector {
         //else we prepend a 0
         else
             return "0"+y;
+    }
+
+    public int color(){
+        switch(sectorType){
+            case 0:
+                return R.color.invalid;
+
+            case 1:
+                return R.color.safe;
+
+            case 2:
+                return R.color.unsafe;
+
+            case 3:
+                return R.color.alien_start;
+
+            case 4:
+                return R.color.human_start;
+
+            case 5:
+                return R.color.escape_hatch;
+        }
+        return Color.WHITE;
     }
 
     public String getId(){
