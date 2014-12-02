@@ -14,10 +14,17 @@ import java.util.ArrayList;
 
 
 public class GamePlay extends Activity implements MapView.OnCellClickListener {
-    ArrayList<Player> players;
-    PlayerSidebarAdapter playerSidebarAdapter;
+
+    //data structures
+    private ArrayList<Player> players;
+    private Sector[][] sectors;
+
+    //adapters
+    private PlayerSidebarAdapter playerSidebarAdapter;
+
+    //views
     private ListView playerListView;
-    MapView hexagonMap;
+    private MapView hexagonMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,29 +36,10 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_game_play);
 
-        players = getIntent().getParcelableArrayListExtra("players");
-        for(int i = 0; i< players.size(); i++){
-            System.out.println("player " + i + " = " + players.get(i).name());
-        }
 
-        playerSidebarAdapter = new PlayerSidebarAdapter(this, players);
-        playerListView = (ListView) findViewById(R.id.playerList);
-        playerListView.setAdapter(playerSidebarAdapter);
+        initializePlayers();
+        initializeHexagonMap();
 
-
-
-
-        hexagonMap = new MapView(this);
-        hexagonMap.initialize(4, 8);
-        hexagonMap.setOnCellClickListener(this);
-        setContentView(hexagonMap);
-        /*
-        AbsoluteLayout layout = (AbsoluteLayout) findViewById(R.id.sectorGrid);
-        HexagonView sector1 = new HexagonView(this);
-        layout.addView(sector1);
-        HexagonView sector2 = new HexagonView(this);
-        layout.addView(sector2);
-        */
 
     }
 
@@ -78,9 +66,34 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         return super.onOptionsItemSelected(item);
     }
 
+    //this is what happens when we click hexagons
     @Override
     public void onCellClick(int column, int row)
     {
         hexagonMap.setCell(column, row, !hexagonMap.isCellSet(column, row));
+    }
+
+    private void initializeHexagonMap(){
+        hexagonMap = (MapView) findViewById(R.id.hexagonMap);
+        hexagonMap.initialize(4, 8);
+        hexagonMap.setOnCellClickListener(this);
+    }
+
+    private void initializePlayers(){
+        //gets the player data from the previous screen
+        players = getIntent().getParcelableArrayListExtra("players");
+        for(int i = 0; i< players.size(); i++){
+            System.out.println("player " + i + " = " + players.get(i).name());
+        }
+
+        //sets up the sidebar with player info
+        playerSidebarAdapter = new PlayerSidebarAdapter(this, players);
+        playerListView = (ListView) findViewById(R.id.playerList);
+        playerListView.setAdapter(playerSidebarAdapter);
+    }
+
+    private void createTestMap(int x, int y){
+        //create an x by y test map of sectors
+
     }
 }

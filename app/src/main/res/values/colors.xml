@@ -13,4 +13,11 @@
     <color name="unsafe">#C0C0C0</color>
     <color name="invalid">#000000</color>
     <color name="escape_hatch">#A0A0A0</color>
+    <!--map colors-->
+    <color name="map_background">#000000</color>
+    <color name="map_outline">#000000</color>
+    <!--move colors on map-->
+    <color name="bluff">#8B0000</color>
+    <color name="certain">#006400</color>
+    <color name="uncertain">#000000</color>
 </resources>

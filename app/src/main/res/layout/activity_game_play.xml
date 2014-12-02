@@ -43,14 +43,13 @@
     </LinearLayout>
 
 
-    <AbsoluteLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/sectorGrid">
 
-        <com.jrobins.jrobins.escape2.HexagonView
-            android:layout_width="200dp"
-            android:layout_height="200dp" />
-        </AbsoluteLayout>
+
+        <com.jrobins.jrobins.escape2.MapView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/map_background"
+            android:id="@+id/hexagonMap"/>
+
 
 </LinearLayout>

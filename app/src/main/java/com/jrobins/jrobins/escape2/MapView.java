@@ -28,6 +28,8 @@ public class MapView extends View {
 
     private OnCellClickListener listener;
 
+    private int cellColor;
+
     public MapView(Context context)
     {
         this(context, null);
@@ -37,12 +39,14 @@ public class MapView extends View {
     {
         super(context, attrs);
 
-        wallPaint.setColor(Color.YELLOW);
+        wallPaint.setColor(getResources().getColor(R.color.map_outline));
         wallPaint.setStyle(Paint.Style.STROKE);
         wallPaint.setStrokeWidth(5f);
 
         fillPaint.setStyle(Paint.Style.FILL);
         cachePaint.setStyle(Paint.Style.FILL);
+
+        cellColor = Color.MAGENTA;
     }
 
     public void initialize(int columns, int rows)
@@ -90,7 +94,7 @@ public class MapView extends View {
     {
         super.onDraw(canvas);
 
-        canvas.drawColor(Color.WHITE);
+        canvas.drawColor(getResources().getColor(R.color.map_background));
 
         boolean oddRow;
         int xOff;
@@ -106,7 +110,7 @@ public class MapView extends View {
             {
                 if (!(oddRow && c == columns - 1))
                 {
-                    fillPaint.setColor(cellSet[c][r] ? Color.RED : Color.WHITE);
+                    fillPaint.setColor(cellSet[c][r] ? Color.RED : cellColor);
                     canvas.drawPath(combPath, fillPaint);
 
                     canvas.drawPath(combPath, wallPaint);
