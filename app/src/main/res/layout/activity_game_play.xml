@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="fill_parent"
     android:layout_height="fill_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -12,6 +12,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:orientation="vertical"
+        android:layout_centerVertical="true"
+        android:id="@+id/sidebar"
         >
         <TextView
             android:layout_width="50dp"
@@ -47,8 +49,9 @@
         <com.jrobins.jrobins.escape2.MapView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/sidebar"
             android:background="@color/map_background"
             android:id="@+id/hexagonMap"/>
 
 
-</LinearLayout>
+</RelativeLayout>

@@ -1,6 +1,7 @@
 package com.jrobins.jrobins.escape2;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -8,7 +9,9 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AbsoluteLayout;
+import android.widget.GridLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -25,6 +28,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
     //views
     private ListView playerListView;
     private MapView hexagonMap;
+    private GridLayout mapGrid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +42,9 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
 
 
         initializePlayers();
-        createTestMap(6,5);
+        createTestMap(5, 3);
         initializeHexagonMap();
-
+        initializeMapGrid();
 
     }
 
@@ -92,6 +96,32 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         playerSidebarAdapter = new PlayerSidebarAdapter(this, players);
         playerListView = (ListView) findViewById(R.id.playerList);
         playerListView.setAdapter(playerSidebarAdapter);
+    }
+
+    private void initializeMapGrid(){
+
+        mapGrid = new GridLayout(this);
+        int rows = sectors.length;
+        int cols = sectors[0].length;
+        mapGrid.setColumnCount(cols);
+        mapGrid.setRowCount(rows);
+
+        GridLayout.Spec row;
+        GridLayout.Spec col;
+        GridLayout.LayoutParams gridLayoutParam;
+        TextView text;
+
+        for(int i = 0; i<rows; i++){
+            for (int j = 0; j<cols; j++){
+                row = GridLayout.spec(i, 1);
+                col = GridLayout.spec(j, 1);
+                gridLayoutParam = new GridLayout.LayoutParams(row, col);
+                text = new TextView(this);
+                text.setText(sectors[i][j].getId());
+                text.setBackgroundColor(Color.YELLOW);
+                mapGrid.addView(text,gridLayoutParam);
+            }
+        }
     }
 
     private void createTestMap(int x, int y){
