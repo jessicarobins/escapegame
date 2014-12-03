@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:orientation="vertical"
-        android:layout_centerVertical="true"
+        android:layout_alignParentTop="true"
         android:id="@+id/sidebar"
         >
         <TextView
@@ -52,6 +52,18 @@
             android:layout_toRightOf="@id/sidebar"
             android:background="@color/map_background"
             android:id="@+id/hexagonMap"/>
+
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@id/sidebar"
+        android:id="@+id/map_grid"
+        android:stretchColumns="*"
+        >
+
+        <!--stuff gets programatically added in here-->
+    </TableLayout>
 
 
 </RelativeLayout>

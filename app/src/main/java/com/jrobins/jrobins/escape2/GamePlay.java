@@ -2,7 +2,9 @@ package com.jrobins.jrobins.escape2;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,6 +13,8 @@ import android.view.WindowManager;
 import android.widget.AbsoluteLayout;
 import android.widget.GridLayout;
 import android.widget.ListView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -28,7 +32,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
     //views
     private ListView playerListView;
     private MapView hexagonMap;
-    private GridLayout mapGrid;
+    private TableLayout mapGrid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,9 +102,10 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         playerListView.setAdapter(playerSidebarAdapter);
     }
 
+    /*
     private void initializeMapGrid(){
 
-        mapGrid = new GridLayout(this);
+        mapGrid = (GridLayout) findViewById(R.id.map_grid);
         int rows = sectors.length;
         int cols = sectors[0].length;
         mapGrid.setColumnCount(cols);
@@ -109,18 +114,49 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         GridLayout.Spec row;
         GridLayout.Spec col;
         GridLayout.LayoutParams gridLayoutParam;
-        TextView text;
+
+
+
 
         for(int i = 0; i<rows; i++){
+            row = GridLayout.spec(i);
             for (int j = 0; j<cols; j++){
-                row = GridLayout.spec(i, 1);
-                col = GridLayout.spec(j, 1);
+                col = GridLayout.spec(j);
                 gridLayoutParam = new GridLayout.LayoutParams(row, col);
+                TextView text = new TextView(this);
+                text.setText(sectors[i][j].getId());
+                text.setBackgroundColor(Color.YELLOW);
+                text.setGravity(Gravity.CENTER);
+
+                mapGrid.addView(text,gridLayoutParam);
+            }
+        }
+    }
+    */
+
+    private void initializeMapGrid(){
+        mapGrid = (TableLayout) findViewById(R.id.map_grid);
+        int rows = sectors.length;
+        int cols = sectors[0].length;
+
+        TextView text;
+        for(int i = 0; i<rows; i++){
+            TableRow row = new TableRow(this);
+            TableLayout.LayoutParams params = new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT,
+                    TableLayout.LayoutParams.MATCH_PARENT, 1.0f);
+            //params.weight = 1;
+
+            row.setLayoutParams(params);
+            row.setGravity(Gravity.CENTER_VERTICAL);
+            for (int j = 0; j<cols; j++){
                 text = new TextView(this);
                 text.setText(sectors[i][j].getId());
                 text.setBackgroundColor(Color.YELLOW);
-                mapGrid.addView(text,gridLayoutParam);
+                text.setGravity(Gravity.CENTER);
+
+                row.addView(text);
             }
+            mapGrid.addView(row);
         }
     }
 
