@@ -140,9 +140,11 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         int cols = sectors[0].length;
 
         TextView text;
+        TableRow row;
+        TableLayout.LayoutParams params;
         for(int i = 0; i<rows; i++){
-            TableRow row = new TableRow(this);
-            TableLayout.LayoutParams params = new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT,
+            row = new TableRow(this);
+            params = new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT,
                     TableLayout.LayoutParams.MATCH_PARENT, 1.0f);
             //params.weight = 1;
 
@@ -151,7 +153,6 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
             for (int j = 0; j<cols; j++){
                 text = new TextView(this);
                 text.setText(sectors[i][j].getId());
-                text.setBackgroundColor(Color.YELLOW);
                 text.setGravity(Gravity.CENTER);
 
                 row.addView(text);
@@ -166,7 +167,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         sectors = new Sector[x][y];
         for(int i = 0; i<x; i++){
             for (int j = 0; j<y; j++){
-                sectors[i][j] = new Sector(x,y,j%5);
+                sectors[i][j] = new Sector(i,j,j%5);
             }
         }
     }

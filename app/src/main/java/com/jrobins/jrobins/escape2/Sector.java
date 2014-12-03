@@ -70,11 +70,13 @@ public class Sector {
     }
 
     public String yCoordinateToString(){
-        if(y>=10)
-            return y+"";
+        //we want to add 1 to y because the grid starts at 1 not 0
+        int yy = y+1;
+        if(yy>=10)
+            return yy+"";
         //else we prepend a 0
         else
-            return "0"+y;
+            return "0"+yy;
     }
 
     public int color(){
