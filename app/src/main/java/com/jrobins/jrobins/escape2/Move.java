@@ -15,4 +15,20 @@ public class Move {
     public int turnNumber(){
         return turnNumber;
     }
+
+    public int certainty(){
+        return certainty;
+    }
+
+    public void setPlayer(Player p){
+        this.player = p;
+    }
+
+    public void setTurnNumber(int turnNumber){
+        this.turnNumber = turnNumber;
+    }
+
+    public void setCertainty(int certainty){
+        this.certainty = certainty;
+    }
 }

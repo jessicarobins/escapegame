@@ -107,6 +107,10 @@ public class Sector {
         return xCoordinateToString()+yCoordinateToString();
     }
 
+    public ArrayList<Move> moves(){
+        return moves;
+    }
+
     //this function is almost certainly useless
     public static String sectorTypeToString(int sector){
         return sectorTypeMap[sector];

@@ -12,6 +12,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AbsoluteLayout;
 import android.widget.GridLayout;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -140,8 +141,10 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         int cols = sectors[0].length;
 
         TextView text;
+        GridView moveGrid;
         TableRow row;
         TableLayout.LayoutParams params;
+
         for(int i = 0; i<rows; i++){
             row = new TableRow(this);
             params = new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT,
@@ -151,11 +154,25 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
             row.setLayoutParams(params);
             row.setGravity(Gravity.CENTER_VERTICAL);
             for (int j = 0; j<cols; j++){
-                text = new TextView(this);
-                text.setText(sectors[i][j].getId());
-                text.setGravity(Gravity.CENTER);
+                //dummy logic for now - if j is odd, make a text view, if j even, make a grid
+                if(j%2 == 1) {
+                    text = new TextView(this);
+                    text.setText(sectors[i][j].getId());
+                    text.setGravity(Gravity.CENTER);
+                    row.addView(text);
+                }
+                /*if j is even, put the moves in the box*/
+                if(j%2 == 0) {
+                    //check to make sure there are any moves before we do anything
+                    if(!sectors[i][j].moves().isEmpty()) {
+                        //get the moves
+                        moveGrid = new GridView(this);
+                        moveGrid.setAdapter(new MoveGridAdapter(this, sectors[i][j].moves()));
+                        //add the view to the row
+                        row.addView(moveGrid);
+                    }
+                }
 
-                row.addView(text);
             }
             mapGrid.addView(row);
         }
