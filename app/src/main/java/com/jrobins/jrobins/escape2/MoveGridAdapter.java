@@ -3,6 +3,7 @@ package com.jrobins.jrobins.escape2;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
@@ -22,7 +23,7 @@ public class MoveGridAdapter extends BaseAdapter {
 
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        TextView view;
+        TextView view;//= new TextView(context);
 
         if (convertView == null) {
             view = new TextView(context);
@@ -30,15 +31,17 @@ public class MoveGridAdapter extends BaseAdapter {
         else {
             view = (TextView) convertView;
         }
-        view.setText(moves.get(position).turnNumber());
+
+        view.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.WRAP_CONTENT, AbsListView.LayoutParams.WRAP_CONTENT));
+        view.setText(moves.get(position).turnNumberToString());
         int certainty = moves.get(position).certainty();
         switch (certainty) {
             case 0:
-                view.setTextColor(convertView.getResources().getColor(R.color.bluff));
+                view.setTextColor(view.getResources().getColor(R.color.bluff));
             case 1:
-                view.setTextColor(convertView.getResources().getColor(R.color.certain));
+                view.setTextColor(view.getResources().getColor(R.color.certain));
             case 2:
-                view.setTextColor(convertView.getResources().getColor(R.color.uncertain));
+                view.setTextColor(view.getResources().getColor(R.color.uncertain));
         }
         view.setBackgroundColor(moves.get(position).color());
         return view;

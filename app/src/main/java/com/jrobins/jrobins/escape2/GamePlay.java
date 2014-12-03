@@ -47,7 +47,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
 
 
         initializePlayers();
-        createTestMap(5, 3);
+        createTestMap(3,5);
         initializeHexagonMap();
         initializeMapGrid();
 
@@ -161,7 +161,8 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
                     text.setGravity(Gravity.CENTER);
                     row.addView(text);
                 }
-                /*if j is even, put the moves in the box*/
+                //if j is even, put the moves in the box
+
                 if(j%2 == 0) {
                     //check to make sure there are any moves before we do anything
                     if(!sectors[i][j].moves().isEmpty()) {
@@ -178,14 +179,37 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         }
     }
 
-    private void createTestMap(int x, int y){
+    private void createTestMap(int rows, int cols){
         //create an x by y test map of sectors
-        System.out.println("creating a new grid with x = " + x + " & y = " + y);
-        sectors = new Sector[x][y];
-        for(int i = 0; i<x; i++){
-            for (int j = 0; j<y; j++){
-                sectors[i][j] = new Sector(i,j,j%5);
+
+        sectors = new Sector[rows][cols];
+        for(int i = 0; i<cols; i++){
+            for(int j = 0; j<rows; j++){
+                sectors[j][i] = new Sector(i, j, j%5);
+                sectors[j][i].addMoves(createRandomArrayOfMoves());
             }
         }
+    }
+
+    private Move createTestMove(Player p){
+        //create a random move for a given player
+        int certainty =  (int)(Math.random()*2);
+        int turnNumber = 1 + (int)(Math.random()*10);
+        return new Move(p, turnNumber, certainty);
+    }
+
+    private ArrayList<Move> createRandomArrayOfMoves(){
+        //create a random array of moves (for testing purposes)
+        ArrayList<Move> moves = new ArrayList<Move>();
+        int playerIndex = 0;
+        int numberOfMoves = (int)(Math.random()*5);
+        for(int i = 0; i < numberOfMoves; i++) {
+            moves.add(createTestMove(players.get(playerIndex)));
+            if(playerIndex == players.size())
+                playerIndex = 0;
+            else
+                playerIndex++;
+        }
+        return moves;
     }
 }

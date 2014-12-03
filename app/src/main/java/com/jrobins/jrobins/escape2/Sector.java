@@ -2,6 +2,7 @@ package com.jrobins.jrobins.escape2;
 
 import android.graphics.Color;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -114,5 +115,13 @@ public class Sector {
     //this function is almost certainly useless
     public static String sectorTypeToString(int sector){
         return sectorTypeMap[sector];
+    }
+
+    public void addMoves(ArrayList<Move> moves){
+        this.moves.addAll(moves);
+    }
+
+    public void addMove(Move move){
+        this.moves.add(move);
     }
 }

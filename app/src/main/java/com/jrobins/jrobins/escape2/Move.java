@@ -8,12 +8,25 @@ public class Move {
     private int turnNumber;
     private int certainty; //0 = bluff, 1 = certain, 2 = uncertain
 
+    public Move(Player p, int turnNumber, int certainty){
+        this.player = p;
+        this.turnNumber = turnNumber;
+        this.certainty = certainty;
+    }
+
     public int color(){
         return player.color();
     }
 
     public int turnNumber(){
         return turnNumber;
+    }
+
+    public String turnNumberToString(){
+        if(turnNumber<10)
+            return "0"+turnNumber;
+        else
+            return ""+turnNumber;
     }
 
     public int certainty(){
