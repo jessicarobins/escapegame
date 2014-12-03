@@ -1,6 +1,7 @@
 package com.jrobins.jrobins.escape2;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -23,7 +24,7 @@ public class MoveGridAdapter extends BaseAdapter {
 
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        TextView view;//= new TextView(context);
+        TextView view;
 
         if (convertView == null) {
             view = new TextView(context);
@@ -32,8 +33,8 @@ public class MoveGridAdapter extends BaseAdapter {
             view = (TextView) convertView;
         }
 
-        view.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.WRAP_CONTENT, AbsListView.LayoutParams.WRAP_CONTENT));
-        view.setText(moves.get(position).turnNumberToString());
+        view.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.MATCH_PARENT));
+        view.setText(" "+moves.get(position).turnNumberToString()+" ");
         int certainty = moves.get(position).certainty();
         switch (certainty) {
             case 0:
@@ -43,6 +44,7 @@ public class MoveGridAdapter extends BaseAdapter {
             case 2:
                 view.setTextColor(view.getResources().getColor(R.color.uncertain));
         }
+        view.setGravity(Gravity.CENTER);
         view.setBackgroundColor(moves.get(position).color());
         return view;
     }

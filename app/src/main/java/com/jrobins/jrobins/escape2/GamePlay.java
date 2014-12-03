@@ -10,7 +10,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AbsListView;
 import android.widget.AbsoluteLayout;
+import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.ListView;
@@ -143,22 +145,25 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         TextView text;
         GridView moveGrid;
         TableRow row;
-        TableLayout.LayoutParams params;
+        TableLayout.LayoutParams tableParams;
+
 
         for(int i = 0; i<rows; i++){
             row = new TableRow(this);
-            params = new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT,
+            tableParams = new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT,
                     TableLayout.LayoutParams.MATCH_PARENT, 1.0f);
             //params.weight = 1;
 
-            row.setLayoutParams(params);
-            row.setGravity(Gravity.CENTER_VERTICAL);
+            row.setLayoutParams(tableParams);
+            row.setGravity(Gravity.CENTER);
             for (int j = 0; j<cols; j++){
                 //dummy logic for now - if j is odd, make a text view, if j even, make a grid
                 if(j%2 == 1) {
+
                     text = new TextView(this);
                     text.setText(sectors[i][j].getId());
                     text.setGravity(Gravity.CENTER);
+
                     row.addView(text);
                 }
                 //if j is even, put the moves in the box
@@ -168,6 +173,8 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
                     if(!sectors[i][j].moves().isEmpty()) {
                         //get the moves
                         moveGrid = new GridView(this);
+                        moveGrid.setNumColumns(5);
+
                         moveGrid.setAdapter(new MoveGridAdapter(this, sectors[i][j].moves()));
                         //add the view to the row
                         row.addView(moveGrid);
