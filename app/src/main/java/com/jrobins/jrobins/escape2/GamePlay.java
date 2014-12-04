@@ -188,29 +188,39 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
                     text = new TextView(this);
                     text.setText(sectors[i][yText].getId());
                     text.setGravity(Gravity.CENTER);
-
+                    text.setBackgroundColor(Color.YELLOW);
                     row.addView(text);
                 }
 
 
-                //i think ytext is never going to be less than 0 for odd rows but
+                //i think ygrid is never going to be less than 0 for odd rows but
                 //  we don't want to print the first row either
 
-                /*else if ( (j>0) && (yText>=0) && ((i+j)%2==1) ) {
+                else if ( (j>0) && (yText>=0) && ((i+j)%2==1) ) {
                     //check to make sure there are any moves before we do anything
-                    if (!sectors[i][yGrid].moves().isEmpty()) {
+                    if (!sectors[i][yText].moves().isEmpty()) {
                         //get the moves
                         moveGrid = new GridView(this);
                         moveGrid.setNumColumns(5);
 
-                        moveGrid.setAdapter(new MoveGridAdapter(this, sectors[i][yGrid].moves()));
+                        moveGrid.setAdapter(new MoveGridAdapter(this, sectors[i][yText].moves()));
                         //add the view to the row
                         row.addView(moveGrid);
                     }
-                }*/
+                    //if the moves array is empty
+                    else {
+                        text = new TextView(this);
+                        text.setText("blank");
+                        text.setGravity(Gravity.CENTER);
+                        text.setBackgroundColor(Color.MAGENTA);
+                        row.addView(text);
+                    }
+                }
                 else {
                         text = new TextView(this);
-                        text.setText(""+i+j);
+                        text.setText("blank");
+                        text.setGravity(Gravity.CENTER);
+                        text.setBackgroundColor(Color.GREEN);
                         row.addView(text);
                 }
             }
