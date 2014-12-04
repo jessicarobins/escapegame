@@ -139,16 +139,20 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
 
     private void initializeMapGrid(){
         mapGrid = (TableLayout) findViewById(R.id.map_grid);
-        int rows = sectors.length;
-        int cols = sectors[0].length;
+        int cols = sectors.length;
+        int rows = sectors[0].length*2;
 
         TextView text;
         GridView moveGrid;
         TableRow row;
         TableLayout.LayoutParams tableParams;
 
+        int yText; //the sector value for x, based on i, j
+        int yGrid; //the sector value for y, based on i,j
 
-        for(int i = 0; i<rows; i++){
+
+        //j is the number of ROWS which means it is the Y VALUE OMG wtf WHY
+        for(int j = 0; j<rows; j++){
             row = new TableRow(this);
             tableParams = new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT,
                     TableLayout.LayoutParams.MATCH_PARENT, 1.0f);
@@ -156,31 +160,59 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
 
             row.setLayoutParams(tableParams);
             row.setGravity(Gravity.CENTER);
-            for (int j = 0; j<cols; j++){
-                //dummy logic for now - if j is odd, make a text view, if j even, make a grid
-                if(j%2 == 1) {
+
+
+            //i is the number of COLUMNS which means it is the X VALUE HOLY SHIT
+            for (int i = 0; i<cols; i++){
+                //if THE X VALUE IS EVEN (so this is A, C, E etc)
+                //  then the new Y value, will just be the Y-value of the table divided
+                //  by two
+                //  that's for the textview on top. the bottom will just be, DUH, one lower
+                if((i%2)==0) {
+                    yText = j/2;
+                    yGrid = yText +1;
+                }
+                //if THE X VALUE IS ODD (that's B, D, F etc)
+                //  the y-value in the table we are displaying is HIGHER than the y-value in
+                //  the sector array. so we have to make sure we aren't getting something
+                //  less than zero from the sector array
+                else {
+                    yText = (j -1) / 2;
+                    yGrid = yText+1;
+                }
+                //if i+j is even, we want to put the sector name
+                //we need to make sure it's not the very last row because that will
+                //  arrayindexoutofbounds our asses
+                if( (yText>=0) && (yText<sectors.length) && ((i+j)%2 == 0)) {
 
                     text = new TextView(this);
-                    text.setText(sectors[i][j].getId());
+                    text.setText(sectors[i][yText].getId());
                     text.setGravity(Gravity.CENTER);
 
                     row.addView(text);
                 }
-                //if j is even, put the moves in the box
 
-                if(j%2 == 0) {
+
+                //i think ytext is never going to be less than 0 for odd rows but
+                //  we don't want to print the first row either
+
+                /*else if ( (j>0) && (yText>=0) && ((i+j)%2==1) ) {
                     //check to make sure there are any moves before we do anything
-                    if(!sectors[i][j].moves().isEmpty()) {
+                    if (!sectors[i][yGrid].moves().isEmpty()) {
                         //get the moves
                         moveGrid = new GridView(this);
                         moveGrid.setNumColumns(5);
 
-                        moveGrid.setAdapter(new MoveGridAdapter(this, sectors[i][j].moves()));
+                        moveGrid.setAdapter(new MoveGridAdapter(this, sectors[i][yGrid].moves()));
                         //add the view to the row
                         row.addView(moveGrid);
                     }
+                }*/
+                else {
+                        text = new TextView(this);
+                        text.setText(""+i+j);
+                        row.addView(text);
                 }
-
             }
             mapGrid.addView(row);
         }
@@ -189,11 +221,11 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
     private void createTestMap(int rows, int cols){
         //create an x by y test map of sectors
 
-        sectors = new Sector[rows][cols];
+        sectors = new Sector[cols][rows];
         for(int i = 0; i<cols; i++){
             for(int j = 0; j<rows; j++){
-                sectors[j][i] = new Sector(i, j, j%5);
-                sectors[j][i].addMoves(createRandomArrayOfMoves());
+                sectors[i][j] = new Sector(i, j, j%5);
+                sectors[i][j].addMoves(createRandomArrayOfMoves());
             }
         }
     }
