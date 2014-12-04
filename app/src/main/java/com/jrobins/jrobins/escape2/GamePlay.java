@@ -87,7 +87,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
 
     private void initializeHexagonMap(){
         hexagonMap = (MapView) findViewById(R.id.hexagonMap);
-        //hexagonMap.initialize(3, 5);
+        //hexagonMap.initialize(5,10);
         hexagonMap.initialize(sectors);
         hexagonMap.setOnCellClickListener(this);
     }

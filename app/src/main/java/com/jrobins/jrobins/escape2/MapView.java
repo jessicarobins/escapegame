@@ -52,17 +52,12 @@ public class MapView extends View {
     }
 
     public void initialize(Sector[][] sectors){
-        /*System.out.println("creating a new grid with rows = " + sectors.length + " & columns = " + sectors[0].length);
-        this.sectors = sectors;
-        this.rows = sectors.length;
-        this.columns = sectors[0].length;
-        this.cellSet = new boolean[columns][rows];
-        System.out.println("creating a new grid with rows = " + rows + " & columns = " + columns);*/
+
         this.sectors = sectors;
         initialize(sectors.length, sectors[0].length);
     }
 
-    public void initialize(int rows, int columns)
+    public void initialize(int columns, int rows)
     {
         this.columns = columns;
         this.rows = rows;
@@ -124,7 +119,7 @@ public class MapView extends View {
                 if (!(oddRow && c == columns - 1))
                 {
                     if(sectors !=null)
-                        cellColor = getResources().getColor(sectors[r][c].color());
+                        cellColor = getResources().getColor(sectors[c][r].color());
                     else
                         cellColor = Color.MAGENTA;
                     fillPaint.setColor(cellSet[c][r] ? Color.RED : cellColor);
