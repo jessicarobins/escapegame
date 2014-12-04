@@ -114,20 +114,60 @@ public class MapView extends View {
         super.onDraw(canvas);
 
         canvas.drawColor(getResources().getColor(R.color.map_background));
+        drawGridWithZigZagRows(canvas);
 
+    }
+
+
+    private void drawGridWithZigZagRows(Canvas canvas){
+        boolean oddCol;
+        int yOff;
+
+
+
+        combPath = getHexPath(cellWidth / 2f, cellWidth / 2f, (float) (cellWidth * Math.sqrt(3) / 4));
+
+        for (int c = 0; c < columns; c++)
+        {
+            oddCol = (c & 1) == 1;
+            yOff = 0;
+
+
+            for (int r = 0; r < rows; r++)
+            {
+                if (!(oddCol && r == rows - 1))
+                {
+                    if(sectors !=null)
+                        cellColor = getResources().getColor(sectors[c][r].color());
+                    else
+                        cellColor = Color.MAGENTA;
+                    fillPaint.setColor(cellSet[c][r] ? Color.RED : cellColor);
+
+
+
+
+                    cachePaint.setColor(Color.argb(255, 1, c, r));
+                    drawSector(canvas, sectors[c][r].getId());
+                    //cacheCan.drawPath(combPath, cachePaint);
+
+                    combPath.offset(0,(int)  (cellWidth * Math.sqrt(3) / 2));
+                    yOff += (cellWidth * Math.sqrt(3) / 2);
+
+
+                }
+            }
+
+            //combPath.offset(cellWidth * .75f, (float)(-yOff));
+            combPath.offset(cellWidth * .75f, (float)(-yOff + (oddCol ? -1 : 1) * (cellWidth * Math.sqrt(3) / 4)));
+        }
+
+    }
+
+    private void drawGridWithZigZagCols(Canvas canvas){
         boolean oddRow;
         int xOff;
 
-        //values for the center of the current hexagon
-        float centerX;
-        float centerY = (float) (cellWidth * Math.sqrt(3) / 4);
 
-
-
-        // min. rect of text
-        Rect textBounds;
-        String text;
-        float x,y;
 
         combPath = getHexPath(cellWidth / 2f, cellWidth / 2f, (float) (cellWidth * Math.sqrt(3) / 4));
 
@@ -135,7 +175,7 @@ public class MapView extends View {
         {
             oddRow = (r & 1) == 1;
             xOff = 0;
-            centerX =  cellWidth/2f + (oddRow ? 1 : 0) * 3 * cellWidth / 4;
+
 
             for (int c = 0; c < columns; c++)
             {
@@ -147,34 +187,21 @@ public class MapView extends View {
                         cellColor = Color.MAGENTA;
                     fillPaint.setColor(cellSet[c][r] ? Color.RED : cellColor);
 
-                    /*canvas.drawPath(combPath, fillPaint);
 
-                    canvas.drawPath(combPath, wallPaint);*/
-                    //drawHexagon(canvas, combPath);
 
-                    /*
-                    textBounds = new Rect();
-                    text = sectors[c][r].getId();
-                    textPaint.getTextBounds(text, 0, text.length(), textBounds);
-                    x = centerX - textBounds.exactCenterX();
-                    y = centerY - textBounds.exactCenterY();
-                    canvas.drawText(text, x, y, textPaint);
-                    */
 
-                    //drawSectorName(canvas,sectors[c][r].getId(), centerX, centerY);
-                    drawSector(canvas, combPath, sectors[c][r].getId());
-                    
                     cachePaint.setColor(Color.argb(255, 1, c, r));
-                    cacheCan.drawPath(combPath, cachePaint);
+                    drawSector(canvas, sectors[c][r].getId());
+                    //cacheCan.drawPath(combPath, cachePaint);
 
                     combPath.offset((int) (1.5f * cellWidth), 0);
                     xOff += 1.5f * cellWidth;
-                    centerX+=xOff;
+
 
                 }
             }
 
-            centerY+=(float) (cellWidth * Math.sqrt(3) / 4);
+
             combPath.offset(-xOff + (oddRow ? -1 : 1) * 3 * cellWidth / 4, (float) (cellWidth * Math.sqrt(3) / 4));
         }
     }
@@ -214,17 +241,20 @@ public class MapView extends View {
         canvas.drawText(sectorName, x, y, textPaint);
     }
 
-    private void drawHexagon(Canvas canvas, Path path){
-        canvas.drawPath(path, fillPaint);
+    private void drawHexagon(Canvas canvas){
+        canvas.drawPath(combPath, fillPaint);
 
-        canvas.drawPath(path, wallPaint);
+        canvas.drawPath(combPath, wallPaint);
+
+        cacheCan.drawPath(combPath, cachePaint);
     }
 
 
-    private void drawSector(Canvas canvas, Path hexPath, String sectorName){
+    private void drawSector(Canvas canvas, String sectorName){
         RectF hexBounds = new RectF();
-        hexPath.computeBounds(hexBounds, true);
-        drawHexagon(canvas, hexPath);
+        combPath.computeBounds(hexBounds, true);
+        drawHexagon(canvas);
+
         drawSectorName(canvas, sectorName, hexBounds.centerX(), hexBounds.centerY());
 
     }
