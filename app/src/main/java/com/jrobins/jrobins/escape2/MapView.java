@@ -6,6 +6,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,6 +19,8 @@ public class MapView extends View {
     private Paint wallPaint = new Paint();
     private Paint fillPaint = new Paint();
     private Paint cachePaint = new Paint();
+    private Paint textPaint = new Paint();
+
     private Path combPath;
     private Bitmap cacheBmp;
     private Canvas cacheCan;
@@ -49,6 +53,12 @@ public class MapView extends View {
         cachePaint.setStyle(Paint.Style.FILL);
 
         cellColor = Color.MAGENTA;
+
+        textPaint.setStyle(Paint.Style.FILL);
+        textPaint.setColor(Color.MAGENTA);
+        textPaint.setAntiAlias(true);
+
+        textPaint.setTextSize(20);
     }
 
     public void initialize(Sector[][] sectors){
@@ -107,12 +117,23 @@ public class MapView extends View {
         boolean oddRow;
         int xOff;
 
+        float centerX;
+        float centerY = (float) (cellWidth * Math.sqrt(3) / 4);
+
+
+
+        // min. rect of text
+        Rect textBounds;
+        String text;
+        float x,y;
+
         combPath = getHexPath(cellWidth / 2f, cellWidth / 2f, (float) (cellWidth * Math.sqrt(3) / 4));
 
         for (int r = 0; r < rows; r++)
         {
             oddRow = (r & 1) == 1;
             xOff = 0;
+            centerX =  cellWidth/2f + (oddRow ? 1 : 0) * 3 * cellWidth / 4;
 
             for (int c = 0; c < columns; c++)
             {
@@ -127,14 +148,25 @@ public class MapView extends View {
 
                     canvas.drawPath(combPath, wallPaint);
 
+                    textBounds = new Rect();
+                    text = sectors[c][r].getId();
+                    textPaint.getTextBounds(text, 0, text.length(), textBounds);
+                    x = centerX - textBounds.exactCenterX();
+                    y = centerY - textBounds.exactCenterY();
+                    canvas.drawText(text, x, y, textPaint);
+
+
                     cachePaint.setColor(Color.argb(255, 1, c, r));
                     cacheCan.drawPath(combPath, cachePaint);
 
                     combPath.offset((int) (1.5f * cellWidth), 0);
                     xOff += 1.5f * cellWidth;
+                    centerX+=xOff;
+
                 }
             }
 
+            centerY+=(float) (cellWidth * Math.sqrt(3) / 4);
             combPath.offset(-xOff + (oddRow ? -1 : 1) * 3 * cellWidth / 4, (float) (cellWidth * Math.sqrt(3) / 4));
         }
     }

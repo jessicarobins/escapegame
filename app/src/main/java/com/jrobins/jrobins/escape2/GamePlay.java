@@ -51,7 +51,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         initializePlayers();
         createTestMap(3,5);
         initializeHexagonMap();
-        initializeMapGrid();
+        //initializeMapGrid();
 
     }
 
