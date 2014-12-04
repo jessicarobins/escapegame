@@ -13,10 +13,12 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-/**
- * Created by jrobins on 12/1/2014.
- */
+import java.util.ArrayList;
+
 public class MapView extends View {
+
+    private final int MAX_MOVES = 4;
+
     private Paint wallPaint = new Paint();
     private Paint fillPaint = new Paint();
     private Paint cachePaint = new Paint();
@@ -28,6 +30,8 @@ public class MapView extends View {
     private Canvas cacheCan;
 
     private int cellWidth;
+    private int moveWidth;
+
     private int columns;
     private int rows;
     private boolean[][] cellSet;
@@ -36,6 +40,9 @@ public class MapView extends View {
 
     private int cellColor;
     private Sector[][] sectors;
+    RectF rectf = new RectF();
+    RectF moveSquare = new RectF();
+    Rect rect = new Rect();
 
 
     public MapView(Context context)
@@ -128,6 +135,7 @@ public class MapView extends View {
         cellWidth = Math.min(cellWidth1, cellWidth2);
         textPaint.setTextSize(cellWidth/5);
         labelPaint.setTextSize(cellWidth/2);
+        moveWidth = cellWidth/10;
     }
 
     @Override
@@ -144,8 +152,6 @@ public class MapView extends View {
     private void drawGridWithZigZagRows(Canvas canvas){
         boolean oddCol;
         int yOff;
-
-
 
         combPath = getHexPath(cellWidth / 2f, cellWidth / 2f, (float) (cellWidth * Math.sqrt(3) / 4));
 
@@ -164,9 +170,6 @@ public class MapView extends View {
                     else
                         cellColor = Color.MAGENTA;
                     fillPaint.setColor(cellSet[c][r] ? Color.RED : cellColor);
-
-
-
 
                     cachePaint.setColor(Color.argb(255, 1, c, r));
                     drawSector(canvas, sectors[c][r]);
@@ -252,26 +255,26 @@ public class MapView extends View {
 
 
     private void drawSectorName(Canvas canvas, String sectorName, float centerX, float centerY){
-        Rect textBounds;
+        //Rect textBounds;
 
         float x,y;
-        textBounds = new Rect();
+        //textBounds = new Rect();
 
-        textPaint.getTextBounds(sectorName, 0, sectorName.length(), textBounds);
-        x = centerX - textBounds.exactCenterX();
-        y = centerY - textBounds.exactCenterY();
+        textPaint.getTextBounds(sectorName, 0, sectorName.length(), rect);
+        x = centerX - rect.exactCenterX();
+        y = centerY - rect.exactCenterY();
         canvas.drawText(sectorName, x, y, textPaint);
     }
 
     private void drawSectorLabel(Canvas canvas, String label, float centerX, float centerY){
-        Rect textBounds;
+        //Rect textBounds;
 
         float x,y;
-        textBounds = new Rect();
+        //textBounds = new Rect();
 
-        labelPaint.getTextBounds(label, 0, label.length(), textBounds);
-        x = centerX - textBounds.exactCenterX();
-        y = centerY - textBounds.exactCenterY();
+        labelPaint.getTextBounds(label, 0, label.length(), rect);
+        x = centerX - rect.exactCenterX();
+        y = centerY - rect.exactCenterY();
         canvas.drawText(label, x, y, labelPaint);
     }
 
@@ -284,26 +287,85 @@ public class MapView extends View {
         cacheCan.drawPath(combPath, cachePaint);
     }
 
+    private void drawMoves(Canvas canvas, ArrayList<Move> moves){
+        //hexagon is combPath
+        //probably need to compute the bounds...
+        combPath.computeBounds(rectf, true);
+
+        //these are the coordinates where the grid should start
+        //  so x is two moves left of center and y is right on center
+        float gridStartX = rectf.centerX()-2*moveWidth;
+        float gridStartY = rectf.centerY();
+
+        //the max # of moves in a row is now a class-level
+        //  constant MAX_MOVES and equal to 4
+
+        //need a for loop with a yoffset for creating rows
+        int yOffset = 0;
+        int certainty;
+        for(int i = 0; i<moves.size(); i++){
+
+
+            //find the right color - this is certainty color, should be text
+            /*
+            certainty = moves.get(0).certainty();
+            switch (certainty) {
+                case 0: fillPaint.setColor(getResources().getColor(R.color.bluff));
+                    break;
+                case 1: fillPaint.setColor(getResources().getColor(R.color.certain));
+                    break;
+                case 2: fillPaint.setColor(getResources().getColor(R.color.uncertain));
+                    break;
+            }*/
+
+            //draw the shape in the right place
+            //that'll be (i%MAX_MOVES)*moveWidth + gridStartX and then gridStartY+yOffset
+            drawMove(canvas, moves.get(i),(i%MAX_MOVES)*moveWidth + gridStartX, gridStartY+yOffset);
+
+            //check that we haven't reached the max number of moves in
+            //  a row - let's check this at the end
+            if(i == MAX_MOVES)
+                yOffset+=moveWidth;
+        }
+
+    }
+
+    private void drawMove(Canvas canvas, Move move, float centerX, float centerY){
+        //get rectangle
+        setMoveSquare(centerX, centerY);
+
+        //set the fillpaint to be the player color
+        fillPaint.setColor(move.color());
+
+        //draw rectangle
+        canvas.drawRect(moveSquare, fillPaint);
+
+        //draw number inside rectangle
+    }
+
+
+    private void setMoveSquare(float centerX, float centerY){
+        moveSquare.set(centerX - moveWidth/2, centerY-moveWidth/2, centerX+moveWidth/2, centerY + moveWidth/2);
+    }
+
+
 
     private void drawSector(Canvas canvas, Sector sector){
-        RectF hexBounds = new RectF();
-        combPath.computeBounds(hexBounds, true);
+        //RectF hexBounds = new RectF();
+        combPath.computeBounds(rectf, true);
         drawHexagon(canvas);
 
-        //draw the sector name only if the sector is valid
-        /*String sectorLabel;
-        if(sector.isValid())
-            drawSectorName(canvas, sector.getId(), hexBounds.centerX(), hexBounds.centerY());*/
-
         //we want text about 1/3 of the way from the top
-        float y = hexBounds.top + hexBounds.height()/3;
+        float y = rectf.top + rectf.height()/3;
 
         //sector is special like H, E, A
         if(sector.isSpecial())
-            drawSectorLabel(canvas, sector.label(), hexBounds.centerX(), hexBounds.centerY());
+            drawSectorLabel(canvas, sector.label(), rectf.centerX(), rectf.centerY());
         //sector is not special but still valid
         else if(sector.isValid())
-            drawSectorName(canvas, sector.label(), hexBounds.centerX(), y);
+            drawSectorName(canvas, sector.label(), rectf.centerX(), y);
+
+        drawMoves(canvas, sector.moves());
     }
 
     private Path getHexPath(float size, float centerX, float centerY)
