@@ -49,7 +49,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
 
 
         initializePlayers();
-        createTestMap(5,4);
+        createTestMap(6,6);
         initializeHexagonMap();
         //initializeMapGrid();
 
@@ -82,7 +82,9 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
     @Override
     public void onCellClick(int column, int row)
     {
-        hexagonMap.setCell(column, row, !hexagonMap.isCellSet(column, row));
+        //if the cell is not invalid - we don't want invalid sectors to be clickable
+        if (sectors[column][row].isValid())
+            hexagonMap.setCell(column, row, !hexagonMap.isCellSet(column, row));
     }
 
     private void initializeHexagonMap(){
@@ -106,7 +108,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
     }
 
 
-
+/*
     private void initializeMapGrid(){
         mapGrid = (TableLayout) findViewById(R.id.map_grid);
         int cols = sectors.length;
@@ -193,7 +195,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
             }
             mapGrid.addView(row);
         }
-    }
+    }*/
 
     private void createTestMap(int cols, int rows){
         //create an x by y test map of sectors

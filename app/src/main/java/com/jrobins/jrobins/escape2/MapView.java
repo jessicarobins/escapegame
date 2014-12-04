@@ -56,9 +56,10 @@ public class MapView extends View {
         cellColor = Color.MAGENTA;
 
         textPaint.setStyle(Paint.Style.FILL);
-        textPaint.setColor(Color.MAGENTA);
+        textPaint.setColor(Color.BLACK);
         textPaint.setAntiAlias(true);
-
+        // text shadow
+        //textPaint.setShadowLayer(1f, 0f, 1f, Color.LTGRAY);
         textPaint.setTextSize(20);
     }
 
@@ -88,6 +89,7 @@ public class MapView extends View {
 
     public void setCell(int column, int row, boolean isSet)
     {
+
         cellSet[column][row] = isSet;
         invalidate();
     }
@@ -113,6 +115,7 @@ public class MapView extends View {
         int cellWidth1 = (int)( cellHeight*2 / Math.sqrt(3)); //if height is limiting
         int cellWidth2 = (int)(w/ (columns - (.25*(columns-1)))); //if width is limiting
         cellWidth = Math.min(cellWidth1, cellWidth2);
+        textPaint.setTextSize(cellWidth/5);
     }
 
     @Override
@@ -154,8 +157,8 @@ public class MapView extends View {
 
 
                     cachePaint.setColor(Color.argb(255, 1, c, r));
-                    drawSector(canvas, sectors[c][r].getId());
-                    //cacheCan.drawPath(combPath, cachePaint);
+                    drawSector(canvas, sectors[c][r]);
+
 
                     combPath.offset(0,(int)  (cellWidth * Math.sqrt(3) / 2));
                     yOff += (cellWidth * Math.sqrt(3) / 2);
@@ -198,7 +201,7 @@ public class MapView extends View {
 
 
                     cachePaint.setColor(Color.argb(255, 1, c, r));
-                    drawSector(canvas, sectors[c][r].getId());
+                    drawSector(canvas, sectors[c][r]);
                     //cacheCan.drawPath(combPath, cachePaint);
 
                     combPath.offset((int) (1.5f * cellWidth), 0);
@@ -257,13 +260,22 @@ public class MapView extends View {
     }
 
 
-    private void drawSector(Canvas canvas, String sectorName){
+    private void drawSector(Canvas canvas, Sector sector){
         RectF hexBounds = new RectF();
         combPath.computeBounds(hexBounds, true);
         drawHexagon(canvas);
 
-        drawSectorName(canvas, sectorName, hexBounds.centerX(), hexBounds.centerY());
+        //draw the sector name only if the sector is valid
+        /*String sectorLabel;
+        if(sector.isValid())
+            drawSectorName(canvas, sector.getId(), hexBounds.centerX(), hexBounds.centerY());*/
 
+        //we want text about 1/3 of the way from the top
+        float y = hexBounds.top + hexBounds.height()/3;
+
+
+        if(sector.isValid())
+            drawSectorName(canvas, sector.label(), hexBounds.centerX(), y);
     }
 
     private Path getHexPath(float size, float centerX, float centerY)

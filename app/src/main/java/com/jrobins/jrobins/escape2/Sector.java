@@ -108,6 +108,17 @@ public class Sector {
         return xCoordinateToString()+yCoordinateToString();
     }
 
+    public String label(){
+        switch(sectorType()){
+            case 0: return null;
+            case 1: case 2: return  getId();
+            case 3: return "A";
+            case 4: return "H";
+            case 5: return "E";
+        }
+        return null;
+    }
+
     public ArrayList<Move> moves(){
         return moves;
     }
@@ -123,5 +134,26 @@ public class Sector {
 
     public void addMove(Move move){
         this.moves.add(move);
+    }
+
+    public boolean isValid(){
+        //returns true if this is a sector that's not invalid (i.e., sectorType!=0)
+        return (sectorType !=0);
+    }
+
+    public boolean isAlienStart(){
+        return (sectorType == 3);
+    }
+
+    public boolean isHumanStart(){
+        return (sectorType == 4);
+    }
+
+    public boolean isEscapeHatch(){
+        return (sectorType == 5);
+    }
+
+    public int sectorType(){
+        return sectorType;
     }
 }
