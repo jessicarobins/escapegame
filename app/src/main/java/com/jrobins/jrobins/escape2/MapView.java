@@ -21,6 +21,7 @@ public class MapView extends View {
     private Paint fillPaint = new Paint();
     private Paint cachePaint = new Paint();
     private Paint textPaint = new Paint();
+    private Paint labelPaint = new Paint();
 
     private Path combPath;
     private Bitmap cacheBmp;
@@ -55,12 +56,22 @@ public class MapView extends View {
 
         cellColor = Color.MAGENTA;
 
+        //for sector names that aren't special sector types
         textPaint.setStyle(Paint.Style.FILL);
         textPaint.setColor(Color.BLACK);
         textPaint.setAntiAlias(true);
         // text shadow
         //textPaint.setShadowLayer(1f, 0f, 1f, Color.LTGRAY);
         textPaint.setTextSize(20);
+
+        //for special sector types (e.g., H, E, A)
+        labelPaint.setStyle(Paint.Style.FILL);
+        labelPaint.setColor(Color.BLACK);
+        labelPaint.setAntiAlias(true);
+        labelPaint.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+        // text shadow
+        //textPaint.setShadowLayer(1f, 0f, 1f, Color.LTGRAY);
+        labelPaint.setTextSize(20);
     }
 
     public void initialize(Sector[][] sectors){
@@ -116,6 +127,7 @@ public class MapView extends View {
         int cellWidth2 = (int)(w/ (columns - (.25*(columns-1)))); //if width is limiting
         cellWidth = Math.min(cellWidth1, cellWidth2);
         textPaint.setTextSize(cellWidth/5);
+        labelPaint.setTextSize(cellWidth/2);
     }
 
     @Override
@@ -251,6 +263,19 @@ public class MapView extends View {
         canvas.drawText(sectorName, x, y, textPaint);
     }
 
+    private void drawSectorLabel(Canvas canvas, String label, float centerX, float centerY){
+        Rect textBounds;
+
+        float x,y;
+        textBounds = new Rect();
+
+        labelPaint.getTextBounds(label, 0, label.length(), textBounds);
+        x = centerX - textBounds.exactCenterX();
+        y = centerY - textBounds.exactCenterY();
+        canvas.drawText(label, x, y, labelPaint);
+    }
+
+
     private void drawHexagon(Canvas canvas){
         canvas.drawPath(combPath, fillPaint);
 
@@ -273,8 +298,11 @@ public class MapView extends View {
         //we want text about 1/3 of the way from the top
         float y = hexBounds.top + hexBounds.height()/3;
 
-
-        if(sector.isValid())
+        //sector is special like H, E, A
+        if(sector.isSpecial())
+            drawSectorLabel(canvas, sector.label(), hexBounds.centerX(), hexBounds.centerY());
+        //sector is not special but still valid
+        else if(sector.isValid())
             drawSectorName(canvas, sector.label(), hexBounds.centerX(), y);
     }
 

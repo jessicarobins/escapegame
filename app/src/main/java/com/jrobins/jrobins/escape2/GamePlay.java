@@ -49,7 +49,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
 
 
         initializePlayers();
-        createTestMap(6,6);
+        createTestMap(6,7);
         initializeHexagonMap();
         //initializeMapGrid();
 
@@ -203,7 +203,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         sectors = new Sector[cols][rows];
         for(int i = 0; i<cols; i++){
             for(int j = 0; j<rows; j++){
-                sectors[i][j] = new Sector(i, j, j%5);
+                sectors[i][j] = new Sector(i, j, j%6);
                 sectors[i][j].addMoves(createRandomArrayOfMoves());
             }
         }

@@ -153,6 +153,10 @@ public class Sector {
         return (sectorType == 5);
     }
 
+    public boolean isSpecial(){
+        return (sectorType > 2 );
+    }
+
     public int sectorType(){
         return sectorType;
     }
