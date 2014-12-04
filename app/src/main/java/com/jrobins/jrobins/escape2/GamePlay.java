@@ -140,7 +140,8 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
     private void initializeMapGrid(){
         mapGrid = (TableLayout) findViewById(R.id.map_grid);
         int cols = sectors.length;
-        int rows = sectors[0].length*2;
+        int sectorRows = sectors[0].length;
+        int rows = sectorRows*2;
 
         TextView text;
         GridView moveGrid;
@@ -148,7 +149,6 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         TableLayout.LayoutParams tableParams;
 
         int yText; //the sector value for x, based on i, j
-        int yGrid; //the sector value for y, based on i,j
 
 
         //j is the number of ROWS which means it is the Y VALUE OMG wtf WHY
@@ -167,10 +167,8 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
                 //if THE X VALUE IS EVEN (so this is A, C, E etc)
                 //  then the new Y value, will just be the Y-value of the table divided
                 //  by two
-                //  that's for the textview on top. the bottom will just be, DUH, one lower
                 if((i%2)==0) {
                     yText = j/2;
-                    yGrid = yText +1;
                 }
                 //if THE X VALUE IS ODD (that's B, D, F etc)
                 //  the y-value in the table we are displaying is HIGHER than the y-value in
@@ -178,12 +176,11 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
                 //  less than zero from the sector array
                 else {
                     yText = (j -1) / 2;
-                    yGrid = yText+1;
                 }
                 //if i+j is even, we want to put the sector name
                 //we need to make sure it's not the very last row because that will
                 //  arrayindexoutofbounds our asses
-                if( (yText>=0) && (yText<sectors.length) && ((i+j)%2 == 0)) {
+                if( (yText>=0) && (yText<sectorRows) && ((i+j)%2 == 0) && (j<(rows-1))) {
 
                     text = new TextView(this);
                     text.setText(sectors[i][yText].getId());
@@ -228,7 +225,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         }
     }
 
-    private void createTestMap(int rows, int cols){
+    private void createTestMap(int cols, int rows){
         //create an x by y test map of sectors
 
         sectors = new Sector[cols][rows];
