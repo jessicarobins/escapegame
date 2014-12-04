@@ -105,7 +105,14 @@ public class MapView extends View {
         cacheBmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
         cacheCan = new Canvas(cacheBmp);
 
-        cellWidth = 2 * w / (2 * columns + columns - 1);
+        //cellWidth = 2 * w / (2 * columns + columns - 1);
+        //cellWidth = (int)( 2*w / (1.75 * columns));
+        //# cols - .5*(#cols-1)/2
+        //cellWidth = Math.min(sqrt(3)/2 * cellWidth)
+        float cellHeight = h/rows;
+        int cellWidth1 = (int)( cellHeight*2 / Math.sqrt(3)); //if height is limiting
+        int cellWidth2 = (int)(w/ (columns - (.25*(columns-1)))); //if width is limiting
+        cellWidth = Math.min(cellWidth1, cellWidth2);
     }
 
     @Override
