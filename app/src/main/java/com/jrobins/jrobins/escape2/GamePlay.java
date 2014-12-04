@@ -105,37 +105,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         playerListView.setAdapter(playerSidebarAdapter);
     }
 
-    /*
-    private void initializeMapGrid(){
 
-        mapGrid = (GridLayout) findViewById(R.id.map_grid);
-        int rows = sectors.length;
-        int cols = sectors[0].length;
-        mapGrid.setColumnCount(cols);
-        mapGrid.setRowCount(rows);
-
-        GridLayout.Spec row;
-        GridLayout.Spec col;
-        GridLayout.LayoutParams gridLayoutParam;
-
-
-
-
-        for(int i = 0; i<rows; i++){
-            row = GridLayout.spec(i);
-            for (int j = 0; j<cols; j++){
-                col = GridLayout.spec(j);
-                gridLayoutParam = new GridLayout.LayoutParams(row, col);
-                TextView text = new TextView(this);
-                text.setText(sectors[i][j].getId());
-                text.setBackgroundColor(Color.YELLOW);
-                text.setGravity(Gravity.CENTER);
-
-                mapGrid.addView(text,gridLayoutParam);
-            }
-        }
-    }
-    */
 
     private void initializeMapGrid(){
         mapGrid = (TableLayout) findViewById(R.id.map_grid);

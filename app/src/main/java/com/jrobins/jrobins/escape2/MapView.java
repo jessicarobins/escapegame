@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -117,6 +118,7 @@ public class MapView extends View {
         boolean oddRow;
         int xOff;
 
+        //values for the center of the current hexagon
         float centerX;
         float centerY = (float) (cellWidth * Math.sqrt(3) / 4);
 
@@ -144,18 +146,24 @@ public class MapView extends View {
                     else
                         cellColor = Color.MAGENTA;
                     fillPaint.setColor(cellSet[c][r] ? Color.RED : cellColor);
-                    canvas.drawPath(combPath, fillPaint);
 
-                    canvas.drawPath(combPath, wallPaint);
+                    /*canvas.drawPath(combPath, fillPaint);
 
+                    canvas.drawPath(combPath, wallPaint);*/
+                    //drawHexagon(canvas, combPath);
+
+                    /*
                     textBounds = new Rect();
                     text = sectors[c][r].getId();
                     textPaint.getTextBounds(text, 0, text.length(), textBounds);
                     x = centerX - textBounds.exactCenterX();
                     y = centerY - textBounds.exactCenterY();
                     canvas.drawText(text, x, y, textPaint);
+                    */
 
-
+                    //drawSectorName(canvas,sectors[c][r].getId(), centerX, centerY);
+                    drawSector(canvas, combPath, sectors[c][r].getId());
+                    
                     cachePaint.setColor(Color.argb(255, 1, c, r));
                     cacheCan.drawPath(combPath, cachePaint);
 
@@ -191,6 +199,34 @@ public class MapView extends View {
             }
         }
         return true;
+    }
+
+
+    private void drawSectorName(Canvas canvas, String sectorName, float centerX, float centerY){
+        Rect textBounds;
+
+        float x,y;
+        textBounds = new Rect();
+
+        textPaint.getTextBounds(sectorName, 0, sectorName.length(), textBounds);
+        x = centerX - textBounds.exactCenterX();
+        y = centerY - textBounds.exactCenterY();
+        canvas.drawText(sectorName, x, y, textPaint);
+    }
+
+    private void drawHexagon(Canvas canvas, Path path){
+        canvas.drawPath(path, fillPaint);
+
+        canvas.drawPath(path, wallPaint);
+    }
+
+
+    private void drawSector(Canvas canvas, Path hexPath, String sectorName){
+        RectF hexBounds = new RectF();
+        hexPath.computeBounds(hexBounds, true);
+        drawHexagon(canvas, hexPath);
+        drawSectorName(canvas, sectorName, hexBounds.centerX(), hexBounds.centerY());
+
     }
 
     private Path getHexPath(float size, float centerX, float centerY)
