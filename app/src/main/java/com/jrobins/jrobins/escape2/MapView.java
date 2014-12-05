@@ -285,6 +285,7 @@ public class MapView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
+        /*
         mScaleDetector.onTouchEvent(event);
         if (event.getPointerCount() > 1){
             if (event.getAction() == MotionEvent.ACTION_POINTER_UP){
@@ -295,11 +296,12 @@ public class MapView extends View {
                 return true;
             }
             return true;
-        }
+        }*/
 
         if (event.getAction() != MotionEvent.ACTION_DOWN)
             return true;
 
+        /*
         int pixel = cacheBmp.getPixel((int) event.getX(), (int) event.getY());
 
         int r = Color.red(pixel);
@@ -311,6 +313,28 @@ public class MapView extends View {
             if (listener != null)
             {
                 listener.onCellClick(g, b);
+            }
+        }*/
+        if(listener != null) {
+            float x = event.getX();
+            float y = event.getY();
+            //float cellHeight = (float) Math.sqrt(3) * cellWidth / 2;
+            int radius = cellWidth/2;
+            int cellHeight = (int) (((float) radius) * Math.sqrt(3));
+            int side = radius * 3 / 2;
+
+
+            int ci = (int)Math.floor((float)x/(float)side);
+            int cx = (int)( x - side*ci);
+
+            int ty = (int)(y - (ci % 2) * cellHeight / 2);
+            int cj = (int)Math.floor((float)ty/(float)cellHeight);
+            int cy = ty - cellHeight*cj;
+
+            if (cx > Math.abs(radius / 2 - radius * cy / cellHeight)) {
+                listener.onCellClick(ci, cj);
+            } else {
+                listener.onCellClick(ci - 1, cj + (ci % 2) - ((cy < cellHeight / 2) ? 1 : 0));
             }
         }
         return true;
