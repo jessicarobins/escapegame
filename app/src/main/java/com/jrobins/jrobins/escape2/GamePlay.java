@@ -148,12 +148,14 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
             turnNumberTextBox.setText(turnNumber+"");
             // do we need to redraw after this? no
 
-            //reset the boolean values in the map
-            hexagonMap.resetAllCells();
+
         }
         else
             currentPlayer++;
 
+        //reset the boolean values in the map
+        hexagonMap.resetAllCells();
+        
         //set next player's turn
         players.get(currentPlayer).setTurn(true);
 
