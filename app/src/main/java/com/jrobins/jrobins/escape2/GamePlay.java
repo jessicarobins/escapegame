@@ -220,10 +220,10 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         //create a random array of moves (for testing purposes)
         ArrayList<Move> moves = new ArrayList<Move>();
         int playerIndex = 0;
-        int numberOfMoves = (int)(Math.random()*5);
+        int numberOfMoves = (int)(Math.random()*10);
         for(int i = 0; i < numberOfMoves; i++) {
             moves.add(createTestMove(players.get(playerIndex)));
-            if(playerIndex == players.size())
+            if(playerIndex == (players.size()-1))
                 playerIndex = 0;
             else
                 playerIndex++;

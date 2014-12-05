@@ -135,7 +135,7 @@ public class MapView extends View {
         cellWidth = Math.min(cellWidth1, cellWidth2);
         textPaint.setTextSize(cellWidth/5);
         labelPaint.setTextSize(cellWidth/2);
-        moveWidth = cellWidth/10;
+        moveWidth = cellWidth/6;
     }
 
     @Override
@@ -293,8 +293,8 @@ public class MapView extends View {
         combPath.computeBounds(rectf, true);
 
         //these are the coordinates where the grid should start
-        //  so x is two moves left of center and y is right on center
-        float gridStartX = rectf.centerX()-2*moveWidth;
+        //  so x is (MAX_MOVES/2) moves left of center and y is right on center
+        float gridStartX = rectf.centerX()-(MAX_MOVES/2)*moveWidth + .5f*moveWidth;
         float gridStartY = rectf.centerY();
 
         //the max # of moves in a row is now a class-level
@@ -304,7 +304,10 @@ public class MapView extends View {
         int yOffset = 0;
         int certainty;
         for(int i = 0; i<moves.size(); i++){
-
+            //check that we haven't reached the max number of moves in
+            //  a row
+            if(i == MAX_MOVES)
+                yOffset+=moveWidth;
 
             //find the right color - this is certainty color, should be text
             /*
@@ -320,17 +323,15 @@ public class MapView extends View {
 
             //draw the shape in the right place
             //that'll be (i%MAX_MOVES)*moveWidth + gridStartX and then gridStartY+yOffset
-            drawMove(canvas, moves.get(i),(i%MAX_MOVES)*moveWidth + gridStartX, gridStartY+yOffset);
+            drawMove(canvas, moves.get(i), (i % MAX_MOVES) * moveWidth + gridStartX, gridStartY + yOffset);
 
-            //check that we haven't reached the max number of moves in
-            //  a row - let's check this at the end
-            if(i == MAX_MOVES)
-                yOffset+=moveWidth;
+
         }
 
     }
 
     private void drawMove(Canvas canvas, Move move, float centerX, float centerY){
+
         //get rectangle
         setMoveSquare(centerX, centerY);
 
@@ -362,10 +363,11 @@ public class MapView extends View {
         if(sector.isSpecial())
             drawSectorLabel(canvas, sector.label(), rectf.centerX(), rectf.centerY());
         //sector is not special but still valid
-        else if(sector.isValid())
+        else if(sector.isValid()) {
             drawSectorName(canvas, sector.label(), rectf.centerX(), y);
 
-        drawMoves(canvas, sector.moves());
+            drawMoves(canvas, sector.moves());
+        }
     }
 
     private Path getHexPath(float size, float centerX, float centerY)
