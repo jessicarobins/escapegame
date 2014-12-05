@@ -11,14 +11,17 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 
 import java.util.ArrayList;
 
 public class MapView extends View {
 
+    //the max number of moves in a row per hexagon
     private final int MAX_MOVES = 4;
 
+    //paints!
     private Paint wallPaint = new Paint();
     private Paint fillPaint = new Paint();
     private Paint cachePaint = new Paint();
@@ -28,7 +31,9 @@ public class MapView extends View {
     private Path combPath;
     private Bitmap cacheBmp;
     private Canvas cacheCan;
+    private Bitmap temp;
 
+    //widths of things
     private int cellWidth;
     private int moveWidth;
 
@@ -44,6 +49,9 @@ public class MapView extends View {
     RectF moveSquare = new RectF();
     Rect rect = new Rect();
 
+    //zooming/panning
+    private ScaleGestureDetector mScaleDetector;
+    private float mScaleFactor = 1.f;
 
     public MapView(Context context)
     {
@@ -80,6 +88,10 @@ public class MapView extends View {
         // text shadow
         //textPaint.setShadowLayer(1f, 0f, 1f, Color.LTGRAY);
         labelPaint.setTextSize(20);
+
+
+        //initialize scale thing
+        mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
     }
 
     public void initialize(Sector[][] sectors){
@@ -163,8 +175,26 @@ public class MapView extends View {
     {
         super.onDraw(canvas);
 
+        cacheCan.save();
+        cacheCan.scale(mScaleFactor, mScaleFactor);
+
+        /*
+        temp = Bitmap.createScaledBitmap(cacheBmp, (int)(cacheBmp.getWidth()*mScaleFactor), (int)(cacheBmp.getHeight()*mScaleFactor), false);
+        cacheBmp = temp;
+        //cacheBmp = Bitmap.createScaledBitmap(cacheBmp, (int)(cacheBmp.getWidth()*mScaleFactor), (int)(cacheBmp.getHeight()*mScaleFactor), false);
+        cacheCan.setBitmap(cacheBmp);*/
+        //cacheCan.drawBitmap(cacheBmp, 0, 0, cachePaint);
+        cacheCan.restore();
+
+        canvas.save();
+        canvas.scale(mScaleFactor, mScaleFactor);
+
         canvas.drawColor(getResources().getColor(R.color.map_background));
         drawGridWithZigZagRows(canvas);
+
+
+        canvas.restore();
+
 
     }
 
@@ -255,6 +285,18 @@ public class MapView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
+        mScaleDetector.onTouchEvent(event);
+        if (event.getPointerCount() > 1){
+            if (event.getAction() == MotionEvent.ACTION_POINTER_UP){
+                temp = Bitmap.createScaledBitmap(cacheBmp, (int)(cacheBmp.getWidth()*mScaleFactor), (int)(cacheBmp.getHeight()*mScaleFactor), false);
+                cacheBmp = temp;
+                //cacheBmp = Bitmap.createScaledBitmap(cacheBmp, (int)(cacheBmp.getWidth()*mScaleFactor), (int)(cacheBmp.getHeight()*mScaleFactor), false);
+                cacheCan.setBitmap(cacheBmp);
+                return true;
+            }
+            return true;
+        }
+
         if (event.getAction() != MotionEvent.ACTION_DOWN)
             return true;
 
@@ -325,7 +367,7 @@ public class MapView extends View {
 
         //need a for loop with a yoffset for creating rows
         int yOffset = 0;
-        int certainty;
+
         for(int i = 0; i<moves.size(); i++){
             //check that we haven't reached the max number of moves in
             //  a row
@@ -425,4 +467,18 @@ public class MapView extends View {
 
         return path;
     }
+
+    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+        @Override
+        public boolean onScale(ScaleGestureDetector detector) {
+            mScaleFactor *= detector.getScaleFactor();
+
+            // Don't let the object get too small or too large.
+            mScaleFactor = Math.max(0.1f, Math.min(mScaleFactor, 5.0f));
+
+            invalidate();
+            return true;
+        }
+    }
 }
+
