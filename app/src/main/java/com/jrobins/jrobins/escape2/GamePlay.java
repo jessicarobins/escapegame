@@ -146,7 +146,10 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
             //increment the number that's at the top
 
             turnNumberTextBox.setText(turnNumber+"");
-            // do we need to redraw after this?
+            // do we need to redraw after this? no
+
+            //reset the boolean values in the map
+            hexagonMap.resetAllCells();
         }
         else
             currentPlayer++;
@@ -167,7 +170,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         for(int i = 0; i<cols; i++){
             for(int j = 0; j<rows; j++){
                 sectors[i][j] = new Sector(i, j, j%6);
-                sectors[i][j].addMoves(createRandomArrayOfMoves());
+                //sectors[i][j].addMoves(createRandomArrayOfMoves());
             }
         }
     }

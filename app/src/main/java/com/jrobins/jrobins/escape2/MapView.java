@@ -108,7 +108,7 @@ public class MapView extends View {
 
     public void setCell(int column, int row, boolean isSet)
     {
-
+        //this is the old 'setcell' user
         cellSet[column][row] = isSet;
         invalidate();
     }
@@ -131,6 +131,10 @@ public class MapView extends View {
 
         cellSet[column][row] = isSet;
         invalidate();
+    }
+
+    public void resetAllCells(){
+        cellSet = new boolean[columns][rows];
     }
 
     @Override
@@ -185,7 +189,8 @@ public class MapView extends View {
                         cellColor = getResources().getColor(sectors[c][r].color());
                     else
                         cellColor = Color.MAGENTA;
-                    fillPaint.setColor(cellSet[c][r] ? Color.RED : cellColor);
+                    //fillPaint.setColor(cellSet[c][r] ? Color.RED : cellColor);
+                    fillPaint.setColor(cellColor);
 
                     cachePaint.setColor(Color.argb(255, 1, c, r));
                     drawSector(canvas, sectors[c][r]);
