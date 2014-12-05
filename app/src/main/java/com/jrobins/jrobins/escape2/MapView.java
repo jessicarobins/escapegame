@@ -24,14 +24,12 @@ public class MapView extends View {
     //paints!
     private Paint wallPaint = new Paint();
     private Paint fillPaint = new Paint();
-    private Paint cachePaint = new Paint();
+
     private Paint textPaint = new Paint();
     private Paint labelPaint = new Paint();
 
     private Path combPath;
-    private Bitmap cacheBmp;
-    private Canvas cacheCan;
-    private Bitmap temp;
+
 
     //widths of things
     private int cellWidth;
@@ -67,7 +65,7 @@ public class MapView extends View {
         //wallPaint.setStrokeWidth(5f);
 
         fillPaint.setStyle(Paint.Style.FILL);
-        cachePaint.setStyle(Paint.Style.FILL);
+
 
         cellColor = Color.MAGENTA;
 
@@ -154,8 +152,6 @@ public class MapView extends View {
     {
         super.onSizeChanged(w, h, oldw, oldh);
 
-        cacheBmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-        cacheCan = new Canvas(cacheBmp);
 
         //cellWidth = 2 * w / (2 * columns + columns - 1);
         //cellWidth = (int)( 2*w / (1.75 * columns));
@@ -175,27 +171,17 @@ public class MapView extends View {
     {
         super.onDraw(canvas);
 
-        cacheCan.save();
-        cacheCan.scale(mScaleFactor, mScaleFactor);
-
-        /*
-        temp = Bitmap.createScaledBitmap(cacheBmp, (int)(cacheBmp.getWidth()*mScaleFactor), (int)(cacheBmp.getHeight()*mScaleFactor), false);
-        cacheBmp = temp;
-        //cacheBmp = Bitmap.createScaledBitmap(cacheBmp, (int)(cacheBmp.getWidth()*mScaleFactor), (int)(cacheBmp.getHeight()*mScaleFactor), false);
-        cacheCan.setBitmap(cacheBmp);*/
-        //cacheCan.drawBitmap(cacheBmp, 0, 0, cachePaint);
-        cacheCan.restore();
-
         canvas.save();
         canvas.scale(mScaleFactor, mScaleFactor);
-
+        cellWidth *=mScaleFactor;
+        moveWidth = cellWidth/7;
         canvas.drawColor(getResources().getColor(R.color.map_background));
         drawGridWithZigZagRows(canvas);
 
 
         canvas.restore();
 
-
+        mScaleFactor = 1.f;
     }
 
 
@@ -222,7 +208,7 @@ public class MapView extends View {
                     //fillPaint.setColor(cellSet[c][r] ? Color.RED : cellColor);
                     fillPaint.setColor(cellColor);
 
-                    cachePaint.setColor(Color.argb(255, 1, c, r));
+
                     drawSector(canvas, sectors[c][r]);
 
 
@@ -263,10 +249,6 @@ public class MapView extends View {
                         cellColor = Color.MAGENTA;
                     fillPaint.setColor(cellSet[c][r] ? Color.RED : cellColor);
 
-
-
-
-                    cachePaint.setColor(Color.argb(255, 1, c, r));
                     drawSector(canvas, sectors[c][r]);
                     //cacheCan.drawPath(combPath, cachePaint);
 
@@ -285,59 +267,42 @@ public class MapView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
-        /*
-        mScaleDetector.onTouchEvent(event);
+
+
         if (event.getPointerCount() > 1){
-            if (event.getAction() == MotionEvent.ACTION_POINTER_UP){
-                temp = Bitmap.createScaledBitmap(cacheBmp, (int)(cacheBmp.getWidth()*mScaleFactor), (int)(cacheBmp.getHeight()*mScaleFactor), false);
-                cacheBmp = temp;
-                //cacheBmp = Bitmap.createScaledBitmap(cacheBmp, (int)(cacheBmp.getWidth()*mScaleFactor), (int)(cacheBmp.getHeight()*mScaleFactor), false);
-                cacheCan.setBitmap(cacheBmp);
-                return true;
-            }
+            mScaleDetector.onTouchEvent(event);
             return true;
-        }*/
-
-        if (event.getAction() != MotionEvent.ACTION_DOWN)
-            return true;
-
-        /*
-        int pixel = cacheBmp.getPixel((int) event.getX(), (int) event.getY());
-
-        int r = Color.red(pixel);
-        if (r == 1)
-        {
-            int g = Color.green(pixel);
-            int b = Color.blue(pixel);
-
-            if (listener != null)
-            {
-                listener.onCellClick(g, b);
-            }
-        }*/
-        if(listener != null) {
-            float x = event.getX();
-            float y = event.getY();
-            //float cellHeight = (float) Math.sqrt(3) * cellWidth / 2;
-            int radius = cellWidth/2;
-            int cellHeight = (int) (((float) radius) * Math.sqrt(3));
-            int side = radius * 3 / 2;
-
-
-            int ci = (int)Math.floor((float)x/(float)side);
-            int cx = (int)( x - side*ci);
-
-            int ty = (int)(y - (ci % 2) * cellHeight / 2);
-            int cj = (int)Math.floor((float)ty/(float)cellHeight);
-            int cy = ty - cellHeight*cj;
-
-            if (cx > Math.abs(radius / 2 - radius * cy / cellHeight)) {
-                listener.onCellClick(ci, cj);
-            } else {
-                listener.onCellClick(ci - 1, cj + (ci % 2) - ((cy < cellHeight / 2) ? 1 : 0));
-            }
         }
-        return true;
+        else {
+            if (event.getAction() != MotionEvent.ACTION_DOWN)
+                return false;
+
+
+            if (listener != null) {
+                float x = event.getX();
+                float y = event.getY();
+
+                int radius = cellWidth / 2;
+                int cellHeight = (int) (((float) radius) * Math.sqrt(3));
+                int side = radius * 3 / 2;
+
+
+                int ci = (int) Math.floor((float) x / (float) side);
+                int cx = (int) (x - side * ci);
+
+                int ty = (int) (y - (ci % 2) * cellHeight / 2);
+                int cj = (int) Math.floor((float) ty / (float) cellHeight);
+                int cy = ty - cellHeight * cj;
+
+                if (cx > Math.abs(radius / 2 - radius * cy / cellHeight)) {
+                    listener.onCellClick(ci, cj);
+                } else {
+                    listener.onCellClick(ci - 1, cj + (ci % 2) - ((cy < cellHeight / 2) ? 1 : 0));
+                }
+            }
+            return true;
+        }
+
     }
 
 
@@ -373,7 +338,6 @@ public class MapView extends View {
         wallPaint.setStrokeWidth(5f);
         canvas.drawPath(combPath, wallPaint);
 
-        cacheCan.drawPath(combPath, cachePaint);
     }
 
     private void drawMoves(Canvas canvas, ArrayList<Move> moves){
