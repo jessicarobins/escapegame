@@ -28,6 +28,8 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
     //data structures
     private ArrayList<Player> players;
     private Sector[][] sectors;
+    private int turnNumber; //this is really the round but they call it turn in the game
+    private int currentPlayer; //the index of the  player whose turn it is within the round (turn)...
 
     //adapters
     private PlayerSidebarAdapter playerSidebarAdapter;
@@ -36,6 +38,8 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
     private ListView playerListView;
     private MapView hexagonMap;
     private TableLayout mapGrid;
+    private TextView turnNumberTextBox;
+    private Button advanceTurnButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +55,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         initializePlayers();
         createTestMap(4,5);
         initializeHexagonMap();
-        //initializeMapGrid();
+        setUpTurnLogic();
 
     }
 
@@ -107,95 +111,50 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         playerListView.setAdapter(playerSidebarAdapter);
     }
 
+    /******* turn logic**********/
+    private void setUpTurnLogic(){
+        turnNumber = 1;
+        currentPlayer = 0;
+        players.get(currentPlayer).setTurn(true);
+        turnNumberTextBox = (TextView) findViewById(R.id.turnNumber);
+        advanceTurnButton = (Button) findViewById(R.id.advance_turn);
 
-/*
-    private void initializeMapGrid(){
-        mapGrid = (TableLayout) findViewById(R.id.map_grid);
-        int cols = sectors.length;
-        int sectorRows = sectors[0].length;
-        int rows = sectorRows*2;
-
-        TextView text;
-        GridView moveGrid;
-        TableRow row;
-        TableLayout.LayoutParams tableParams;
-
-        int yText; //the sector value for x, based on i, j
-
-
-        //j is the number of ROWS which means it is the Y VALUE OMG wtf WHY
-        for(int j = 0; j<rows; j++){
-            row = new TableRow(this);
-            tableParams = new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT,
-                    TableLayout.LayoutParams.MATCH_PARENT, 1.0f);
-            //params.weight = 1;
-
-            row.setLayoutParams(tableParams);
-            row.setGravity(Gravity.CENTER);
-
-
-            //i is the number of COLUMNS which means it is the X VALUE HOLY SHIT
-            for (int i = 0; i<cols; i++){
-                //if THE X VALUE IS EVEN (so this is A, C, E etc)
-                //  then the new Y value, will just be the Y-value of the table divided
-                //  by two
-                if((i%2)==0) {
-                    yText = j/2;
-                }
-                //if THE X VALUE IS ODD (that's B, D, F etc)
-                //  the y-value in the table we are displaying is HIGHER than the y-value in
-                //  the sector array. so we have to make sure we aren't getting something
-                //  less than zero from the sector array
-                else {
-                    yText = (j -1) / 2;
-                }
-                //if i+j is even, we want to put the sector name
-                //we need to make sure it's not the very last row because that will
-                //  arrayindexoutofbounds our asses
-                if( (yText>=0) && (yText<sectorRows) && ((i+j)%2 == 0) && (j<(rows-1))) {
-
-                    text = new TextView(this);
-                    text.setText(sectors[i][yText].getId());
-                    text.setGravity(Gravity.CENTER);
-                    text.setBackgroundColor(Color.YELLOW);
-                    row.addView(text);
-                }
-
-
-                //i think ygrid is never going to be less than 0 for odd rows but
-                //  we don't want to print the first row either
-
-                else if ( (j>0) && (yText>=0) && ((i+j)%2==1) ) {
-                    //check to make sure there are any moves before we do anything
-                    if (!sectors[i][yText].moves().isEmpty()) {
-                        //get the moves
-                        moveGrid = new GridView(this);
-                        moveGrid.setNumColumns(5);
-
-                        moveGrid.setAdapter(new MoveGridAdapter(this, sectors[i][yText].moves()));
-                        //add the view to the row
-                        row.addView(moveGrid);
-                    }
-                    //if the moves array is empty
-                    else {
-                        text = new TextView(this);
-                        text.setText("blank");
-                        text.setGravity(Gravity.CENTER);
-                        text.setBackgroundColor(Color.MAGENTA);
-                        row.addView(text);
-                    }
-                }
-                else {
-                        text = new TextView(this);
-                        text.setText("blank");
-                        text.setGravity(Gravity.CENTER);
-                        text.setBackgroundColor(Color.GREEN);
-                        row.addView(text);
-                }
+        advanceTurnButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                advanceTurn();
             }
-            mapGrid.addView(row);
+
+        });
+    }
+
+    private void advanceTurn() {
+
+        //remove current player's turn
+        players.get(currentPlayer).setTurn(false);
+
+        //if the player is the last one in the array, increment the turn count
+        if(currentPlayer == (players.size()-1)) {
+            //increment turn number
+            turnNumber++;
+
+            //sent the currentturn array index back to 0
+            currentPlayer = 0;
+
+            //increment the number that's at the top
+
+            turnNumberTextBox.setText(turnNumber+"");
+            // do we need to redraw after this?
         }
-    }*/
+        else
+            currentPlayer++;
+
+        //set next player's turn
+        players.get(currentPlayer).setTurn(true);
+
+    }
+
+    /******* testing stuff*******/
 
     private void createTestMap(int cols, int rows){
         //create an x by y test map of sectors

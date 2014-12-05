@@ -20,6 +20,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="1"
+            android:background="@android:color/black"
             android:id="@+id/turnNumber"
             android:layout_gravity="center_horizontal"
             android:gravity="center_horizontal"
@@ -38,7 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/next_turn_button"
-            android:id="@+id/button2"
+            android:id="@+id/advance_turn"
             android:layout_gravity="center_horizontal"
             />
 
