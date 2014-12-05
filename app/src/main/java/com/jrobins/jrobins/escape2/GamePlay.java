@@ -152,6 +152,8 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         //set next player's turn
         players.get(currentPlayer).setTurn(true);
 
+        playerSidebarAdapter.notifyDataSetChanged();
+
     }
 
     /******* testing stuff*******/

@@ -16,7 +16,7 @@
         android:id="@+id/sidebar"
         >
         <TextView
-            android:layout_width="50dp"
+            android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="1"
@@ -27,7 +27,7 @@
             />
 
         <ListView
-            android:layout_width="50dp"
+            android:layout_width="30dp"
             android:layout_height="wrap_content"
             android:divider="@android:color/transparent"
             android:dividerHeight="5dp"
@@ -36,11 +36,13 @@
 
         <Button
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:text="@string/next_turn_button"
             android:id="@+id/advance_turn"
             android:layout_gravity="center_horizontal"
+            android:gravity="top"
+
             />
 
     </LinearLayout>
