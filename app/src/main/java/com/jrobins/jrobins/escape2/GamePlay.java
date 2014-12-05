@@ -49,7 +49,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
 
 
         initializePlayers();
-        createTestMap(6,7);
+        createTestMap(4,5);
         initializeHexagonMap();
         //initializeMapGrid();
 
@@ -220,7 +220,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         //create a random array of moves (for testing purposes)
         ArrayList<Move> moves = new ArrayList<Move>();
         int playerIndex = 0;
-        int numberOfMoves = (int)(Math.random()*10);
+        int numberOfMoves = (int)(Math.random()*12);
         for(int i = 0; i < numberOfMoves; i++) {
             moves.add(createTestMove(players.get(playerIndex)));
             if(playerIndex == (players.size()-1))

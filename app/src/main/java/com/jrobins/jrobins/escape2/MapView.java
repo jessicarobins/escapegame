@@ -56,7 +56,7 @@ public class MapView extends View {
 
         wallPaint.setColor(getResources().getColor(R.color.map_outline));
         wallPaint.setStyle(Paint.Style.STROKE);
-        wallPaint.setStrokeWidth(5f);
+        //wallPaint.setStrokeWidth(5f);
 
         fillPaint.setStyle(Paint.Style.FILL);
         cachePaint.setStyle(Paint.Style.FILL);
@@ -69,6 +69,7 @@ public class MapView extends View {
         textPaint.setAntiAlias(true);
         // text shadow
         //textPaint.setShadowLayer(1f, 0f, 1f, Color.LTGRAY);
+
         textPaint.setTextSize(20);
 
         //for special sector types (e.g., H, E, A)
@@ -133,9 +134,9 @@ public class MapView extends View {
         int cellWidth1 = (int)( cellHeight*2 / Math.sqrt(3)); //if height is limiting
         int cellWidth2 = (int)(w/ (columns - (.25*(columns-1)))); //if width is limiting
         cellWidth = Math.min(cellWidth1, cellWidth2);
-        textPaint.setTextSize(cellWidth/5);
+
         labelPaint.setTextSize(cellWidth/2);
-        moveWidth = cellWidth/6;
+        moveWidth = cellWidth/7;
     }
 
     @Override
@@ -259,7 +260,9 @@ public class MapView extends View {
 
         float x,y;
         //textBounds = new Rect();
-
+        textPaint.setTextSize(cellWidth/5);
+        textPaint.setColor(Color.BLACK);
+        textPaint.clearShadowLayer();
         textPaint.getTextBounds(sectorName, 0, sectorName.length(), rect);
         x = centerX - rect.exactCenterX();
         y = centerY - rect.exactCenterY();
@@ -281,7 +284,7 @@ public class MapView extends View {
 
     private void drawHexagon(Canvas canvas){
         canvas.drawPath(combPath, fillPaint);
-
+        wallPaint.setStrokeWidth(5f);
         canvas.drawPath(combPath, wallPaint);
 
         cacheCan.drawPath(combPath, cachePaint);
@@ -306,20 +309,10 @@ public class MapView extends View {
         for(int i = 0; i<moves.size(); i++){
             //check that we haven't reached the max number of moves in
             //  a row
-            if(i == MAX_MOVES)
+            if(i > 0 && i%MAX_MOVES==0)
                 yOffset+=moveWidth;
 
-            //find the right color - this is certainty color, should be text
-            /*
-            certainty = moves.get(0).certainty();
-            switch (certainty) {
-                case 0: fillPaint.setColor(getResources().getColor(R.color.bluff));
-                    break;
-                case 1: fillPaint.setColor(getResources().getColor(R.color.certain));
-                    break;
-                case 2: fillPaint.setColor(getResources().getColor(R.color.uncertain));
-                    break;
-            }*/
+
 
             //draw the shape in the right place
             //that'll be (i%MAX_MOVES)*moveWidth + gridStartX and then gridStartY+yOffset
@@ -337,13 +330,34 @@ public class MapView extends View {
 
         //set the fillpaint to be the player color
         fillPaint.setColor(move.color());
-
+        wallPaint.setStrokeWidth(1f);
         //draw rectangle
         canvas.drawRect(moveSquare, fillPaint);
-
-        //draw number inside rectangle
+        canvas.drawRect(moveSquare, wallPaint);
+        if(moveWidth>22)
+            drawTextInMoveSquare(canvas, move);
     }
 
+    private void drawTextInMoveSquare(Canvas canvas, Move move){
+        //find the right text color - this is certainty color, should be text
+
+        int certainty = move.certainty();
+        switch (certainty) {
+            case 0: textPaint.setColor(getResources().getColor(R.color.bluff));
+                break;
+            case 1: textPaint.setColor(getResources().getColor(R.color.certain));
+                break;
+            case 2: textPaint.setColor(getResources().getColor(R.color.uncertain));
+                break;
+        }
+        //draw number inside rectangle
+        textPaint.setTextSize(cellWidth/10);
+
+        textPaint.getTextBounds(move.turnNumberToString(), 0, move.turnNumberToString().length(), rect);
+        float x = moveSquare.centerX() - rect.exactCenterX();
+        float y = moveSquare.centerY() - rect.exactCenterY();
+        canvas.drawText(move.turnNumberToString(), x,y, textPaint);
+    }
 
     private void setMoveSquare(float centerX, float centerY){
         moveSquare.set(centerX - moveWidth/2, centerY-moveWidth/2, centerX+moveWidth/2, centerY + moveWidth/2);
@@ -356,8 +370,8 @@ public class MapView extends View {
         combPath.computeBounds(rectf, true);
         drawHexagon(canvas);
 
-        //we want text about 1/3 of the way from the top
-        float y = rectf.top + rectf.height()/3;
+        //we want text about 1/4 of the way from the top
+        float y = rectf.top + rectf.height()/4;
 
         //sector is special like H, E, A
         if(sector.isSpecial())
