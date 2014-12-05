@@ -44,4 +44,5 @@ public class Move {
     public void setCertainty(int certainty){
         this.certainty = certainty;
     }
+
 }

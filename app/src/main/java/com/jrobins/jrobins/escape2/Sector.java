@@ -136,6 +136,10 @@ public class Sector {
         this.moves.add(move);
     }
 
+    public void removeLastMove(){
+        moves.remove(moves.size()-1);
+    }
+
     public boolean isValid(){
         //returns true if this is a sector that's not invalid (i.e., sectorType!=0)
         return (sectorType !=0);
@@ -155,6 +159,10 @@ public class Sector {
 
     public boolean isSpecial(){
         return (sectorType > 2 );
+    }
+
+    public boolean isNormal() {
+        return (sectorType == 1 || sectorType == 2);
     }
 
     public int sectorType(){

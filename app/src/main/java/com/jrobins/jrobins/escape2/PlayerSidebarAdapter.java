@@ -52,14 +52,13 @@ public class PlayerSidebarAdapter extends ArrayAdapter<Player>{
         TextView playerID = (TextView) convertView.findViewById(R.id.player_id);
 
         //size the buttons so they all fit on the screen
-        /*
+
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-        int height = size.y;
-        button.setWidth( (height/10) / players.size());
-        button.setHeight((height/10) / players.size());*/
+        int h = size.y;
+        playerID.setTextSize( (h/16) / players.size());
 
 
 
@@ -69,11 +68,11 @@ public class PlayerSidebarAdapter extends ArrayAdapter<Player>{
         Rect bounds = new Rect();
         Paint textPaint = playerID.getPaint();
 
-        textPaint.getTextBounds(playerName,0,playerName.length(),bounds);
-        int height = bounds.height();
+        textPaint.getTextBounds("MM",0,2,bounds);
+        int textwidth = bounds.width();
 
-        playerID.setWidth((int)(height*1.5));
-        playerID.setHeight((int)(height*1.5));
+        playerID.setWidth((int)(textwidth*1.25));
+        playerID.setHeight((int)(textwidth*1.25));
 
 
 

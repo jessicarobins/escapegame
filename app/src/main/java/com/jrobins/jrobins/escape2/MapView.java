@@ -118,6 +118,21 @@ public class MapView extends View {
         return cellSet[column][row];
     }
 
+    public void setCell(int column, int row, boolean isSet, Move move)
+    {
+        if (isSet){ //cell is now set
+            //add move to array
+            sectors[column][row].addMove(move);
+        }
+        else { //isSet == false, cell is now not set
+            //remove move from array
+            sectors[column][row].removeLastMove();
+        }
+
+        cellSet[column][row] = isSet;
+        invalidate();
+    }
+
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh)
     {

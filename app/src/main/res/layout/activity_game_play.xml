@@ -38,7 +38,7 @@
             style="?android:attr/buttonStyleSmall"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:text="@string/next_turn_button"
+            android:background="@drawable/ic_action_next_item"
             android:id="@+id/advance_turn"
             android:layout_gravity="center_horizontal"
             android:gravity="top"
