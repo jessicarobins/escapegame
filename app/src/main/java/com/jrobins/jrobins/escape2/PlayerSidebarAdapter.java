@@ -69,10 +69,10 @@ public class PlayerSidebarAdapter extends ArrayAdapter<Player>{
         Paint textPaint = playerID.getPaint();
 
         textPaint.getTextBounds("MM",0,2,bounds);
-        int textwidth = bounds.width();
+        h = bounds.width();
 
-        playerID.setWidth((int)(textwidth*1.25));
-        playerID.setHeight((int)(textwidth*1.25));
+        playerID.setWidth((int)(h*1.25));
+        playerID.setHeight((int)(h*1.25));
 
 
 

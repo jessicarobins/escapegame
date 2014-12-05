@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +16,7 @@ import android.widget.AbsoluteLayout;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -40,18 +42,14 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
     private TableLayout mapGrid;
     private TextView turnNumberTextBox;
     private Button advanceTurnButton;
+    private LinearLayout sidebar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //Remove title bar
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-
-        //Remove notification bar
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_game_play);
 
 
+        setUpWindow();
         initializePlayers();
         createTestMap(4,5);
         initializeHexagonMap();
@@ -91,6 +89,27 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
             //hexagonMap.setCell(column, row, !hexagonMap.isCellSet(column, row));
             hexagonMap.setCell(column, row, !hexagonMap.isCellSet(column, row), new Move(players.get(currentPlayer),turnNumber,1));
         }
+    }
+
+
+    private void setUpWindow(){
+
+        //Remove title bar
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        //Remove notification bar
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setContentView(R.layout.activity_game_play);
+
+        //set width of sidebar based on screen width
+
+        sidebar = (LinearLayout) findViewById(R.id.sidebar);
+        Point size = new Point();
+        this.getWindowManager().getDefaultDisplay().getSize(size);
+
+        int w = size.x/25;
+        int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, w, getResources().getDisplayMetrics());
+        sidebar.getLayoutParams().width = width;
     }
 
     private void initializeHexagonMap(){
