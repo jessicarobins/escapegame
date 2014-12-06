@@ -152,11 +152,6 @@ public class MapView extends View {
     {
         super.onSizeChanged(w, h, oldw, oldh);
 
-
-        //cellWidth = 2 * w / (2 * columns + columns - 1);
-        //cellWidth = (int)( 2*w / (1.75 * columns));
-        //# cols - .5*(#cols-1)/2
-        //cellWidth = Math.min(sqrt(3)/2 * cellWidth)
         float cellHeight = h/rows;
         int cellWidth1 = (int)( cellHeight*2 / Math.sqrt(3)); //if height is limiting
         int cellWidth2 = (int)(w/ (columns - (.25*(columns-1)))); //if width is limiting
@@ -225,44 +220,6 @@ public class MapView extends View {
 
     }
 
-    private void drawGridWithZigZagCols(Canvas canvas){
-        boolean oddRow;
-        int xOff;
-
-
-
-        combPath = getHexPath(cellWidth / 2f, cellWidth / 2f, (float) (cellWidth * Math.sqrt(3) / 4));
-
-        for (int r = 0; r < rows; r++)
-        {
-            oddRow = (r & 1) == 1;
-            xOff = 0;
-
-
-            for (int c = 0; c < columns; c++)
-            {
-                if (!(oddRow && c == columns - 1))
-                {
-                    if(sectors !=null)
-                        cellColor = getResources().getColor(sectors[c][r].color());
-                    else
-                        cellColor = Color.MAGENTA;
-                    fillPaint.setColor(cellSet[c][r] ? Color.RED : cellColor);
-
-                    drawSector(canvas, sectors[c][r]);
-                    //cacheCan.drawPath(combPath, cachePaint);
-
-                    combPath.offset((int) (1.5f * cellWidth), 0);
-                    xOff += 1.5f * cellWidth;
-
-
-                }
-            }
-
-
-            combPath.offset(-xOff + (oddRow ? -1 : 1) * 3 * cellWidth / 4, (float) (cellWidth * Math.sqrt(3) / 4));
-        }
-    }
 
     @Override
     public boolean onTouchEvent(MotionEvent event)
@@ -325,7 +282,7 @@ public class MapView extends View {
 
         float x,y;
         //textBounds = new Rect();
-
+        labelPaint.setTextSize(cellWidth/2);
         labelPaint.getTextBounds(label, 0, label.length(), rect);
         x = centerX - rect.exactCenterX();
         y = centerY - rect.exactCenterY();
