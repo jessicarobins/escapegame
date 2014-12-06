@@ -6,13 +6,18 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+import android.widget.ScrollView;
 
 import java.util.ArrayList;
 
@@ -24,10 +29,10 @@ public class MapView extends View {
     //paints!
     private Paint wallPaint = new Paint();
     private Paint fillPaint = new Paint();
-
     private Paint textPaint = new Paint();
     private Paint labelPaint = new Paint();
 
+    //path of a hexagon
     private Path combPath;
 
 
@@ -38,18 +43,38 @@ public class MapView extends View {
     private int columns;
     private int rows;
     private boolean[][] cellSet;
-
-    private OnCellClickListener listener;
-
     private int cellColor;
+
     private Sector[][] sectors;
+
+    //rectangles! for drawing things the right size
     RectF rectf = new RectF();
     RectF moveSquare = new RectF();
     Rect rect = new Rect();
 
-    //zooming/panning
+    //clicking
+    private OnCellClickListener listener;
+
+    //zooming
     private ScaleGestureDetector mScaleDetector;
     private float mScaleFactor = 1.f;
+
+    private float originX = 0f; // current position of viewport
+    private float originY = 0f;
+
+
+    //panning
+    private GestureDetector mGestureDetector;
+    private float offsetX = 0f;
+    private float offsetY = 0f;
+
+
+    private static final float AXIS_X_MIN = -1f;
+    private static final float AXIS_X_MAX = 1f;
+    private static final float AXIS_Y_MIN = -1f;
+    private static final float AXIS_Y_MAX = 1f;
+    private RectF mCurrentViewport = new RectF(AXIS_X_MIN, AXIS_Y_MIN, AXIS_X_MAX, AXIS_Y_MAX);
+    private Rect mContentRect = new Rect();
 
     public MapView(Context context)
     {
@@ -88,8 +113,11 @@ public class MapView extends View {
         labelPaint.setTextSize(20);
 
 
-        //initialize scale thing
+        //initialize zoom thing
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
+
+        //initialize the pan thing
+        mGestureDetector = new GestureDetector(context, new GestureListener());
     }
 
     public void initialize(Sector[][] sectors){
@@ -167,7 +195,12 @@ public class MapView extends View {
         super.onDraw(canvas);
 
         canvas.save();
+
+        //canvas.translate(originX, originY);
+        //canvas.scale(mScaleFactor, mScaleFactor, originX, originY);
         canvas.scale(mScaleFactor, mScaleFactor);
+        canvas.translate(offsetX, offsetY);
+
         cellWidth *=mScaleFactor;
         moveWidth = cellWidth/7;
         canvas.drawColor(getResources().getColor(R.color.map_background));
@@ -225,14 +258,17 @@ public class MapView extends View {
     public boolean onTouchEvent(MotionEvent event)
     {
 
-
+        mGestureDetector.onTouchEvent(event);
         if (event.getPointerCount() > 1){
             mScaleDetector.onTouchEvent(event);
             return true;
         }
+
         else {
+
+
             if (event.getAction() != MotionEvent.ACTION_DOWN)
-                return false;
+                return true;
 
 
             if (listener != null) {
@@ -415,15 +451,103 @@ public class MapView extends View {
 
     private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
         @Override
+        public boolean onScaleBegin(ScaleGestureDetector detector) {
+
+            getParent().requestDisallowInterceptTouchEvent(true);
+            super.onScaleBegin(detector);
+            return true;
+        }
+
+        @Override
         public boolean onScale(ScaleGestureDetector detector) {
+
+            if (detector.getScaleFactor() < 0.01)
+                return false; // ignore small changes
+
+
+            //float fx = detector.getFocusX();
+            //float fy = detector.getFocusY();
+            originX = detector.getFocusX();
+            originY = detector.getFocusY();
+
+            //originX += fx/mScaleFactor; // move origin to focus
+            //originY += fy/mScaleFactor;
+
+
             mScaleFactor *= detector.getScaleFactor();
 
             // Don't let the object get too small or too large.
             mScaleFactor = Math.max(0.1f, Math.min(mScaleFactor, 5.0f));
 
+            //originX -= fx/mScaleFactor; // move back, allow us to zoom with (fx,fy) as center
+            //originY -= fy/mScaleFactor;
+
+
             invalidate();
             return true;
         }
+
+        @Override
+        public void onScaleEnd(ScaleGestureDetector detector1) {
+            getParent().requestDisallowInterceptTouchEvent(false);
+            super.onScaleEnd(detector1);
+
+        }
     }
+
+    private class GestureListener extends GestureDetector.SimpleOnGestureListener {
+
+
+        @Override
+        public boolean onScroll(MotionEvent e1, MotionEvent e2,
+                                float distanceX, float distanceY) {
+
+            /*
+            // Scrolling uses math based on the viewport (as opposed to math using pixels).
+
+            // Pixel offset is the offset in screen pixels, while viewport offset is the
+            // offset within the current viewport.
+            float viewportOffsetX = distanceX * mCurrentViewport.width()
+                    / mContentRect.width();
+            float viewportOffsetY = -distanceY * mCurrentViewport.height()
+                    / mContentRect.height();
+
+            // Updates the viewport, refreshes the display.
+            setViewportBottomLeft(
+                    mCurrentViewport.left + viewportOffsetX,
+                    mCurrentViewport.bottom + viewportOffsetY);
+            */
+            offsetX -=distanceX;
+            offsetY -=distanceY;
+            invalidate();
+            return true;
+        }
+
+    }
+
+    /**
+     * Sets the current viewport (defined by mCurrentViewport) to the given
+     * X and Y positions. Note that the Y value represents the topmost pixel position,
+     * and thus the bottom of the mCurrentViewport rectangle.
+     */
+    private void setViewportBottomLeft(float x, float y) {
+        /*
+         * Constrains within the scroll range. The scroll range is simply the viewport
+         * extremes (AXIS_X_MAX, etc.) minus the viewport size. For example, if the
+         * extremes were 0 and 10, and the viewport size was 2, the scroll range would
+         * be 0 to 8.
+         */
+
+        float curWidth = mCurrentViewport.width();
+        float curHeight = mCurrentViewport.height();
+        x = Math.max(AXIS_X_MIN, Math.min(x, AXIS_X_MAX - curWidth));
+        y = Math.max(AXIS_Y_MIN + curHeight, Math.min(y, AXIS_Y_MAX));
+
+        mCurrentViewport.set(x, y - curHeight, x + curWidth, y);
+
+        // Invalidates the View to update the display.
+        ViewCompat.postInvalidateOnAnimation(this);
+    }
+
 }
 
