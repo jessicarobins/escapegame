@@ -68,13 +68,12 @@ public class MapView extends View {
     private float offsetX = 0f;
     private float offsetY = 0f;
 
+    private final int ZOOM = 1;
+    private final int PAN = 2;
+    private int clickEvent;
 
-    private static final float AXIS_X_MIN = -1f;
-    private static final float AXIS_X_MAX = 1f;
-    private static final float AXIS_Y_MIN = -1f;
-    private static final float AXIS_Y_MAX = 1f;
-    private RectF mCurrentViewport = new RectF(AXIS_X_MIN, AXIS_Y_MIN, AXIS_X_MAX, AXIS_Y_MAX);
-    private Rect mContentRect = new Rect();
+
+
 
     public MapView(Context context)
     {
@@ -257,44 +256,46 @@ public class MapView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
-
+        clickEvent = 0;
         mGestureDetector.onTouchEvent(event);
         if (event.getPointerCount() > 1){
             mScaleDetector.onTouchEvent(event);
             return true;
         }
-
+        /*
         else {
+            Log.d("click", "click event = " + clickEvent);
 
-
-            if (event.getAction() != MotionEvent.ACTION_DOWN)
+            if (event.getActionMasked() != MotionEvent.ACTION_UP)
                 return true;
 
+            if (clickEvent != PAN && clickEvent != ZOOM) {
+                if (listener != null) {
+                    float x = event.getX() - offsetX;
+                    float y = event.getY() - offsetY;
 
-            if (listener != null) {
-                float x = event.getX()-offsetX;
-                float y = event.getY()-offsetY;
-
-                int radius = cellWidth / 2;
-                int cellHeight = (int) (((float) radius) * Math.sqrt(3));
-                int side = radius * 3 / 2;
+                    int radius = cellWidth / 2;
+                    int cellHeight = (int) (((float) radius) * Math.sqrt(3));
+                    int side = radius * 3 / 2;
 
 
-                int ci = (int) Math.floor((float) x / (float) side);
-                int cx = (int) (x - side * ci);
+                    int ci = (int) Math.floor((float) x / (float) side);
+                    int cx = (int) (x - side * ci);
 
-                int ty = (int) (y - (ci % 2) * cellHeight / 2);
-                int cj = (int) Math.floor((float) ty / (float) cellHeight);
-                int cy = ty - cellHeight * cj;
+                    int ty = (int) (y - (ci % 2) * cellHeight / 2);
+                    int cj = (int) Math.floor((float) ty / (float) cellHeight);
+                    int cy = ty - cellHeight * cj;
 
-                if (cx > Math.abs(radius / 2 - radius * cy / cellHeight)) {
-                    listener.onCellClick(ci, cj);
-                } else {
-                    listener.onCellClick(ci - 1, cj + (ci % 2) - ((cy < cellHeight / 2) ? 1 : 0));
+                    if (cx > Math.abs(radius / 2 - radius * cy / cellHeight)) {
+                        listener.onCellClick(ci, cj);
+                    } else {
+                        listener.onCellClick(ci - 1, cj + (ci % 2) - ((cy < cellHeight / 2) ? 1 : 0));
+                    }
                 }
+                return true;
             }
             return true;
-        }
+        }*/return true;
 
     }
 
@@ -482,7 +483,8 @@ public class MapView extends View {
             //originX -= fx/mScaleFactor; // move back, allow us to zoom with (fx,fy) as center
             //originY -= fy/mScaleFactor;
 
-
+            clickEvent = ZOOM;
+            Log.d("zoom", "click event = " + clickEvent);
             invalidate();
             return true;
         }
@@ -517,36 +519,44 @@ public class MapView extends View {
                     mCurrentViewport.left + viewportOffsetX,
                     mCurrentViewport.bottom + viewportOffsetY);
             */
+
             offsetX -=distanceX;
             offsetY -=distanceY;
+            clickEvent = PAN;
+            Log.d("pan", "click event = " + clickEvent);
             invalidate();
             return true;
         }
 
-    }
+        @Override
+        public boolean onSingleTapUp(MotionEvent event) {
+            Log.d("gestures", "onSingleTapUp: " + event.toString());
 
-    /**
-     * Sets the current viewport (defined by mCurrentViewport) to the given
-     * X and Y positions. Note that the Y value represents the topmost pixel position,
-     * and thus the bottom of the mCurrentViewport rectangle.
-     */
-    private void setViewportBottomLeft(float x, float y) {
-        /*
-         * Constrains within the scroll range. The scroll range is simply the viewport
-         * extremes (AXIS_X_MAX, etc.) minus the viewport size. For example, if the
-         * extremes were 0 and 10, and the viewport size was 2, the scroll range would
-         * be 0 to 8.
-         */
+            if (listener != null) {
+                float x = event.getX() - offsetX;
+                float y = event.getY() - offsetY;
 
-        float curWidth = mCurrentViewport.width();
-        float curHeight = mCurrentViewport.height();
-        x = Math.max(AXIS_X_MIN, Math.min(x, AXIS_X_MAX - curWidth));
-        y = Math.max(AXIS_Y_MIN + curHeight, Math.min(y, AXIS_Y_MAX));
+                int radius = cellWidth / 2;
+                int cellHeight = (int) (((float) radius) * Math.sqrt(3));
+                int side = radius * 3 / 2;
 
-        mCurrentViewport.set(x, y - curHeight, x + curWidth, y);
 
-        // Invalidates the View to update the display.
-        ViewCompat.postInvalidateOnAnimation(this);
+                int ci = (int) Math.floor((float) x / (float) side);
+                int cx = (int) (x - side * ci);
+
+                int ty = (int) (y - (ci % 2) * cellHeight / 2);
+                int cj = (int) Math.floor((float) ty / (float) cellHeight);
+                int cy = ty - cellHeight * cj;
+
+                if (cx > Math.abs(radius / 2 - radius * cy / cellHeight)) {
+                    listener.onCellClick(ci, cj);
+                } else {
+                    listener.onCellClick(ci - 1, cj + (ci % 2) - ((cy < cellHeight / 2) ? 1 : 0));
+                }
+
+            }
+            return true;
+        }
     }
 
 }
