@@ -272,8 +272,8 @@ public class MapView extends View {
 
 
             if (listener != null) {
-                float x = event.getX();
-                float y = event.getY();
+                float x = event.getX()-offsetX;
+                float y = event.getY()-offsetY;
 
                 int radius = cellWidth / 2;
                 int cellHeight = (int) (((float) radius) * Math.sqrt(3));
