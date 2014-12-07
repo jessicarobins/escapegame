@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Maps xmlns:android="http://schemas.android.com/apk/res/android">
-    <Map id = "Galilei">
+    <Map>
+        <name>Galilei</name>
         <Column id = "0">
             <Sector>
                 <row>1</row>

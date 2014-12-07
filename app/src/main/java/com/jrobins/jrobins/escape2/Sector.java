@@ -1,6 +1,7 @@
 package com.jrobins.jrobins.escape2;
 
 import android.graphics.Color;
+import android.util.Log;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -34,6 +35,13 @@ public class Sector {
         this.x = x;
         this.y = y;
         this.sectorType = sectorType;
+        moves = new ArrayList<Move>();
+    }
+
+    public Sector(int x, int y, String sectorType){
+        this.x = x;
+        this.y = y;
+        this.sectorType = sectorTypeToInt(sectorType);
         moves = new ArrayList<Move>();
     }
 
@@ -128,6 +136,25 @@ public class Sector {
         return sectorTypeMap[sector];
     }
 
+    public static int sectorTypeToInt(String sector){
+        if(sector.equals("invalid"))
+            return 0;
+        else if (sector.equals("safe"))
+            return 1;
+        else if (sector.equals("unsafe"))
+            return 2;
+        else if (sector.contains("alien"))
+            return 3;
+        else if (sector.contains("human"))
+            return 4;
+        else if (sector.contains("escape"))
+            return 5;
+        else {
+            Log.d("sector", "invalid sector type " + sector);
+            return -1;
+        }
+    }
+
     public void addMoves(ArrayList<Move> moves){
         this.moves.addAll(moves);
     }
@@ -167,5 +194,9 @@ public class Sector {
 
     public int sectorType(){
         return sectorType;
+    }
+
+    public void setSectorType (String sectorType){
+        this.sectorType = sectorTypeToInt(sectorType);
     }
 }
