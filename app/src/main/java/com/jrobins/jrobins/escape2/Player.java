@@ -15,6 +15,7 @@ public class Player implements Parcelable {
     public Player(Parcel source) {
         name = source.readString();
         color = source.readInt();
+
     }
 
     public Player(){

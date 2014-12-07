@@ -1,5 +1,6 @@
 package com.jrobins.jrobins.escape2;
 
+import android.content.res.XmlResourceParser;
 import android.util.Xml;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -15,8 +16,10 @@ public class MapParser {
     // We don't use namespaces
     private static final String ns = null;
 
+    XmlResourceParser parser;
 
 
+    /*
     public List parse(InputStream in) throws XmlPullParserException, IOException {
         try {
             XmlPullParser parser = Xml.newPullParser();
@@ -27,9 +30,13 @@ public class MapParser {
         } finally {
             in.close();
         }
+    }*/
+
+    public MapParser(XmlResourceParser parser){
+        this.parser = parser;
     }
 
-    private List readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
+    public List readFeed(XmlResourceParser parser) throws XmlPullParserException, IOException {
         List <Map> entries = new ArrayList<Map>();
 
         parser.require(XmlPullParser.START_TAG, ns, "feed");

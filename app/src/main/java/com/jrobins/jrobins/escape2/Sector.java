@@ -1,6 +1,8 @@
 package com.jrobins.jrobins.escape2;
 
 import android.graphics.Color;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import java.lang.reflect.Array;
@@ -9,7 +11,7 @@ import java.util.ArrayList;
 /**
  * Created by jrobins on 12/1/2014.
  */
-public class Sector {
+public class Sector implements Parcelable{
     private int x; //this represents A-Z, the x coordinate
     private int y;
     private int sectorType; //0 = invalid, 1 = safe, 2 = unsafe, 3 = alien start, 4 = human start
@@ -29,6 +31,13 @@ public class Sector {
 
     public Sector(){
         moves = new ArrayList<Move>();
+    }
+
+    public Sector(Parcel in) {
+        moves = new ArrayList<Move>();
+        this.x = in.readInt();
+        this.y = in.readInt();
+        this.sectorType = in.readInt();
     }
 
     public Sector(int x, int y, int sectorType){
@@ -199,4 +208,28 @@ public class Sector {
     public void setSectorType (String sectorType){
         this.sectorType = sectorTypeToInt(sectorType);
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.x);
+        dest.writeInt(this.y);
+        dest.writeInt(this.sectorType);
+    }
+
+    public static final Parcelable.Creator<Sector> CREATOR
+            = new Parcelable.Creator() {
+        public Sector createFromParcel(Parcel in) {
+            return new Sector(in);
+        }
+
+        public Sector[] newArray(int size) {
+            return new Sector[size];
+        }
+    };
+
 }
