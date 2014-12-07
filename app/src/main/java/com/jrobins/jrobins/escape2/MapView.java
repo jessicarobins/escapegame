@@ -68,10 +68,6 @@ public class MapView extends View {
     private float offsetX = 0f;
     private float offsetY = 0f;
 
-    private final int ZOOM = 1;
-    private final int PAN = 2;
-    private int clickEvent;
-
 
 
 
@@ -256,46 +252,13 @@ public class MapView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
-        clickEvent = 0;
+
         mGestureDetector.onTouchEvent(event);
         if (event.getPointerCount() > 1){
             mScaleDetector.onTouchEvent(event);
             return true;
         }
-        /*
-        else {
-            Log.d("click", "click event = " + clickEvent);
-
-            if (event.getActionMasked() != MotionEvent.ACTION_UP)
-                return true;
-
-            if (clickEvent != PAN && clickEvent != ZOOM) {
-                if (listener != null) {
-                    float x = event.getX() - offsetX;
-                    float y = event.getY() - offsetY;
-
-                    int radius = cellWidth / 2;
-                    int cellHeight = (int) (((float) radius) * Math.sqrt(3));
-                    int side = radius * 3 / 2;
-
-
-                    int ci = (int) Math.floor((float) x / (float) side);
-                    int cx = (int) (x - side * ci);
-
-                    int ty = (int) (y - (ci % 2) * cellHeight / 2);
-                    int cj = (int) Math.floor((float) ty / (float) cellHeight);
-                    int cy = ty - cellHeight * cj;
-
-                    if (cx > Math.abs(radius / 2 - radius * cy / cellHeight)) {
-                        listener.onCellClick(ci, cj);
-                    } else {
-                        listener.onCellClick(ci - 1, cj + (ci % 2) - ((cy < cellHeight / 2) ? 1 : 0));
-                    }
-                }
-                return true;
-            }
-            return true;
-        }*/return true;
+        return true;
 
     }
 
@@ -483,8 +446,7 @@ public class MapView extends View {
             //originX -= fx/mScaleFactor; // move back, allow us to zoom with (fx,fy) as center
             //originY -= fy/mScaleFactor;
 
-            clickEvent = ZOOM;
-            Log.d("zoom", "click event = " + clickEvent);
+
             invalidate();
             return true;
         }
@@ -522,15 +484,14 @@ public class MapView extends View {
 
             offsetX -=distanceX;
             offsetY -=distanceY;
-            clickEvent = PAN;
-            Log.d("pan", "click event = " + clickEvent);
+
             invalidate();
             return true;
         }
 
         @Override
-        public boolean onSingleTapUp(MotionEvent event) {
-            Log.d("gestures", "onSingleTapUp: " + event.toString());
+        public boolean onSingleTapConfirmed(MotionEvent event) {
+
 
             if (listener != null) {
                 float x = event.getX() - offsetX;
@@ -557,6 +518,38 @@ public class MapView extends View {
             }
             return true;
         }
+
+        /*
+        @Override
+        public boolean onDoubleTapEvent(MotionEvent event) {
+            Log.d("gestures", "onDoubleTapEvent: " + event.toString());
+
+
+
+
+            float fx = event.getX();
+            float fy = event.getY();
+            //originX = event.getX();
+            //originY = event.getY();
+
+            originX += fx/mScaleFactor; // move origin to focus
+            originY += fy/mScaleFactor;
+
+
+            mScaleFactor *= 1.25;
+
+            // Don't let the object get too small or too large.
+            mScaleFactor = Math.max(0.1f, Math.min(mScaleFactor, 5.0f));
+
+            //originX -= fx/mScaleFactor; // move back, allow us to zoom with (fx,fy) as center
+            //originY -= fy/mScaleFactor;
+
+
+            invalidate();
+            return true;
+
+        }
+        */
     }
 
 }
