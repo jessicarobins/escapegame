@@ -31,22 +31,30 @@ public class MapParser {
 
 
         String tag;
-        xpp.next();
+        //xpp.next();
         int eventType = xpp.getEventType();
         while (eventType != XmlPullParser.END_DOCUMENT)
         {
             if(eventType == XmlPullParser.START_TAG)
             {
                 tag = xpp.getName();
+                if (tag == null)
+                    return maps;
+
                 if(tag.equalsIgnoreCase("Map")){
                     //eventType = xpp.nextTag();
+                    xpp.next();
                     maps.add(parseMap());
-
+                    //break;
                 }
+                else
+                    eventType = xpp.next();
 
             }
+            else
+                eventType = xpp.next();
 
-            eventType = xpp.next();
+
         }
         return maps;
     }
@@ -63,9 +71,10 @@ public class MapParser {
             if (eventType == XmlPullParser.START_TAG) {
                 tag = xpp.getName();
                 if (tag.equalsIgnoreCase("map")){
-                    eventType = xpp.next();
-                    tag = xpp.getName();
+                    //eventType = xpp.next();
+                    //tag = xpp.getName();
                     //eventType = xpp.nextTag();
+                    return new Map(name, sectors);
                 }
 
                 if (tag.equalsIgnoreCase("name")){

@@ -57,7 +57,7 @@ public class MapChoiceAdapter extends ArrayAdapter<Map> {
         mapName.setText(maps.get(position).name());
         map = (BasicHexagonGridView) convertView.findViewById(R.id.map);
         int y = (int)(size.x*(.61));
-        map.setMinimumHeight(y);
+        map.setMinimumHeight(size.x);
         map.setMinimumWidth(size.x);
         map.initialize(maps.get(position));
 
