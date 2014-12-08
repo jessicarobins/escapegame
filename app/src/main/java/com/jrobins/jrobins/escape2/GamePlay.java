@@ -22,7 +22,11 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class GamePlay extends Activity implements MapView.OnCellClickListener {
@@ -51,7 +55,8 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
 
         setUpWindow();
         initializePlayers();
-        createTestMap(4,5);
+
+        //createTestMap(4,5);
         initializeHexagonMap();
         setUpTurnLogic();
 
@@ -134,6 +139,8 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         playerListView = (ListView) findViewById(R.id.playerList);
         playerListView.setAdapter(playerSidebarAdapter);
     }
+
+
 
     /******* turn logic**********/
     private void setUpTurnLogic(){

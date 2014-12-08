@@ -2,6 +2,7 @@ package com.jrobins.jrobins.escape2;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.XmlResourceParser;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -15,19 +16,29 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemSelectedListener;
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class ChoosePlayersActivity extends Activity implements OnItemSelectedListener {
     private Spinner spinner;
     private Button playButton;
 
+    //players
     private ListView playerListView;
     private ArrayList<Player> players;
     private int [] colors;
 
     private ArrayAdapter playerArrayAdapter;
     private int numberOfPlayers = 4;
+
+    //maps
+    List <Map> maps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +47,19 @@ public class ChoosePlayersActivity extends Activity implements OnItemSelectedLis
 
 
         spinner = (Spinner) findViewById(R.id.spinner);
+        readMaps();
+        try {
+            MapParser mp = new MapParser(this);
+            //InputStream raw = this.getAssets().ope
+            maps = mp.getMaps();
+            String s = mp.getEventsFromAnXMLToString();
 
+            System.out.println(s);
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         initializeColorList();
         initializePlayerList();
         setUpPlayerListView();
@@ -81,6 +104,23 @@ public class ChoosePlayersActivity extends Activity implements OnItemSelectedLis
         // TODO Auto-generated method stub
 
     }
+
+
+    private void readMaps(){
+        MapParser parser = new MapParser(this);
+
+        try {
+            maps = parser.getMaps();
+            Log.d("maps", "created maps?");
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
 
     private void setUpPlayerListView() {
         setUpPlayerListView(4);

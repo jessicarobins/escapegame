@@ -1,6 +1,8 @@
 package com.jrobins.jrobins.escape2;
 
+import android.app.Activity;
 import android.content.res.XmlResourceParser;
+import android.util.Log;
 import android.util.Xml;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -16,43 +18,216 @@ public class MapParser {
     // We don't use namespaces
     private static final String ns = null;
 
-    XmlResourceParser parser;
+    //XmlResourceParser parser;
+    XmlResourceParser xpp;
+
+    public MapParser(Activity activity){
+        xpp = activity.getResources().getXml(R.xml.maps_pack_1);
+
+    }
 
 
-    /*
+    public List <Map> getMaps() throws XmlPullParserException, IOException {
+        List <Map> maps = new ArrayList<Map>();
+
+
+        String tag;
+        xpp.next();
+        int eventType = xpp.getEventType();
+        while (eventType != XmlPullParser.END_DOCUMENT)
+        {
+            if(eventType == XmlPullParser.START_TAG)
+            {
+                tag = xpp.getName();
+                if(tag.equalsIgnoreCase("Map")){
+                    //eventType = xpp.nextTag();
+                    maps.add(parseMap());
+
+                }
+
+            }
+
+            eventType = xpp.next();
+        }
+        return maps;
+    }
+
+    public Map parseMap() throws XmlPullParserException, IOException {
+
+        String tag;
+        String name = null;
+        Sector sectors[][] = new Sector[23][14];
+
+        //int eventType = xpp.nextTag();
+        int eventType = xpp.getEventType();
+        while (eventType != XmlPullParser.END_DOCUMENT) {
+            if (eventType == XmlPullParser.START_TAG) {
+                tag = xpp.getName();
+                if (tag.equalsIgnoreCase("map")){
+                    eventType = xpp.next();
+                    tag = xpp.getName();
+                    //eventType = xpp.nextTag();
+                }
+
+                if (tag.equalsIgnoreCase("name")){
+                    name = readText();
+                    //eventType = xpp.nextTag();
+                }
+                else if (tag.equalsIgnoreCase("column")) {
+                    int column = Integer.parseInt(xpp.getAttributeValue(null, "id"));
+                    sectors = parseColumn(sectors, column);
+                    //eventType = xpp.nextTag();
+                }
+                else {
+                    break;
+                }
+            }
+            eventType = xpp.next();
+        }
+
+        return new Map (name, sectors);
+    }
+
+    public Sector [][] parseColumn (Sector [][] sectors, int column) throws XmlPullParserException, IOException {
+
+        String tag;
+        Sector sector;
+
+        //int eventType = xpp.nextTag();
+        int eventType = xpp.getEventType();
+        while (eventType != XmlPullParser.END_DOCUMENT) {
+            if (eventType == XmlPullParser.START_TAG) {
+                tag = xpp.getName();
+                if (tag.equalsIgnoreCase("column")){
+                    eventType = xpp.next();
+                    tag = xpp.getName();
+                }
+
+                if (tag.equalsIgnoreCase("sector")) {
+
+
+                    sectors = parseSector(sectors, column);
+                    //sectors[column][sector.yCoordinate()] = sector;
+                    //eventType = xpp.nextTag();
+                }
+                else
+                    break;
+            }
+            eventType = xpp.next();
+        }
+        return sectors;
+    }
+
+    public Sector[][] parseSector(Sector[][] sectors, int column) throws XmlPullParserException, IOException {
+
+        String tag;
+        int row = 0;
+        String type = null;
+
+        //int eventType = xpp.next();
+        int eventType = xpp.getEventType();
+        while (eventType != XmlPullParser.END_DOCUMENT) {
+            if (eventType == XmlPullParser.START_TAG) {
+                tag = xpp.getName();
+                if (tag.equalsIgnoreCase("sector")){
+                    eventType = xpp.next();
+                    tag = xpp.getName();
+                }
+
+                if (tag.equalsIgnoreCase("row")){
+                    row = Integer.parseInt(readText())-1;
+                }
+                else if (tag.equalsIgnoreCase("type")){
+                    type = readText();
+                    sectors[column][row] = new Sector(column, row, type);
+                }
+                else
+                    break;
+            }
+            eventType = xpp.next();
+        }
+        return sectors;
+    }
+
+    public String getEventsFromAnXMLToString()
+            throws XmlPullParserException, IOException
+    {
+        StringBuffer stringBuffer = new StringBuffer();
+
+
+        xpp.next();
+        int eventType = xpp.getEventType();
+        while (eventType != XmlPullParser.END_DOCUMENT)
+        {
+            if(eventType == XmlPullParser.START_DOCUMENT)
+            {
+                stringBuffer.append("--- Start XML ---");
+            }
+            else if(eventType == XmlPullParser.START_TAG)
+            {
+                stringBuffer.append("\nSTART_TAG: "+xpp.getName());
+            }
+            else if(eventType == XmlPullParser.END_TAG)
+            {
+                stringBuffer.append("\nEND_TAG: "+xpp.getName());
+            }
+            else if(eventType == XmlPullParser.TEXT)
+            {
+                stringBuffer.append("\nTEXT: "+xpp.getText());
+            }
+            eventType = xpp.next();
+        }
+        stringBuffer.append("\n--- End XML ---");
+        return stringBuffer.toString();
+    }
+
+
+
     public List parse(InputStream in) throws XmlPullParserException, IOException {
         try {
             XmlPullParser parser = Xml.newPullParser();
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
             parser.setInput(in, null);
             parser.nextTag();
-            return readFeed(parser);
+            return getMaps(xpp);
         } finally {
             in.close();
         }
-    }*/
-
-    public MapParser(XmlResourceParser parser){
-        this.parser = parser;
     }
 
-    public List readFeed(XmlResourceParser parser) throws XmlPullParserException, IOException {
-        List <Map> entries = new ArrayList<Map>();
+    /*
+    public MapParser(XmlResourceParser parser){
+        this.parser = parser;
+    }*/
 
-        parser.require(XmlPullParser.START_TAG, ns, "feed");
+/*
+    public List <Map> getMaps() throws XmlPullParserException, IOException {
+
+        return getMaps(xpp);
+    }*/
+
+
+    public List <Map> getMaps(XmlResourceParser parser) throws XmlPullParserException, IOException {
+        List <Map> maps = new ArrayList<Map>();
+        //parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+
+        parser.next();
+
+        //Log.d("parser", parser.getName());
+        parser.require(XmlPullParser.START_TAG, ns, "Maps");
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
             String name = parser.getName();
             // Starts by looking for the entry tag
-            if (name.equals("map")) {
-                entries.add(readMap(parser));
+            if (name.equals("Map")) {
+                maps.add(readMap(parser));
             } else {
                 skip(parser);
             }
         }
-        return entries;
+        return maps;
     }
 
     // Parses the contents of a map
@@ -80,9 +255,9 @@ public class MapParser {
 
     // Processes the name of the map
     private String readName(XmlPullParser parser) throws IOException, XmlPullParserException {
-        parser.require(XmlPullParser.START_TAG, ns, "title");
+        parser.require(XmlPullParser.START_TAG, ns, "name");
         String name = readText(parser);
-        parser.require(XmlPullParser.END_TAG, ns, "title");
+        parser.require(XmlPullParser.END_TAG, ns, "name");
         return name;
     }
 
@@ -160,5 +335,14 @@ public class MapParser {
                     break;
             }
         }
+    }
+
+    private String readText() throws IOException, XmlPullParserException {
+        String result = "";
+        if (xpp.next() == XmlPullParser.TEXT) {
+            result = xpp.getText();
+            xpp.nextTag();
+        }
+        return result;
     }
 }
