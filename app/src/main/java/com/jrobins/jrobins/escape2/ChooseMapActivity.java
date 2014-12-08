@@ -2,16 +2,30 @@ package com.jrobins.jrobins.escape2;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
+
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+import java.util.List;
 
 
 public class ChooseMapActivity extends Activity {
+    List<Map> maps;
+    BasicHexagonGridView map;
+    ListView mapListView;
+    MapChoiceAdapter mapChoiceAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_map);
+
+        loadMaps();
+        initializeMapList();
     }
 
 
@@ -36,4 +50,25 @@ public class ChooseMapActivity extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    private void loadMaps(){
+        MapParser parser = new MapParser(this);
+
+        try {
+            maps = parser.getMaps();
+            Log.d("maps", "created maps?");
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void initializeMapList(){
+        mapChoiceAdapter = new MapChoiceAdapter(this, maps);
+        mapListView = (ListView) findViewById(R.id.mapList);
+        mapListView.setAdapter(mapChoiceAdapter);
+    }
+
+
 }

@@ -47,7 +47,7 @@ public class ChoosePlayersActivity extends Activity implements OnItemSelectedLis
 
 
         spinner = (Spinner) findViewById(R.id.spinner);
-        readMaps();
+
 
         initializeColorList();
         initializePlayerList();
@@ -95,18 +95,6 @@ public class ChoosePlayersActivity extends Activity implements OnItemSelectedLis
     }
 
 
-    private void readMaps(){
-        MapParser parser = new MapParser(this);
-
-        try {
-            maps = parser.getMaps();
-            Log.d("maps", "created maps?");
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
 
 
@@ -181,8 +169,12 @@ public class ChoosePlayersActivity extends Activity implements OnItemSelectedLis
                 for(int i = 0; i< players.size(); i++){
                     System.out.println("player " + i + " = " + players.get(i).name());
                 }
+                /*
                 Intent intent = new Intent(ChoosePlayersActivity.this, GamePlay.class);
                 intent.putParcelableArrayListExtra("players", players);
+                startActivity(intent);*/
+                Intent intent = new Intent(ChoosePlayersActivity.this, ChooseMapActivity.class);
+
                 startActivity(intent);
             }
 

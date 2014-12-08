@@ -12,7 +12,7 @@
     <color name="safe">#FFFFFF</color>
     <color name="unsafe">#C0C0C0</color>
     <color name="invalid">#000000</color>
-    <color name="escape_hatch">#808080</color>
+    <color name="escape_hatch">#4B0082</color>
     <!--map colors-->
     <color name="map_background">#000000</color>
     <color name="map_outline">#000000</color>

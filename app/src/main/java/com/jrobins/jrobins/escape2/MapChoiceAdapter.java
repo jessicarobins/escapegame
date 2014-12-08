@@ -1,0 +1,65 @@
+package com.jrobins.jrobins.escape2;
+
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.Point;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.Display;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
+public class MapChoiceAdapter extends ArrayAdapter<Map> {
+    private LayoutInflater inflater;
+    BasicHexagonGridView map;
+    List <Map> maps;
+    Activity activity;
+
+
+    public MapChoiceAdapter(Activity activity, List<Map> maps){
+        super(activity, R.layout.choose_map, maps);
+        this.maps = (List<Map>) maps;
+        this.activity = activity;
+        inflater = activity.getWindow().getLayoutInflater();
+    }
+
+
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent){
+
+        WindowManager wm = (WindowManager) activity.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+
+        if(convertView == null)
+        {
+            convertView  = (LinearLayout)inflater.inflate(R.layout.choose_map, parent, false);
+
+        }
+
+        map = (BasicHexagonGridView) convertView.findViewById(R.id.map);
+        map.setMinimumHeight(size.y);
+        map.setMinimumWidth(size.x);
+        map.initialize(maps.get(position));
+
+
+
+        return convertView ;
+    }
+
+}
