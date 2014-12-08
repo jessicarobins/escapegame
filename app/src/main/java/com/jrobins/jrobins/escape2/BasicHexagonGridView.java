@@ -153,8 +153,8 @@ public class BasicHexagonGridView extends View {
 
             for (int r = 0; r < rows; r++)
             {
-                if (!(oddCol && r == rows - 1))
-                {
+                //if (!(oddCol && r == rows - 1))
+                //{
                     if(sectors !=null)
                         cellColor = getResources().getColor(sectors[c][r].color());
                     else
@@ -170,7 +170,7 @@ public class BasicHexagonGridView extends View {
                     yOff += (cellWidth * Math.sqrt(3) / 2);
 
 
-                }
+                //}
             }
 
             //combPath.offset(cellWidth * .75f, (float)(-yOff));
