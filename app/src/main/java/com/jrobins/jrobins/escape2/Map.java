@@ -24,6 +24,10 @@ public class Map implements Parcelable {
 
     }
 
+    public Sector[][] sectors(){
+        return sectors;
+    }
+
     @Override
     public int describeContents() {
         return 0;

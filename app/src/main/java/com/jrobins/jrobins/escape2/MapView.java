@@ -21,31 +21,26 @@ import android.widget.ScrollView;
 
 import java.util.ArrayList;
 
-public class MapView extends View {
+public class MapView extends BasicHexagonGridView {
 
     //the max number of moves in a row per hexagon
     private final int MAX_MOVES = 4;
 
     //paints!
-    private Paint wallPaint = new Paint();
-    private Paint fillPaint = new Paint();
+    //private Paint wallPaint = new Paint();
+    //private Paint fillPaint = new Paint();
     private Paint textPaint = new Paint();
     private Paint labelPaint = new Paint();
 
-    //path of a hexagon
-    private Path combPath;
 
-
-    //widths of things
-    private int cellWidth;
     private int moveWidth;
 
-    private int columns;
-    private int rows;
+    //private int columns;
+    //private int rows;
     private boolean[][] cellSet;
-    private int cellColor;
+    //private int cellColor;
 
-    private Sector[][] sectors;
+    //private Sector[][] sectors;
 
     //rectangles! for drawing things the right size
     RectF rectf = new RectF();
@@ -80,14 +75,9 @@ public class MapView extends View {
     {
         super(context, attrs);
 
-        wallPaint.setColor(getResources().getColor(R.color.map_outline));
-        wallPaint.setStyle(Paint.Style.STROKE);
-        //wallPaint.setStrokeWidth(5f);
-
-        fillPaint.setStyle(Paint.Style.FILL);
+        //wallpaint, fillpaint, cellcolor taken care of in basichexagongridview
 
 
-        cellColor = Color.MAGENTA;
 
         //for sector names that aren't special sector types
         textPaint.setStyle(Paint.Style.FILL);
@@ -115,19 +105,23 @@ public class MapView extends View {
         mGestureDetector = new GestureDetector(context, new GestureListener());
     }
 
+    //initialize moved to basichexagongridview
+    @Override
     public void initialize(Sector[][] sectors){
 
-        this.sectors = sectors;
-        initialize(sectors.length, sectors[0].length);
+        super.initialize(sectors);
+        this.cellSet = new boolean[sectors.length][sectors[0].length];
     }
 
-    public void initialize(int columns, int rows)
+    /*public void initialize(int columns, int rows)
     {
         this.columns = columns;
         this.rows = rows;
 
         this.cellSet = new boolean[columns][rows];
-    }
+    }*/
+
+    //only clickable for actual maps so this stays
 
     public interface OnCellClickListener
     {
@@ -139,12 +133,7 @@ public class MapView extends View {
         this.listener = listener;
     }
 
-    public void setCell(int column, int row, boolean isSet)
-    {
-        //this is the old 'setcell' user
-        cellSet[column][row] = isSet;
-        invalidate();
-    }
+
 
     public boolean isCellSet(int column, int row)
     {
@@ -155,11 +144,13 @@ public class MapView extends View {
     {
         if (isSet){ //cell is now set
             //add move to array
-            sectors[column][row].addMove(move);
+            //sectors[column][row].addMove(move);
+            super.addMove(column, row, move);
         }
         else { //isSet == false, cell is now not set
             //remove move from array
-            sectors[column][row].removeLastMove();
+            //sectors[column][row].removeLastMove();
+            super.removeLastMove(column, row);
         }
 
         cellSet[column][row] = isSet;
@@ -167,7 +158,7 @@ public class MapView extends View {
     }
 
     public void resetAllCells(){
-        cellSet = new boolean[columns][rows];
+        cellSet = new boolean[columns()][rows()];
     }
 
     @Override
@@ -175,13 +166,8 @@ public class MapView extends View {
     {
         super.onSizeChanged(w, h, oldw, oldh);
 
-        float cellHeight = h/rows;
-        int cellWidth1 = (int)( cellHeight*2 / Math.sqrt(3)); //if height is limiting
-        int cellWidth2 = (int)(w/ (columns - (.25*(columns-1)))); //if width is limiting
-        cellWidth = Math.min(cellWidth1, cellWidth2);
-
-        labelPaint.setTextSize(cellWidth/2);
-        moveWidth = cellWidth/7;
+        labelPaint.setTextSize(cellWidth()/2);
+        moveWidth = cellWidth()/7;
     }
 
     @Override
@@ -196,8 +182,11 @@ public class MapView extends View {
         canvas.scale(mScaleFactor, mScaleFactor);
         canvas.translate(offsetX, offsetY);
 
-        cellWidth *=mScaleFactor;
-        moveWidth = cellWidth/7;
+        setCellWidth(cellWidth()*mScaleFactor);
+        moveWidth = cellWidth()/7;
+
+        //not sure if we need to do this again because we are doing it in the superclass
+        //i think we do though
         canvas.drawColor(getResources().getColor(R.color.map_background));
         drawGridWithZigZagRows(canvas);
 
@@ -208,47 +197,7 @@ public class MapView extends View {
     }
 
 
-    private void drawGridWithZigZagRows(Canvas canvas){
-        boolean oddCol;
-        int yOff;
-
-        combPath = getHexPath(cellWidth / 2f, cellWidth / 2f, (float) (cellWidth * Math.sqrt(3) / 4));
-
-        for (int c = 0; c < columns; c++)
-        {
-            oddCol = (c & 1) == 1;
-            yOff = 0;
-
-
-            for (int r = 0; r < rows; r++)
-            {
-                if (!(oddCol && r == rows - 1))
-                {
-                    if(sectors !=null)
-                        cellColor = getResources().getColor(sectors[c][r].color());
-                    else
-                        cellColor = Color.MAGENTA;
-                    //fillPaint.setColor(cellSet[c][r] ? Color.RED : cellColor);
-                    fillPaint.setColor(cellColor);
-
-
-                    drawSector(canvas, sectors[c][r]);
-
-
-                    combPath.offset(0,(int)  (cellWidth * Math.sqrt(3) / 2));
-                    yOff += (cellWidth * Math.sqrt(3) / 2);
-
-
-                }
-            }
-
-            //combPath.offset(cellWidth * .75f, (float)(-yOff));
-            combPath.offset(cellWidth * .75f, (float)(-yOff + (oddCol ? -1 : 1) * (cellWidth * Math.sqrt(3) / 4)));
-        }
-
-    }
-
-
+    /****** touch events stay *************************/
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
@@ -263,12 +212,13 @@ public class MapView extends View {
     }
 
 
+    /****** are we drawing the sector names here or in basichexagongridview?*******/
     private void drawSectorName(Canvas canvas, String sectorName, float centerX, float centerY){
         //Rect textBounds;
 
         float x,y;
         //textBounds = new Rect();
-        textPaint.setTextSize(cellWidth/5);
+        textPaint.setTextSize(cellWidth()/5);
         textPaint.setColor(Color.BLACK);
         textPaint.clearShadowLayer();
         textPaint.getTextBounds(sectorName, 0, sectorName.length(), rect);
@@ -282,7 +232,7 @@ public class MapView extends View {
 
         float x,y;
         //textBounds = new Rect();
-        labelPaint.setTextSize(cellWidth/2);
+        labelPaint.setTextSize(cellWidth()/2);
         labelPaint.getTextBounds(label, 0, label.length(), rect);
         x = centerX - rect.exactCenterX();
         y = centerY - rect.exactCenterY();
@@ -290,17 +240,12 @@ public class MapView extends View {
     }
 
 
-    private void drawHexagon(Canvas canvas){
-        canvas.drawPath(combPath, fillPaint);
-        wallPaint.setStrokeWidth(5f);
-        canvas.drawPath(combPath, wallPaint);
 
-    }
 
     private void drawMoves(Canvas canvas, ArrayList<Move> moves){
         //hexagon is combPath
         //probably need to compute the bounds...
-        combPath.computeBounds(rectf, true);
+        combPath().computeBounds(rectf, true);
 
         //these are the coordinates where the grid should start
         //  so x is (MAX_MOVES/2) moves left of center and y is right on center
@@ -336,11 +281,11 @@ public class MapView extends View {
         setMoveSquare(centerX, centerY);
 
         //set the fillpaint to be the player color
-        fillPaint.setColor(move.color());
-        wallPaint.setStrokeWidth(1f);
+        fillPaint().setColor(move.color());
+        wallPaint().setStrokeWidth(1f);
         //draw rectangle
-        canvas.drawRect(moveSquare, fillPaint);
-        canvas.drawRect(moveSquare, wallPaint);
+        canvas.drawRect(moveSquare, fillPaint());
+        canvas.drawRect(moveSquare, wallPaint());
         if(moveWidth>22)
             drawTextInMoveSquare(canvas, move);
     }
@@ -358,7 +303,7 @@ public class MapView extends View {
                 break;
         }
         //draw number inside rectangle
-        textPaint.setTextSize(cellWidth/10);
+        textPaint.setTextSize(cellWidth()/10);
 
         textPaint.getTextBounds(move.turnNumberToString(), 0, move.turnNumberToString().length(), rect);
         float x = moveSquare.centerX() - rect.exactCenterX();
@@ -371,11 +316,12 @@ public class MapView extends View {
     }
 
 
-
-    private void drawSector(Canvas canvas, Sector sector){
+    @Override
+    public void drawSector(Canvas canvas, Sector sector){
+        super.drawSector(canvas, sector);
         //RectF hexBounds = new RectF();
-        combPath.computeBounds(rectf, true);
-        drawHexagon(canvas);
+        combPath().computeBounds(rectf, true);
+
 
         //we want text about 1/4 of the way from the top
         float y = rectf.top + rectf.height()/4;
@@ -391,27 +337,7 @@ public class MapView extends View {
         }
     }
 
-    private Path getHexPath(float size, float centerX, float centerY)
-    {
-        Path path = new Path();
 
-        for (int j = 0; j <= 6; j++)
-        {
-            double angle = j * Math.PI / 3;
-            float x = (float) (centerX + size * Math.cos(angle));
-            float y = (float) (centerY + size * Math.sin(angle));
-            if (j == 0)
-            {
-                path.moveTo(x, y);
-            }
-            else
-            {
-                path.lineTo(x, y);
-            }
-        }
-
-        return path;
-    }
 
     private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
         @Override
@@ -497,7 +423,7 @@ public class MapView extends View {
                 float x = event.getX() - offsetX;
                 float y = event.getY() - offsetY;
 
-                int radius = cellWidth / 2;
+                int radius = cellWidth() / 2;
                 int cellHeight = (int) (((float) radius) * Math.sqrt(3));
                 int side = radius * 3 / 2;
 
