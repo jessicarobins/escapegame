@@ -113,13 +113,7 @@ public class MapView extends BasicHexagonGridView {
         this.cellSet = new boolean[sectors.length][sectors[0].length];
     }
 
-    /*public void initialize(int columns, int rows)
-    {
-        this.columns = columns;
-        this.rows = rows;
 
-        this.cellSet = new boolean[columns][rows];
-    }*/
 
     //only clickable for actual maps so this stays
 
