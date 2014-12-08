@@ -22,6 +22,10 @@
             android:label="@string/title_activity_game_play"
             android:theme="@style/FullscreenTheme" >
         </activity>
+        <activity
+            android:name="com.jrobins.jrobins.escape2.ChooseMapActivity"
+            android:label="@string/title_activity_choose_map" >
+        </activity>
     </application>
 
 </manifest>

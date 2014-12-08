@@ -37,7 +37,7 @@
     <Button
         android:layout_width="220dp"
         android:layout_height="wrap_content"
-        android:text="Play!"
+        android:text="@string/choose_players_button_text"
         android:id="@+id/play"
         android:layout_below="@+id/playerList"
         android:layout_centerHorizontal="true" />

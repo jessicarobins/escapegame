@@ -2,8 +2,11 @@
 <resources>
 
     <string name="app_name">Escape2</string>
-    <string name="choose_players_text">Select number of players: </string>
     <string name="action_settings">Settings</string>
+
+    <!-- choosing players screen -->
+    <string name="choose_players_text">Select number of players: </string>
+    <string name="choose_players_button_text">Next</string>
 
     <string-array name="players_array">
         <item>4</item>
@@ -14,7 +17,8 @@
     </string-array>
 
     <string name="title_activity_game_play">GamePlay</string>
-    <string name="next_turn_button">&gt;</string>
+    <string name="next_turn_button">></string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_choose_map">ChooseMapActivity</string>
 
 </resources>

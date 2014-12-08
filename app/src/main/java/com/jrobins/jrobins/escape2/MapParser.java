@@ -9,7 +9,6 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +17,7 @@ public class MapParser {
     // We don't use namespaces
     private static final String ns = null;
 
-    //XmlResourceParser parser;
+
     XmlResourceParser xpp;
 
     public MapParser(Activity activity){
@@ -92,7 +91,7 @@ public class MapParser {
     public Sector [][] parseColumn (Sector [][] sectors) throws XmlPullParserException, IOException {
 
         String tag;
-        Sector sector;
+
         int column = 0;
 
         //int eventType = xpp.nextTag();

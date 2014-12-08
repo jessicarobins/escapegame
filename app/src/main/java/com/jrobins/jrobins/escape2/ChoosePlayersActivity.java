@@ -48,18 +48,7 @@ public class ChoosePlayersActivity extends Activity implements OnItemSelectedLis
 
         spinner = (Spinner) findViewById(R.id.spinner);
         readMaps();
-        try {
-            MapParser mp = new MapParser(this);
-            //InputStream raw = this.getAssets().ope
-            maps = mp.getMaps();
-            String s = mp.getEventsFromAnXMLToString();
 
-            System.out.println(s);
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         initializeColorList();
         initializePlayerList();
         setUpPlayerListView();
