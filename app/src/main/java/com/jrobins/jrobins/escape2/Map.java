@@ -28,6 +28,10 @@ public class Map implements Parcelable {
         return sectors;
     }
 
+    public String name(){
+        return name;
+    }
+
     @Override
     public int describeContents() {
         return 0;

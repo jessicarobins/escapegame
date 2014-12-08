@@ -136,6 +136,7 @@ public class BasicHexagonGridView extends View {
         canvas.drawColor(getResources().getColor(R.color.map_background));
         drawGridWithZigZagRows(canvas);
 
+
     }
 
     public void drawGridWithZigZagRows(Canvas canvas){

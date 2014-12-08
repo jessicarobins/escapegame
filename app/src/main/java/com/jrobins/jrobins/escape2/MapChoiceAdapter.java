@@ -25,6 +25,7 @@ import java.util.List;
 public class MapChoiceAdapter extends ArrayAdapter<Map> {
     private LayoutInflater inflater;
     BasicHexagonGridView map;
+    TextView mapName;
     List <Map> maps;
     Activity activity;
 
@@ -52,8 +53,11 @@ public class MapChoiceAdapter extends ArrayAdapter<Map> {
 
         }
 
+        mapName = (TextView) convertView.findViewById(R.id.mapName);
+        mapName.setText(maps.get(position).name());
         map = (BasicHexagonGridView) convertView.findViewById(R.id.map);
-        map.setMinimumHeight(size.y);
+        int y = (int)(size.x*(.61));
+        map.setMinimumHeight(y);
         map.setMinimumWidth(size.x);
         map.initialize(maps.get(position));
 
