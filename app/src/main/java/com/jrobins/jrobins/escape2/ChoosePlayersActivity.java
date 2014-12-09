@@ -171,10 +171,10 @@ public class ChoosePlayersActivity extends Activity implements OnItemSelectedLis
                 }
                 /*
                 Intent intent = new Intent(ChoosePlayersActivity.this, GamePlay.class);
-                intent.putParcelableArrayListExtra("players", players);
+
                 startActivity(intent);*/
                 Intent intent = new Intent(ChoosePlayersActivity.this, ChooseMapActivity.class);
-
+                intent.putParcelableArrayListExtra("players", players);
                 startActivity(intent);
             }
 

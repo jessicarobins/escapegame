@@ -1,6 +1,7 @@
 package com.jrobins.jrobins.escape2;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -12,11 +13,13 @@ import android.widget.ListView;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class ChooseMapActivity extends Activity {
     List<Map> maps;
+    ArrayList<Player> players;
     Map selectedMap;
     BasicHexagonGridView map;
     ListView mapListView;
@@ -27,8 +30,10 @@ public class ChooseMapActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_map);
 
+        getPlayers();
         loadMaps();
         initializeMapList();
+
     }
 
 
@@ -77,11 +82,18 @@ public class ChooseMapActivity extends Activity {
                                     int position, long id) {
 
                 selectedMap = mapChoiceAdapter.getItem(position);
-                System.out.println(map);
+                Intent intent = new Intent(ChooseMapActivity.this, GamePlay.class);
+                intent.putParcelableArrayListExtra("players", players);
+                intent.putExtra("map", selectedMap);
+                startActivity(intent);
+
 
             }
         });
     }
 
+    private void getPlayers(){
+        players = getIntent().getParcelableArrayListExtra("players");
+    }
 
 }

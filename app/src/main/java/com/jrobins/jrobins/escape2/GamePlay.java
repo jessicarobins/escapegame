@@ -33,7 +33,8 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
 
     //data structures
     private ArrayList<Player> players;
-    private Sector[][] sectors;
+    private Map map;
+    //private Sector[][] sectors;
     private int turnNumber; //this is really the round but they call it turn in the game
     private int currentPlayer; //the index of the  player whose turn it is within the round (turn)...
 
@@ -55,8 +56,8 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
 
         setUpWindow();
         initializePlayers();
-
-        createTestMap(4,5);
+        initializeMap();
+        //createTestMap(4,5);
         initializeHexagonMap();
         setUpTurnLogic();
 
@@ -90,9 +91,9 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
     public void onCellClick(int column, int row)
     {
         //need to check that we are even in the array
-        if(column < sectors.length && row < sectors[0].length && column>=0 && row >=0) {
+        if(column < map.sectors().length && row < map.sectors()[0].length && column>=0 && row >=0) {
             //if the cell is not invalid - we don't want invalid sectors to be clickable
-            if (sectors[column][row].isNormal()) {
+            if (map.sectors()[column][row].isNormal()) {
                 //hexagonMap.setCell(column, row, !hexagonMap.isCellSet(column, row));
                 hexagonMap.setCell(column, row, !hexagonMap.isCellSet(column, row), new Move(players.get(currentPlayer), turnNumber, 2));
             }
@@ -123,7 +124,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
     private void initializeHexagonMap(){
         hexagonMap = (MapView) findViewById(R.id.hexagonMap);
         //hexagonMap.initialize(5,10);
-        hexagonMap.initialize(sectors);
+        hexagonMap.initialize(map.sectors());
         hexagonMap.setOnCellClickListener(this);
     }
 
@@ -140,7 +141,10 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         playerListView.setAdapter(playerSidebarAdapter);
     }
 
-
+    private void initializeMap(){
+        map = getIntent().getParcelableExtra("map");
+        setTitle(map.name());
+    }
 
     /******* turn logic**********/
     private void setUpTurnLogic(){
@@ -197,10 +201,10 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
     private void createTestMap(int cols, int rows){
         //create an x by y test map of sectors
 
-        sectors = new Sector[cols][rows];
+        map.setSectors(new Sector[cols][rows]);
         for(int i = 0; i<cols; i++){
             for(int j = 0; j<rows; j++){
-                sectors[i][j] = new Sector(i, j, j%6);
+                map.sectors()[i][j] = new Sector(i, j, j%6);
                 //sectors[i][j].addMoves(createRandomArrayOfMoves());
             }
         }
