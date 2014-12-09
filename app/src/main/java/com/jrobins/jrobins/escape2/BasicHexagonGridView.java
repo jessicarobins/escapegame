@@ -70,9 +70,12 @@ public class BasicHexagonGridView   extends SurfaceView
     /**************** surfaceholder implementation ******/
     @Override
     public void surfaceCreated(SurfaceHolder holder){
-        mapThread.setRunning(true);
+        if (mapThread.getState() == Thread.State.NEW) {
 
-        mapThread.start();
+            mapThread.setRunning(true);
+
+            mapThread.start();
+        }
     }
 
     public void setMapThread(MapDrawingThread mapThread){
@@ -92,7 +95,7 @@ public class BasicHexagonGridView   extends SurfaceView
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
 
-        mapThread.setRunning(false);
+
 
         boolean retry = true;
 
@@ -100,6 +103,7 @@ public class BasicHexagonGridView   extends SurfaceView
             try{
                 mapThread.join();
                 retry = false;
+                mapThread.setRunning(false);
             }
 
             catch(Exception e) {
