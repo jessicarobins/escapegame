@@ -115,6 +115,31 @@ public class MapView extends BasicHexagonGridView {
     }
 
 
+    /*****surfaceview thing******/
+    public void doDraw(Canvas canvas){
+        super.doDraw(canvas);
+        canvas.save();
+
+        //canvas.translate(originX, originY);
+        //canvas.scale(mScaleFactor, mScaleFactor, originX, originY);
+        canvas.scale(mScaleFactor, mScaleFactor);
+        canvas.translate(offsetX, offsetY);
+
+        setCellWidth(cellWidth()*mScaleFactor);
+        moveWidth = cellWidth()/7;
+
+        //not sure if we need to do this again because we are doing it in the superclass
+        //i think we do though
+        canvas.drawColor(getResources().getColor(R.color.map_background));
+        drawGridWithZigZagRows(canvas);
+
+
+        canvas.restore();
+
+        mScaleFactor = 1.f;
+
+    }
+
 
     //only clickable for actual maps so this stays
 
@@ -172,6 +197,7 @@ public class MapView extends BasicHexagonGridView {
         moveWidth = cellWidth()/7;
     }
 
+    /*
     @Override
     protected void onDraw(Canvas canvas)
     {
@@ -196,7 +222,7 @@ public class MapView extends BasicHexagonGridView {
         canvas.restore();
 
         mScaleFactor = 1.f;
-    }
+    }*/
 
 
     /****** touch events stay *************************/
@@ -320,7 +346,7 @@ public class MapView extends BasicHexagonGridView {
 
         }
         rectf.round(rect);
-        invalidate(rect);
+        //invalidate(rect);
     }
 
     private void drawMove(Canvas canvas, Move move, float centerX, float centerY){
@@ -442,8 +468,8 @@ public class MapView extends BasicHexagonGridView {
         @Override
         public boolean onScale(ScaleGestureDetector detector) {
 
-            if (detector.getScaleFactor() < 0.01)
-                return false; // ignore small changes
+           /* if (detector.getScaleFactor() < 0.01)
+                return false; // ignore small changes*/
 
 
             //float fx = detector.getFocusX();
@@ -464,7 +490,7 @@ public class MapView extends BasicHexagonGridView {
             //originY -= fy/mScaleFactor;
 
 
-            invalidate();
+            //invalidate();
             return true;
         }
 
@@ -502,7 +528,7 @@ public class MapView extends BasicHexagonGridView {
             offsetX -=distanceX;
             offsetY -=distanceY;
 
-            invalidate();
+            //invalidate();
             return true;
         }
 
