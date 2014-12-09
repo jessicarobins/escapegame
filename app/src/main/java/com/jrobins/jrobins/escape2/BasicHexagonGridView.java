@@ -62,7 +62,7 @@ public class BasicHexagonGridView   extends SurfaceView
         this.context = context;
 
         getHolder().addCallback(this);
-        mapThread = new MapDrawingThread(getHolder(),context, this);
+        mapThread = new MapDrawingThread(getHolder(),context, this, true);
         //setFocusable(true);
     }
 
@@ -73,6 +73,10 @@ public class BasicHexagonGridView   extends SurfaceView
         mapThread.setRunning(true);
 
         mapThread.start();
+    }
+
+    public void setMapThread(MapDrawingThread mapThread){
+        this.mapThread = mapThread;
     }
 
     @Override

@@ -13,6 +13,7 @@ public class MapDrawingThread extends Thread {
 
     //whether the thread is running
     boolean running;
+    boolean staticImage = false;
     Canvas canvas;
     SurfaceHolder surfaceHolder;
     Context context;
@@ -42,6 +43,19 @@ public class MapDrawingThread extends Thread {
 
     }
 
+    public MapDrawingThread(SurfaceHolder sholder, Context ctx, BasicHexagonGridView hexagonGrid, boolean staticImage){
+
+        this.surfaceHolder = sholder;
+
+        this.context = ctx;
+
+        this.running = false;
+
+        this.hexagonGrid = hexagonGrid;
+
+        this.staticImage = staticImage;
+
+    }
 
 
     public void setRunning(boolean running){
@@ -72,6 +86,9 @@ public class MapDrawingThread extends Thread {
                     hexagonGrid.doDraw(canvas);
 
                     surfaceHolder.unlockCanvasAndPost(canvas);
+                    if(staticImage)
+                        running = false;
+
 
                 }
 

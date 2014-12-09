@@ -104,6 +104,9 @@ public class MapView extends BasicHexagonGridView {
 
         //initialize the pan thing
         mGestureDetector = new GestureDetector(context, new GestureListener());
+
+        //threads
+        setMapThread(new MapDrawingThread(getHolder(),context, this, false));
     }
 
     //initialize moved to basichexagongridview
