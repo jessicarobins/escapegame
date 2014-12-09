@@ -221,6 +221,7 @@ public class ChoosePlayersActivity extends Activity implements OnItemSelectedLis
     }
 
     private void initializeColorList(){
+        /*
         colors = new int[8];
         colors[0] = getResources().getColor(android.R.color.holo_purple);
         colors[1] = getResources().getColor(android.R.color.holo_blue_bright);
@@ -230,6 +231,8 @@ public class ChoosePlayersActivity extends Activity implements OnItemSelectedLis
         colors[5] = getResources().getColor(android.R.color.holo_blue_dark);
         colors[6] = getResources().getColor(android.R.color.darker_gray);
         colors[7] = getResources().getColor(android.R.color.holo_green_dark);
+        */
+        colors = getResources().getIntArray(R.array.player_color_choices);
     }
 
     private void initializePlayerList(){

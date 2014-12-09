@@ -1,6 +1,7 @@
 package com.jrobins.jrobins.escape2;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.LauncherActivity;
 import android.app.LauncherActivity.ListItem;
 import android.content.Context;
@@ -11,9 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -29,11 +32,12 @@ public class PlayerChoiceAdapter extends ArrayAdapter<Player> {
 
     public ArrayList<Player> players;
     private HashMap<String, String> playerNameValues = new HashMap<String, String>();
-
+    private Activity activity;
 
     public PlayerChoiceAdapter(Activity activity, List<Player> players){
         super(activity, R.layout.player_choice, players);
         this.players = (ArrayList<Player>) players;
+        this.activity = activity;
         inflater = activity.getWindow().getLayoutInflater();
     }
 
@@ -69,7 +73,14 @@ public class PlayerChoiceAdapter extends ArrayAdapter<Player> {
 
         final Button button = (Button) convertView.findViewById(R.id.button);
         button.setBackgroundColor(players.get(position).color());
-
+        button.setLongClickable(true);
+        button.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                showAlertDialog();
+                return true;
+            }
+        });
 
         //playerNameValues.put(playerName.getTag().toString(), playerName.getText().toString());
 
@@ -130,5 +141,23 @@ public class PlayerChoiceAdapter extends ArrayAdapter<Player> {
             result = "default value";
 
         return new Player(result);
+    }
+
+    private void showAlertDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        GridView gridView = new GridView(getContext());
+
+        int [] colors = getContext().getResources().getIntArray(R.array.player_color_choices);
+
+        gridView.setAdapter(new ColorChoiceGridViewAdapter(getContext(), colors));
+        gridView.setNumColumns(4);
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // do something here
+            }
+        });
+        builder.setView(gridView);
+        builder.show();
     }
 }
