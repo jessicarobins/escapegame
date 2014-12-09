@@ -1,6 +1,8 @@
 package com.jrobins.jrobins.escape2;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.XmlResourceParser;
 import android.os.Bundle;
@@ -162,17 +164,31 @@ public class ChoosePlayersActivity extends Activity implements OnItemSelectedLis
                 Player p;
                 for(int i = 0; i<playerArrayAdapter.getCount();i++){
                     p = (Player)playerArrayAdapter.getItem(i);
+
+                    //this is where we check to see if they have a name
+                    if (p.name()==null || p.name().length() == 0){
+                        //error message
+                        new AlertDialog.Builder(ChoosePlayersActivity.this)
+                                .setTitle("Enter player name")
+                                .setMessage("Player names can't be blank yo")
+                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // do nothing
+                                    }
+                                })
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                        return;
+                    }
+
                     p.setColor(colors[i]);
-                    //System.out.println("name = " + playerArrayAdapter.getItem(i).toString() + " i = " +i);
+                    System.out.println("name = " + playerArrayAdapter.getItem(i).toString() + " i = " +i);
                     players.add(p);
                 }
                 for(int i = 0; i< players.size(); i++){
                     System.out.println("player " + i + " = " + players.get(i).name());
                 }
-                /*
-                Intent intent = new Intent(ChoosePlayersActivity.this, GamePlay.class);
 
-                startActivity(intent);*/
                 Intent intent = new Intent(ChoosePlayersActivity.this, ChooseMapActivity.class);
                 intent.putParcelableArrayListExtra("players", players);
                 startActivity(intent);

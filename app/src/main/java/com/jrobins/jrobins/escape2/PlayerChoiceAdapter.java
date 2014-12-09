@@ -41,21 +41,36 @@ public class PlayerChoiceAdapter extends ArrayAdapter<Player> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
 
-        boolean convertViewWasNull = false;
+
         if(convertView == null)
         {
             convertView  = (LinearLayout)inflater.inflate(R.layout.player_choice, parent, false);
-            convertViewWasNull = true;
+
         }
 
         final int p = position;
         final EditText playerName = (EditText) convertView.findViewById(R.id.playerName);
+        //set the tag of the textbox so we can use it in the hashmap
+        playerName.setTag("theFirstEditTextAtPos:"+position);
+
+        //if that tag does not exist in the hashmap, put the default player value there
+        if(!playerNameValues.containsKey(playerName.getTag()))
+            playerNameValues.put(playerName.getTag().toString(), players.get(position).name());
+         /*
+        else {
+            //set the text then add the tag?
+            playerName.setText(players.get(position).name());
+
+        }*/
+        playerName.setText(playerNameValues.get(playerName.getTag().toString()));
+
+
         //playerName.setText("Player " + position);
-        playerName.setText(players.get(position).name());
+
         final Button button = (Button) convertView.findViewById(R.id.button);
         button.setBackgroundColor(players.get(position).color());
 
-        playerName.setTag("theFirstEditTextAtPos:"+position);
+
         //playerNameValues.put(playerName.getTag().toString(), playerName.getText().toString());
 
         playerName.addTextChangedListener(new TextWatcher(){
@@ -72,10 +87,11 @@ public class PlayerChoiceAdapter extends ArrayAdapter<Player> {
                                 playerName.getText().toString().substring(1,2).toLowerCase();
                         button.setText(btnText);
                     }
-                    PlayerChoiceAdapter.this.playerNameValues.put(playerName.getTag().toString(), s.toString());
+
                     //players.get(p).setName(playerName.getText().toString());
                     //System.out.println("setting player name = " +playerName.getText().toString());
                 }
+                PlayerChoiceAdapter.this.playerNameValues.put(playerName.getTag().toString(), s.toString());
             }
             public void beforeTextChanged(CharSequence s, int start, int count, int after){}
             public void onTextChanged(CharSequence s, int start, int before, int count){}
