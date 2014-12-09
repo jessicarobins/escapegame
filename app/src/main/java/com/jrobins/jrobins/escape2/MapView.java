@@ -210,27 +210,27 @@ public class MapView extends BasicHexagonGridView {
     private void drawSectorName(Canvas canvas, String sectorName, float centerX, float centerY){
         //Rect textBounds;
 
-        float x,y;
+        //float x,y;
         //textBounds = new Rect();
         textPaint.setTextSize(cellWidth()/5);
         textPaint.setColor(Color.BLACK);
         textPaint.clearShadowLayer();
         textPaint.getTextBounds(sectorName, 0, sectorName.length(), rect);
-        x = centerX - rect.exactCenterX();
-        y = centerY - rect.exactCenterY();
-        canvas.drawText(sectorName, x, y, textPaint);
+        //x = centerX - rect.exactCenterX();
+        //y = centerY - rect.exactCenterY();
+        canvas.drawText(sectorName, centerX - rect.exactCenterX(), centerY - rect.exactCenterY(), textPaint);
     }
 
     private void drawSectorLabel(Canvas canvas, String label, float centerX, float centerY){
         //Rect textBounds;
 
-        float x,y;
+        //float x,y;
         //textBounds = new Rect();
         labelPaint.setTextSize(cellWidth()/2);
         labelPaint.getTextBounds(label, 0, label.length(), rect);
-        x = centerX - rect.exactCenterX();
-        y = centerY - rect.exactCenterY();
-        canvas.drawText(label, x, y, labelPaint);
+        //x = centerX - rect.exactCenterX();
+        //y = centerY - rect.exactCenterY();
+        canvas.drawText(label, centerX - rect.exactCenterX(), centerY - rect.exactCenterY(), labelPaint);
     }
 
 
@@ -385,9 +385,10 @@ public class MapView extends BasicHexagonGridView {
         textPaint.setTextSize(cellWidth()/10);
 
         textPaint.getTextBounds(move.turnNumberToString(), 0, move.turnNumberToString().length(), rect);
-        float x = moveSquare.centerX() - rect.exactCenterX();
-        float y = moveSquare.centerY() - rect.exactCenterY();
-        canvas.drawText(move.turnNumberToString(), x,y, textPaint);
+        //float x = moveSquare.centerX() - rect.exactCenterX();
+        //float y = moveSquare.centerY() - rect.exactCenterY();
+        canvas.drawText(move.turnNumberToString(), moveSquare.centerX() - rect.exactCenterX(),
+                moveSquare.centerY() - rect.exactCenterY(), textPaint);
     }
 
     private void setMoveSquare(float centerX, float centerY){
@@ -403,14 +404,14 @@ public class MapView extends BasicHexagonGridView {
 
 
         //we want text about 1/4 of the way from the top
-        float y = rectf.top + rectf.height()/4;
+        //float y = rectf.top + rectf.height()/4;
 
         //sector is special like H, E, A
         if(sector.isSpecial())
             drawSectorLabel(canvas, sector.label(), rectf.centerX(), rectf.centerY());
         //sector is not special but still valid
         else if(sector.isValid()) {
-            drawSectorName(canvas, sector.label(), rectf.centerX(), y);
+            drawSectorName(canvas, sector.label(), rectf.centerX(), rectf.top + rectf.height()/4);
 
             drawMoves(canvas, sector.moves());
         }
@@ -507,7 +508,7 @@ public class MapView extends BasicHexagonGridView {
                 int side = radius * 3 / 2;
 
 
-                int ci = (int) Math.floor((float) x / (float) side);
+                int ci = (int) Math.floor(x / (float) side);
                 int cx = (int) (x - side * ci);
 
                 int ty = (int) (y - (ci % 2) * cellHeight / 2);
