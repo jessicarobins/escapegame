@@ -119,6 +119,7 @@ public class MapView extends BasicHexagonGridView {
 
 
     /*****surfaceview thing******/
+    @Override
     public void doDraw(Canvas canvas){
         super.doDraw(canvas);
         canvas.save();

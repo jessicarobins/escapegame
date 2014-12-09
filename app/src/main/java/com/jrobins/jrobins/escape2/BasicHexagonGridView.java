@@ -109,10 +109,10 @@ public class BasicHexagonGridView   extends SurfaceView
     }
 
     public void doDraw(Canvas canvas){
-        float cellHeight = getHeight()/rows;
+        /*float cellHeight = getHeight()/rows;
         int cellWidth1 = (int)( cellHeight*2 / Math.sqrt(3)); //if height is limiting
         int cellWidth2 = (int)(getWidth()/ (columns - (.25*(columns-1)))); //if width is limiting
-        cellWidth = Math.min(cellWidth1, cellWidth2);
+        cellWidth = Math.min(cellWidth1, cellWidth2);*/
 
 
         drawGridWithZigZagRows(canvas);
