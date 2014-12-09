@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Point;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
@@ -80,6 +81,14 @@ public class BasicHexagonGridView extends View {
 
     public int cellWidth(){
         return cellWidth;
+    }
+
+    public int cellHeight(){
+        return (int)(Math.sqrt(3)*cellWidth/2);
+    }
+
+    public int cellRadius(){
+        return cellWidth/2;
     }
 
     public void setCellWidth(float cellWidth){
@@ -194,7 +203,20 @@ public class BasicHexagonGridView extends View {
 
     }
 
-    private Path getHexPath(float size, float centerX, float centerY)
+    //find the centerpoint of the hexagon based on its position in the array
+    public Point findHexagon(int col, int row){
+        //x = size * 3/2 * q
+        //y = size * sqrt(3) * (r + 0.5 * (q&1))
+        //where 'size' = 1/2 width
+        return new Point((cellWidth/2)*(3/2)*col, (int)((cellWidth/2)*Math.sqrt(3)*(row+.5*(col&1))));
+    }
+
+    public Point findHexagonTopLeft(int col, int row){
+
+        return new Point((int)(col*cellWidth*(3/4)), (int) (row*cellHeight()+(col%2)*(cellHeight()/2)));
+    }
+
+    public Path getHexPath(float size, float centerX, float centerY)
     {
         Path path = new Path();
 

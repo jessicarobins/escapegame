@@ -50,6 +50,7 @@ public class MapView extends BasicHexagonGridView {
     //clicking
     private OnCellClickListener listener;
 
+
     //zooming
     private ScaleGestureDetector mScaleDetector;
     private float mScaleFactor = 1.f;
@@ -148,7 +149,14 @@ public class MapView extends BasicHexagonGridView {
         }
 
         cellSet[column][row] = isSet;
-        invalidate();
+        /*Point p = super.findHexagon(column, row);
+        Path x = super.getHexPath(cellWidth(), p.x-offsetX, p.y-offsetY);
+        x.computeBounds(rectf, true);
+        rectf.round(rect);
+        invalidate(rect);*/
+        //Point p = findHexagonTopLeft(column, row);
+        //invalidate(p.x, p.y, p.x + cellWidth()/2, p.y+cellHeight());
+        //invalidate();
     }
 
     public void resetAllCells(){
@@ -311,7 +319,8 @@ public class MapView extends BasicHexagonGridView {
 
 
         }
-
+        rectf.round(rect);
+        invalidate(rect);
     }
 
     private void drawMove(Canvas canvas, Move move, float centerX, float centerY){
@@ -327,6 +336,8 @@ public class MapView extends BasicHexagonGridView {
         canvas.drawRect(moveSquare, wallPaint());
         if(moveWidth>22)
             drawTextInMoveSquare(canvas, move);
+
+
     }
 
     private void drawMove(Canvas canvas, Move move, float centerX, float centerY, int size){
@@ -412,8 +423,8 @@ public class MapView extends BasicHexagonGridView {
         //sector is not special but still valid
         else if(sector.isValid()) {
             drawSectorName(canvas, sector.label(), rectf.centerX(), rectf.top + rectf.height()/4);
-
-            drawMoves(canvas, sector.moves());
+            if(sector.moves() != null && sector.moves().size()>0)
+                drawMoves(canvas, sector.moves());
         }
     }
 
