@@ -24,7 +24,7 @@ import java.util.ArrayList;
 public class MapView extends BasicHexagonGridView {
 
     //the max number of moves in a row per hexagon
-    private final int MAX_MOVES = 4;
+    private final int MAX_MOVES = 3;
 
     //paints!
     //private Paint wallPaint = new Paint();
@@ -243,11 +243,56 @@ public class MapView extends BasicHexagonGridView {
 
         //these are the coordinates where the grid should start
         //  so x is (MAX_MOVES/2) moves left of center and y is right on center
-        float gridStartX = rectf.centerX()-(MAX_MOVES/2)*moveWidth + .5f*moveWidth;
-        float gridStartY = rectf.centerY();
+        float gridStartX;
+        int movesInRow;// = Math.min(moves.size(), MAX_MOVES);
+        int localMoveWidth = 0;
+        int localMoveYOffset = 0;
+        switch(moves.size()){
+            case 1: {
+                localMoveWidth = (int)(cellWidth()/2.5);
+                localMoveYOffset = localMoveWidth/4;
+                movesInRow = 1;
+                break;
+            }
+            case 2:  {
+                localMoveWidth = (int)(cellWidth() / 3.5);
+                localMoveYOffset = localMoveWidth/4;
+                movesInRow = 2;
+                break;
+            }
+            case 3: {
+                localMoveWidth = cellWidth() / 4;
+                movesInRow = 3;
+                break;
+            }
+            case 4:{
+                localMoveWidth = cellWidth() / 4;
+                movesInRow = 2;
+                break;
+            }
+            case 5:case 6: {
+                localMoveWidth = cellWidth() / 5;
+                movesInRow = 3;
+                break;
+            }
+            default: {
+                localMoveWidth = moveWidth;
+                movesInRow = MAX_MOVES;
+                break;
+            }
+        }
+
+        if(movesInRow % 2 == 0)
+            gridStartX = rectf.centerX()-(movesInRow/2)*localMoveWidth + .5f*localMoveWidth;
+        else
+            gridStartX = rectf.centerX()-(movesInRow/2)*localMoveWidth;
+
+        float gridStartY = rectf.centerY() + localMoveYOffset;
 
         //the max # of moves in a row is now a class-level
         //  constant MAX_MOVES and equal to 4
+
+
 
         //need a for loop with a yoffset for creating rows
         int yOffset = 0;
@@ -255,14 +300,14 @@ public class MapView extends BasicHexagonGridView {
         for(int i = 0; i<moves.size(); i++){
             //check that we haven't reached the max number of moves in
             //  a row
-            if(i > 0 && i%MAX_MOVES==0)
-                yOffset+=moveWidth;
+            if(i > 0 && i%movesInRow==0)
+                yOffset+=localMoveWidth;
 
 
 
             //draw the shape in the right place
             //that'll be (i%MAX_MOVES)*moveWidth + gridStartX and then gridStartY+yOffset
-            drawMove(canvas, moves.get(i), (i % MAX_MOVES) * moveWidth + gridStartX, gridStartY + yOffset);
+            drawMove(canvas, moves.get(i), (i % movesInRow) * localMoveWidth + gridStartX, gridStartY + yOffset, localMoveWidth);
 
 
         }
@@ -282,6 +327,46 @@ public class MapView extends BasicHexagonGridView {
         canvas.drawRect(moveSquare, wallPaint());
         if(moveWidth>22)
             drawTextInMoveSquare(canvas, move);
+    }
+
+    private void drawMove(Canvas canvas, Move move, float centerX, float centerY, int size){
+
+        //get rectangle
+        setMoveSquare(centerX, centerY, size);
+
+        //set the fillpaint to be the player color
+        fillPaint().setColor(move.color());
+        wallPaint().setStrokeWidth(1f);
+        //draw rectangle
+        canvas.drawRect(moveSquare, fillPaint());
+        canvas.drawRect(moveSquare, wallPaint());
+        if(size>20)
+            drawTextInMoveSquare(canvas, move, size);
+    }
+
+    private void setMoveSquare(float centerX, float centerY, int size){
+        moveSquare.set(centerX - size/2, centerY-size/2, centerX+size/2, centerY + size/2);
+    }
+
+    private void drawTextInMoveSquare(Canvas canvas, Move move, int sizeOfMove){
+        //find the right text color - this is certainty color, should be text
+
+        int certainty = move.certainty();
+        switch (certainty) {
+            case 0: textPaint.setColor(getResources().getColor(R.color.bluff));
+                break;
+            case 1: textPaint.setColor(getResources().getColor(R.color.certain));
+                break;
+            case 2: textPaint.setColor(getResources().getColor(R.color.uncertain));
+                break;
+        }
+        //draw number inside rectangle
+        textPaint.setTextSize((int)(sizeOfMove/1.5));
+
+        textPaint.getTextBounds(move.turnNumberToString(), 0, move.turnNumberToString().length(), rect);
+        float x = moveSquare.centerX() - rect.exactCenterX();
+        float y = moveSquare.centerY() - rect.exactCenterY();
+        canvas.drawText(move.turnNumberToString(), x,y, textPaint);
     }
 
     private void drawTextInMoveSquare(Canvas canvas, Move move){

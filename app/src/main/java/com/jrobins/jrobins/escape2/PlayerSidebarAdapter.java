@@ -57,7 +57,8 @@ public class PlayerSidebarAdapter extends ArrayAdapter<Player>{
         Display display = wm.getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-        int h = size.y;
+
+        int h = Math.min(size.x,size.y);
         playerID.setTextSize( (h/16) / players.size());
 
 
