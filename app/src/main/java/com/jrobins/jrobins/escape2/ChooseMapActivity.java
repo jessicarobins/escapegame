@@ -32,7 +32,8 @@ public class ChooseMapActivity extends Activity {
 
         getPlayers();
         loadMaps();
-        initializeMapList();
+        //initializeMapList();
+        testMap();
 
     }
 
@@ -96,4 +97,10 @@ public class ChooseMapActivity extends Activity {
         players = getIntent().getParcelableArrayListExtra("players");
     }
 
+    private void testMap(){
+        BasicHexagonGridView view = new BasicHexagonGridView(this);
+
+        view.initialize(maps.get(0));
+        setContentView(view);
+    }
 }

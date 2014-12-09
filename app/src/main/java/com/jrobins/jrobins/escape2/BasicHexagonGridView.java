@@ -8,14 +8,16 @@ import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.ScaleGestureDetector;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 
-/**
- * Created by jrobins on 12/8/2014.
- */
-public class BasicHexagonGridView extends View {
+
+public class BasicHexagonGridView   extends SurfaceView
+                                    implements SurfaceHolder.Callback{
 
     //paints - just wall and fill, no text
     private Paint wallPaint = new Paint();
@@ -34,6 +36,11 @@ public class BasicHexagonGridView extends View {
 
     private Sector[][] sectors;
 
+    private Context context;
+
+    //multithreading
+    MapDrawingThread mapThread;
+
     public BasicHexagonGridView(Context context)
     {
         this(context, null);
@@ -51,7 +58,63 @@ public class BasicHexagonGridView extends View {
 
 
         cellColor = Color.MAGENTA;
+
+        this.context = context;
+
+        getHolder().addCallback(this);
+        mapThread = new MapDrawingThread(getHolder(),context, this);
+        //setFocusable(true);
     }
+
+
+    /**************** surfaceholder implementation ******/
+    @Override
+    public void surfaceCreated(SurfaceHolder holder){
+        mapThread.setRunning(true);
+
+        mapThread.start();
+    }
+
+    @Override
+    public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
+        /*float cellHeight = h/rows;
+        int cellWidth1 = (int)( cellHeight*2 / Math.sqrt(3)); //if height is limiting
+        int cellWidth2 = (int)(w/ (columns - (.25*(columns-1)))); //if width is limiting
+        cellWidth = Math.min(cellWidth1, cellWidth2);*/
+    }
+
+
+    @Override
+    public void surfaceDestroyed(SurfaceHolder holder) {
+
+        //mapThread.setRunning(false);
+
+        boolean retry = true;
+
+        while(retry){
+            try{
+                mapThread.join();
+                retry = false;
+            }
+
+            catch(Exception e) {
+                Log.v("Exception Occurred", e.getMessage());
+            }
+        }
+    }
+
+    public void doDraw(Canvas canvas){
+        /*float cellHeight = getHeight()/rows;
+        int cellWidth1 = (int)( cellHeight*2 / Math.sqrt(3)); //if height is limiting
+        int cellWidth2 = (int)(getWidth()/ (columns - (.25*(columns-1)))); //if width is limiting
+        cellWidth = Math.min(cellWidth1, cellWidth2);*/
+
+        canvas.drawColor(getResources().getColor(R.color.map_background));
+        drawGridWithZigZagRows(canvas);
+    }
+
+
+
     /***************** setters & getters ********/
 
     public Sector[][] sectors(){
@@ -126,6 +189,7 @@ public class BasicHexagonGridView extends View {
     }
 
     /************* drawing the map****************/
+
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh)
     {
@@ -137,7 +201,7 @@ public class BasicHexagonGridView extends View {
         cellWidth = Math.min(cellWidth1, cellWidth2);
     }
 
-
+/*
     @Override
     protected void onDraw(Canvas canvas)
     {
@@ -146,7 +210,7 @@ public class BasicHexagonGridView extends View {
         drawGridWithZigZagRows(canvas);
 
 
-    }
+    }*/
 
     public void drawGridWithZigZagRows(Canvas canvas){
         boolean oddCol;
