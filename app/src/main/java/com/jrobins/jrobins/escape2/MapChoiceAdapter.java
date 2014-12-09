@@ -2,7 +2,9 @@ package com.jrobins.jrobins.escape2;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Point;
+import android.provider.CalendarContract;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Display;
@@ -59,6 +61,9 @@ public class MapChoiceAdapter extends ArrayAdapter<Map> {
         int y = (int)(size.x*(.65));
         map.setMinimumHeight(y);
         map.setMinimumWidth(size.x);
+        //map.setMinimumWidth(100);
+        //map.setMinimumHeight(100);
+
         map.initialize(maps.get(position));
 
 

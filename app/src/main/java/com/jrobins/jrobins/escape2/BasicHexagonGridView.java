@@ -81,13 +81,14 @@ public class BasicHexagonGridView   extends SurfaceView
         int cellWidth1 = (int)( cellHeight*2 / Math.sqrt(3)); //if height is limiting
         int cellWidth2 = (int)(w/ (columns - (.25*(columns-1)))); //if width is limiting
         cellWidth = Math.min(cellWidth1, cellWidth2);*/
+
     }
 
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
 
-        //mapThread.setRunning(false);
+        mapThread.setRunning(false);
 
         boolean retry = true;
 
@@ -104,13 +105,14 @@ public class BasicHexagonGridView   extends SurfaceView
     }
 
     public void doDraw(Canvas canvas){
-        /*float cellHeight = getHeight()/rows;
+        float cellHeight = getHeight()/rows;
         int cellWidth1 = (int)( cellHeight*2 / Math.sqrt(3)); //if height is limiting
         int cellWidth2 = (int)(getWidth()/ (columns - (.25*(columns-1)))); //if width is limiting
-        cellWidth = Math.min(cellWidth1, cellWidth2);*/
+        cellWidth = Math.min(cellWidth1, cellWidth2);
 
-        canvas.drawColor(getResources().getColor(R.color.map_background));
+
         drawGridWithZigZagRows(canvas);
+
     }
 
 

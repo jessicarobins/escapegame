@@ -32,8 +32,8 @@ public class ChooseMapActivity extends Activity {
 
         getPlayers();
         loadMaps();
-        //initializeMapList();
-        testMap();
+        initializeMapList();
+        //testMap2();
 
     }
 
@@ -103,4 +103,6 @@ public class ChooseMapActivity extends Activity {
         view.initialize(maps.get(0));
         setContentView(view);
     }
+
+
 }
