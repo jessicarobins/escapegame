@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -15,6 +17,7 @@ import java.util.List;
 
 public class ChooseMapActivity extends Activity {
     List<Map> maps;
+    Map selectedMap;
     BasicHexagonGridView map;
     ListView mapListView;
     MapChoiceAdapter mapChoiceAdapter;
@@ -68,6 +71,16 @@ public class ChooseMapActivity extends Activity {
         mapChoiceAdapter = new MapChoiceAdapter(this, maps);
         mapListView = (ListView) findViewById(R.id.mapList);
         mapListView.setAdapter(mapChoiceAdapter);
+        mapListView.setClickable(true);
+        mapListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+
+                selectedMap = mapChoiceAdapter.getItem(position);
+                System.out.println(map);
+
+            }
+        });
     }
 
 

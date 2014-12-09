@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string name="app_name">Escape2</string>
+    <!-- titles -->
+    <string name="app_name">Escape from the Aliens in Outer Space</string>
+    <string name="choose_players_title">Select number of players</string>
+    <string name="choose_map_title">Select a map</string>
     <string name="action_settings">Settings</string>
 
     <!-- choosing players screen -->
     <string name="choose_players_text">Select number of players: </string>
-    <string name="choose_players_button_text">Next</string>
+    <string name="choose_players_button_text">Select map</string>
 
     <string-array name="players_array">
         <item>4</item>

@@ -10,7 +10,7 @@
     <color name="alien_start">#008B8B</color>
     <color name="human_start">#DC143C</color>
     <color name="safe">#FFFFFF</color>
-    <color name="unsafe">#C0C0C0</color>
+    <color name="unsafe">#808080</color>
     <color name="invalid">#000000</color>
     <color name="escape_hatch">#4B0082</color>
     <!--map colors-->
