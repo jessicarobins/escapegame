@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.LauncherActivity;
 import android.app.LauncherActivity.ListItem;
 import android.content.Context;
+import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -157,6 +158,7 @@ public class PlayerChoiceAdapter extends ArrayAdapter<Player> {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         //final Button button = (Button) findViewById(R.id.button);
         GridView gridView = new GridView(getContext());
+        //gridView.setBackgroundColor(Color.TRANSPARENT);
         //int w = getContext().getResources().getDisplayMetrics().widthPixels;
         //gridView.setLayoutParams(new AbsListView.LayoutParams(w/2, AbsListView.LayoutParams.WRAP_CONTENT));
 
@@ -182,7 +184,8 @@ public class PlayerChoiceAdapter extends ArrayAdapter<Player> {
 
         lp.copyFrom(alertDialog.getWindow().getAttributes());
         lp.width = 400;
-        lp.height = 800;
+
+        //lp.height = 800;
         //lp.x=-170;
         //lp.y=100;
         alertDialog.getWindow().setAttributes(lp);

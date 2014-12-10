@@ -1,6 +1,7 @@
 package com.jrobins.jrobins.escape2;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -54,10 +55,13 @@ public class ColorChoiceGridViewAdapter extends BaseAdapter {
             view = (TextView) convertView;
         }
 
-        view.setLayoutParams(new AbsListView.LayoutParams(100, 100));
+        //view.setLayoutParams(new AbsListView.LayoutParams(100, 100));
         view.setBackgroundColor(colors[position]);
-        if(letters != null && letters.length > 0)
+        if(letters != null && letters.length > 0) {
             view.setText(letters[position]);
+            view.setGravity(Gravity.CENTER);
+            view.setTextSize(30);
+        }
         return view;
     }
 }

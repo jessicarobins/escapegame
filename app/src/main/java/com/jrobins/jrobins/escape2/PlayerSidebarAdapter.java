@@ -158,8 +158,8 @@ public class PlayerSidebarAdapter extends ArrayAdapter<Player>{
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
 
         lp.copyFrom(alertDialog.getWindow().getAttributes());
-        lp.width = 400;
-        lp.height = 800;
+        lp.width = 300;
+        //lp.height = 800;
         //lp.x=-170;
         //lp.y=100;
         alertDialog.getWindow().setAttributes(lp);
