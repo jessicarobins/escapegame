@@ -10,12 +10,21 @@ import android.widget.TextView;
 
 public class ColorChoiceGridViewAdapter extends BaseAdapter {
     int [] colors;
+    String [] letters;
     Context context;
 
     public ColorChoiceGridViewAdapter(Context context, int[]colors) {
         this.context = context;
         this.colors= colors;
+        this.letters =null;
     }
+
+    public ColorChoiceGridViewAdapter(Context context, int[]colors, String[] letters) {
+        this.context = context;
+        this.colors= colors;
+        this.letters = letters;
+    }
+
     @Override
     public int getCount() {
         if(colors == null)
@@ -45,8 +54,10 @@ public class ColorChoiceGridViewAdapter extends BaseAdapter {
             view = (TextView) convertView;
         }
 
-        view.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.MATCH_PARENT));
+        view.setLayoutParams(new AbsListView.LayoutParams(100, 100));
         view.setBackgroundColor(colors[position]);
+        if(letters != null && letters.length > 0)
+            view.setText(letters[position]);
         return view;
     }
 }

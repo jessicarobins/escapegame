@@ -11,7 +11,9 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -73,12 +75,11 @@ public class PlayerChoiceAdapter extends ArrayAdapter<Player> {
 
         final Button button = (Button) convertView.findViewById(R.id.button);
         button.setBackgroundColor(players.get(position).color());
-        button.setLongClickable(true);
-        button.setOnLongClickListener(new View.OnLongClickListener() {
+        button.setClickable(true);
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
+            public void onClick(View v) {
                 showAlertDialog();
-                return true;
             }
         });
 
@@ -146,8 +147,10 @@ public class PlayerChoiceAdapter extends ArrayAdapter<Player> {
     private void showAlertDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         GridView gridView = new GridView(getContext());
+        //int w = getContext().getResources().getDisplayMetrics().widthPixels;
+        //gridView.setLayoutParams(new AbsListView.LayoutParams(w/2, AbsListView.LayoutParams.WRAP_CONTENT));
 
-        int [] colors = getContext().getResources().getIntArray(R.array.player_color_choices);
+        int[] colors = getContext().getResources().getIntArray(R.array.player_color_choices);
 
         gridView.setAdapter(new ColorChoiceGridViewAdapter(getContext(), colors));
         gridView.setNumColumns(4);
@@ -158,6 +161,16 @@ public class PlayerChoiceAdapter extends ArrayAdapter<Player> {
             }
         });
         builder.setView(gridView);
-        builder.show();
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+        //alertDialog.getWindow().setLayout(400, 800);
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+
+        lp.copyFrom(alertDialog.getWindow().getAttributes());
+        lp.width = 400;
+        lp.height = 800;
+        //lp.x=-170;
+        //lp.y=100;
+        alertDialog.getWindow().setAttributes(lp);
     }
 }
