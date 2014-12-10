@@ -6,6 +6,13 @@
     <color name="alien">#008B8B</color>
     <color name="neutral">#FFFFFF</color>
     <color name="current_turn">#FFD700</color>
+
+    <array name="halo_colors">
+        <item>@color/human</item>
+        <item>@color/alien</item>
+        <item>@color/neutral</item>
+    </array>
+
     <!--hexagon colors -->
     <color name="alien_start">#008B8B</color>
     <color name="human_start">#DC143C</color>

@@ -25,4 +25,11 @@
     <string name="title_activity_choose_map">ChooseMapActivity</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <!-- halo color array labels-->
+    <string-array name="halo_color_labels">
+        <item>H</item>
+        <item>A</item>
+        <item>\?</item>
+    </string-array>
+
 </resources>

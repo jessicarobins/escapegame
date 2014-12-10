@@ -1,6 +1,7 @@
 package com.jrobins.jrobins.escape2;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.Point;
@@ -15,14 +16,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -32,11 +36,14 @@ public class PlayerSidebarAdapter extends ArrayAdapter<Player>{
     private Activity context;
     private LayoutInflater inflater;
     public ArrayList<Player> players;
+    HashMap<String, Integer> haloColors = new HashMap<String, Integer>();
+    int[] colors;
 
     public PlayerSidebarAdapter(Activity activity, List<Player> players){
         super(activity, R.layout.player_sidebar, players);
         this.context = activity;
         this.players = (ArrayList<Player>) players;
+        colors = getContext().getResources().getIntArray(R.array.halo_colors);
         inflater = activity.getWindow().getLayoutInflater();
     }
 
@@ -58,7 +65,7 @@ public class PlayerSidebarAdapter extends ArrayAdapter<Player>{
         Point size = new Point();
         display.getSize(size);
 
-        int h = Math.min(size.x,size.y);
+        int h = Math.min(size.x, size.y);
         playerID.setTextSize( (h/16) / players.size());
 
 
@@ -90,14 +97,28 @@ public class PlayerSidebarAdapter extends ArrayAdapter<Player>{
 
         //make the halo for aliens/humans
 
-        LinearLayout halo = (LinearLayout) convertView.findViewById(R.id.halo);
+        final LinearLayout halo = (LinearLayout) convertView.findViewById(R.id.halo);
+        halo.setTag("halo"+position);
+        if(!haloColors.containsKey(halo.getTag()))
+            haloColors.put(halo.getTag().toString(), new Integer(colors[2]));
+
+        halo.setBackgroundColor(haloColors.get(halo.getTag()));
+
+        playerID.setClickable(true);
+        playerID.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAlertDialog(halo);
+            }
+        });
+        /*
         if (players.get(position).isAlien())
             halo.setBackgroundColor(convertView.getResources().getColor(R.color.alien));
         else if (players.get(position).isHuman())
             halo.setBackgroundColor(convertView.getResources().getColor(R.color.human));
         else
             halo.setBackgroundColor(convertView.getResources().getColor(R.color.neutral));
-
+        */
         LinearLayout currentTurn = (LinearLayout) convertView.findViewById(R.id.currentTurn);
         if(players.get(position).turn())
             currentTurn.setBackgroundColor(convertView.getResources().getColor(R.color.current_turn));
@@ -105,5 +126,42 @@ public class PlayerSidebarAdapter extends ArrayAdapter<Player>{
             currentTurn.setBackgroundColor(convertView.getResources().getColor(android.R.color.black));
 
         return convertView ;
+    }
+
+
+    private void showAlertDialog(final LinearLayout halo) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        //final Button button = (Button) findViewById(R.id.button);
+        GridView gridView = new GridView(getContext());
+        //int w = getContext().getResources().getDisplayMetrics().widthPixels;
+        //gridView.setLayoutParams(new AbsListView.LayoutParams(w/2, AbsListView.LayoutParams.WRAP_CONTENT));
+
+        final int[] colors = getContext().getResources().getIntArray(R.array.halo_colors);
+        final String[] labels = getContext().getResources().getStringArray(R.array.halo_color_labels);
+
+        gridView.setAdapter(new ColorChoiceGridViewAdapter(getContext(), colors, labels));
+        gridView.setNumColumns(3);
+        builder.setView(gridView);
+        final AlertDialog alertDialog = builder.create();
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // do something here
+                halo.setBackgroundColor(colors[position]);
+                haloColors.put(halo.getTag().toString(), new Integer(colors[position]));
+                alertDialog.dismiss();
+            }
+        });
+
+        alertDialog.show();
+        //alertDialog.getWindow().setLayout(400, 800);
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+
+        lp.copyFrom(alertDialog.getWindow().getAttributes());
+        lp.width = 400;
+        lp.height = 800;
+        //lp.x=-170;
+        //lp.y=100;
+        alertDialog.getWindow().setAttributes(lp);
     }
 }
