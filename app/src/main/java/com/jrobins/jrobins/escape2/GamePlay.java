@@ -49,6 +49,8 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
     private Button advanceTurnButton;
     private LinearLayout sidebar;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +65,12 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
 
     }
 
+    @Override
+    protected void onPause(){
+        super.onPause();
+        hexagonMap.stopThread();
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

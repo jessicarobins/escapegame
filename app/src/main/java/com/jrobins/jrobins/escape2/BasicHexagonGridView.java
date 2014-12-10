@@ -104,6 +104,7 @@ public class BasicHexagonGridView   extends SurfaceView
                 mapThread.join();
                 retry = false;
                 mapThread.setRunning(false);
+                Log.v("map thread", "surface destroyed");
             }
 
             catch(Exception e) {
@@ -139,6 +140,9 @@ public class BasicHexagonGridView   extends SurfaceView
         return rows;
     }
 
+    public MapDrawingThread thread(){
+        return mapThread;
+    }
 
     public Paint fillPaint(){
         return fillPaint;
@@ -168,6 +172,13 @@ public class BasicHexagonGridView   extends SurfaceView
         this.cellWidth = (int) cellWidth;
     }
 
+    public void stopThread(){
+        mapThread.setRunning(false);
+    }
+
+    public void startThread(){
+        mapThread.setRunning(true);
+    }
 
     /**************** moves *********************/
     public void addMove(int col, int row, Move move){

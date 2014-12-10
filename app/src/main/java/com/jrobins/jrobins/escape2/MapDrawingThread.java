@@ -69,29 +69,21 @@ public class MapDrawingThread extends Thread {
     @Override
 
     public void run(){
-        {
-
-            super.run();
-
-            while(running)
-
-            {
-
-                canvas = surfaceHolder.lockCanvas();
-
-                if(canvas != null)
-
-                {
-
-                    hexagonGrid.doDraw(canvas);
-
-                    surfaceHolder.unlockCanvasAndPost(canvas);
-                    if(staticImage)
-                        running = false;
 
 
-                }
+        super.run();
 
+        while(running){
+
+            canvas = surfaceHolder.lockCanvas();
+
+            if(canvas != null){
+
+                hexagonGrid.doDraw(canvas);
+
+                surfaceHolder.unlockCanvasAndPost(canvas);
+                if(staticImage)
+                running = false;
             }
 
         }

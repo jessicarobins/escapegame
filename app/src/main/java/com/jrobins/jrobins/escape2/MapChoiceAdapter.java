@@ -77,4 +77,9 @@ public class MapChoiceAdapter extends ArrayAdapter<Map> {
         return maps.get(position);
     }
 
+    @Override
+    public int getCount(){
+        return maps.size();
+    }
+
 }

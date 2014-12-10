@@ -37,6 +37,22 @@ public class ChooseMapActivity extends Activity {
 
     }
 
+    @Override
+    protected void onPause(){
+        super.onPause();
+
+
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+
+        initializeMapList();
+
+
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
