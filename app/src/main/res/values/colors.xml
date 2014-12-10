@@ -28,7 +28,11 @@
     <color name="certain">#006400</color>
     <color name="uncertain">#000000</color>
 
-
+    <array name="certanties">
+        <item>@color/bluff</item>
+        <item>@color/certain</item>
+        <item>@color/uncertain</item>
+    </array>
 
     <!--color choice-->
 

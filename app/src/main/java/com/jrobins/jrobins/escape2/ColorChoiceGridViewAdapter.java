@@ -59,9 +59,11 @@ public class ColorChoiceGridViewAdapter extends BaseAdapter {
         view.setBackgroundColor(colors[position]);
         if(letters != null && letters.length > 0) {
             view.setText(letters[position]);
-            view.setGravity(Gravity.CENTER);
-            view.setTextSize(30);
         }
+        else
+            view.setText(" ");
+        view.setGravity(Gravity.CENTER);
+        view.setTextSize(30);
         return view;
     }
 }
