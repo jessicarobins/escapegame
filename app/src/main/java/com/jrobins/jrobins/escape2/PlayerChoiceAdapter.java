@@ -1,6 +1,7 @@
 package com.jrobins.jrobins.escape2;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.LauncherActivity;
 import android.app.LauncherActivity.ListItem;
 import android.content.Context;
@@ -10,10 +11,14 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -29,11 +34,12 @@ public class PlayerChoiceAdapter extends ArrayAdapter<Player> {
 
     public ArrayList<Player> players;
     private HashMap<String, String> playerNameValues = new HashMap<String, String>();
-
+    private Activity activity;
 
     public PlayerChoiceAdapter(Activity activity, List<Player> players){
         super(activity, R.layout.player_choice, players);
         this.players = (ArrayList<Player>) players;
+        this.activity = activity;
         inflater = activity.getWindow().getLayoutInflater();
     }
 
@@ -41,21 +47,42 @@ public class PlayerChoiceAdapter extends ArrayAdapter<Player> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
 
-        boolean convertViewWasNull = false;
+
         if(convertView == null)
         {
             convertView  = (LinearLayout)inflater.inflate(R.layout.player_choice, parent, false);
-            convertViewWasNull = true;
+
         }
 
         final int p = position;
         final EditText playerName = (EditText) convertView.findViewById(R.id.playerName);
+        //set the tag of the textbox so we can use it in the hashmap
+        playerName.setTag("theFirstEditTextAtPos:"+position);
+
+        //if that tag does not exist in the hashmap, put the default player value there
+        if(!playerNameValues.containsKey(playerName.getTag()))
+            playerNameValues.put(playerName.getTag().toString(), players.get(position).name());
+         /*
+        else {
+            //set the text then add the tag?
+            playerName.setText(players.get(position).name());
+
+        }*/
+        playerName.setText(playerNameValues.get(playerName.getTag().toString()));
+
+
         //playerName.setText("Player " + position);
-        playerName.setText(players.get(position).name());
+
         final Button button = (Button) convertView.findViewById(R.id.button);
         button.setBackgroundColor(players.get(position).color());
+        button.setClickable(true);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAlertDialog();
+            }
+        });
 
-        playerName.setTag("theFirstEditTextAtPos:"+position);
         //playerNameValues.put(playerName.getTag().toString(), playerName.getText().toString());
 
         playerName.addTextChangedListener(new TextWatcher(){
@@ -72,10 +99,11 @@ public class PlayerChoiceAdapter extends ArrayAdapter<Player> {
                                 playerName.getText().toString().substring(1,2).toLowerCase();
                         button.setText(btnText);
                     }
-                    PlayerChoiceAdapter.this.playerNameValues.put(playerName.getTag().toString(), s.toString());
+
                     //players.get(p).setName(playerName.getText().toString());
                     //System.out.println("setting player name = " +playerName.getText().toString());
                 }
+                PlayerChoiceAdapter.this.playerNameValues.put(playerName.getTag().toString(), s.toString());
             }
             public void beforeTextChanged(CharSequence s, int start, int count, int after){}
             public void onTextChanged(CharSequence s, int start, int before, int count){}
@@ -114,5 +142,35 @@ public class PlayerChoiceAdapter extends ArrayAdapter<Player> {
             result = "default value";
 
         return new Player(result);
+    }
+
+    private void showAlertDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        GridView gridView = new GridView(getContext());
+        //int w = getContext().getResources().getDisplayMetrics().widthPixels;
+        //gridView.setLayoutParams(new AbsListView.LayoutParams(w/2, AbsListView.LayoutParams.WRAP_CONTENT));
+
+        int[] colors = getContext().getResources().getIntArray(R.array.player_color_choices);
+
+        gridView.setAdapter(new ColorChoiceGridViewAdapter(getContext(), colors));
+        gridView.setNumColumns(4);
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // do something here
+            }
+        });
+        builder.setView(gridView);
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+        //alertDialog.getWindow().setLayout(400, 800);
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+
+        lp.copyFrom(alertDialog.getWindow().getAttributes());
+        lp.width = 400;
+        lp.height = 800;
+        //lp.x=-170;
+        //lp.y=100;
+        alertDialog.getWindow().setAttributes(lp);
     }
 }

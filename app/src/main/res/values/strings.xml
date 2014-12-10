@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <!-- titles -->
     <string name="app_name">Escape from the Aliens in Outer Space</string>
     <string name="choose_players_title">Select number of players</string>
@@ -22,5 +23,6 @@
     <string name="next_turn_button">></string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_choose_map">ChooseMapActivity</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
