@@ -34,7 +34,10 @@ public class PlayerChoiceAdapter extends ArrayAdapter<Player> {
 
     public ArrayList<Player> players;
     private HashMap<String, String> playerNameValues = new HashMap<String, String>();
+    private HashMap<String, Integer> buttonColorValues = new HashMap<String, Integer>();
     private Activity activity;
+
+
 
     public PlayerChoiceAdapter(Activity activity, List<Player> players){
         super(activity, R.layout.player_choice, players);
@@ -74,12 +77,16 @@ public class PlayerChoiceAdapter extends ArrayAdapter<Player> {
         //playerName.setText("Player " + position);
 
         final Button button = (Button) convertView.findViewById(R.id.button);
-        button.setBackgroundColor(players.get(position).color());
+        button.setTag("button"+position);
+        if(!buttonColorValues.containsKey(button.getTag()))
+            buttonColorValues.put(button.getTag().toString(), new Integer(players.get(position).color()));
+
+        button.setBackgroundColor(buttonColorValues.get(button.getTag()));
         button.setClickable(true);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showAlertDialog();
+                showAlertDialog(button);
             }
         });
 
@@ -137,31 +144,38 @@ public class PlayerChoiceAdapter extends ArrayAdapter<Player> {
 
     @Override
     public Player getItem(int position){
-        String result = playerNameValues.get("theFirstEditTextAtPos:"+position);
-        if(result ==null)
-            result = "default value";
+        String name = playerNameValues.get("theFirstEditTextAtPos:"+position);
+        if(name ==null)
+            name = "default value";
 
-        return new Player(result);
+        int color = buttonColorValues.get("button"+position);
+
+        return new Player(name, color);
     }
 
-    private void showAlertDialog() {
+    private void showAlertDialog(final Button button) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        //final Button button = (Button) findViewById(R.id.button);
         GridView gridView = new GridView(getContext());
         //int w = getContext().getResources().getDisplayMetrics().widthPixels;
         //gridView.setLayoutParams(new AbsListView.LayoutParams(w/2, AbsListView.LayoutParams.WRAP_CONTENT));
 
-        int[] colors = getContext().getResources().getIntArray(R.array.player_color_choices);
+        final int[] colors = getContext().getResources().getIntArray(R.array.player_color_choices);
 
         gridView.setAdapter(new ColorChoiceGridViewAdapter(getContext(), colors));
         gridView.setNumColumns(4);
+        builder.setView(gridView);
+        final AlertDialog alertDialog = builder.create();
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // do something here
+                button.setBackgroundColor(colors[position]);
+                buttonColorValues.put(button.getTag().toString(), new Integer(colors[position]));
+                alertDialog.dismiss();
             }
         });
-        builder.setView(gridView);
-        AlertDialog alertDialog = builder.create();
+
         alertDialog.show();
         //alertDialog.getWindow().setLayout(400, 800);
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();

@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.XmlResourceParser;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -162,6 +164,7 @@ public class ChoosePlayersActivity extends Activity implements OnItemSelectedLis
             public void onClick(View v) {
                 players = new ArrayList<Player>();
                 Player p;
+
                 for(int i = 0; i<playerArrayAdapter.getCount();i++){
                     p = (Player)playerArrayAdapter.getItem(i);
 
@@ -181,13 +184,12 @@ public class ChoosePlayersActivity extends Activity implements OnItemSelectedLis
                         return;
                     }
 
-                    p.setColor(colors[i]);
-                    System.out.println("name = " + playerArrayAdapter.getItem(i).toString() + " i = " +i);
+
+
+                    //System.out.println("name = " + playerArrayAdapter.getItem(i).toString() + " i = " +i);
                     players.add(p);
                 }
-                for(int i = 0; i< players.size(); i++){
-                    System.out.println("player " + i + " = " + players.get(i).name());
-                }
+
 
                 Intent intent = new Intent(ChoosePlayersActivity.this, ChooseMapActivity.class);
                 intent.putParcelableArrayListExtra("players", players);
