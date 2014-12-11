@@ -7,10 +7,10 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 
 
-public class MapCreatorView extends BasicHexagonGridView {
+public class MapCreatorView extends MapView {
     //clicking
-    private OnCellClickListener listener;
-    private GestureDetector mGestureDetector;
+    //private OnCellClickListener listener;
+    //private GestureDetector mGestureDetector;
 
     public MapCreatorView(Context context) {
         super(context);
@@ -25,16 +25,16 @@ public class MapCreatorView extends BasicHexagonGridView {
         setWallPaint(Color.GRAY);
 
         //set this to not be a static view
-        setMapThread(new MapDrawingThread(getHolder(),context, this, false));
+        //setMapThread(new MapDrawingThread(getHolder(),context, this, false));
 
         //initialize the pan thing
-        mGestureDetector = new GestureDetector(context, new GestureListener());
+        //mGestureDetector = new GestureDetector(context, new GestureListener());
 
         //initialize with a blank default map
         initialize(new Map());
     }
 
-
+/*
     //clicking
     @Override
     public boolean onTouchEvent(MotionEvent event)
@@ -42,17 +42,9 @@ public class MapCreatorView extends BasicHexagonGridView {
         mGestureDetector.onTouchEvent(event);
         return true;
 
-    }
+    }*/
 
-    public interface OnCellClickListener
-    {
-        public void onCellClick(int column, int row);
-    }
 
-    public void setOnCellClickListener(OnCellClickListener listener)
-    {
-        this.listener = listener;
-    }
 
     public void changeSectorType(int column, int row)
     {
@@ -60,7 +52,7 @@ public class MapCreatorView extends BasicHexagonGridView {
                 (sectors()[column][row].sectorType()+1)%3);
     }
 
-
+    /*
     private class GestureListener extends GestureDetector.SimpleOnGestureListener {
 
 
@@ -95,5 +87,5 @@ public class MapCreatorView extends BasicHexagonGridView {
         }
 
 
-    }
+    }*/
 }
