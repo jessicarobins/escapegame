@@ -14,6 +14,13 @@ import java.util.ArrayList;
 public class Sector implements Parcelable{
     private int x; //this represents A-Z, the x coordinate
     private int y;
+    final public static int INVALID = 0;
+    final public static int SAFE = 1;
+    final public static int UNSAFE = 2;
+    final public static int ALIEN_START = 3;
+    final public static int HUMAN_START = 4;
+    final public static int ESCAPE_HATCH = 5;
+
     private int sectorType; //0 = invalid, 1 = safe, 2 = unsafe, 3 = alien start, 4 = human start
                             //5 = escape hatch
     private static final String[] sectorTypeMap = {"invalid",
@@ -207,6 +214,10 @@ public class Sector implements Parcelable{
 
     public void setSectorType (String sectorType){
         this.sectorType = sectorTypeToInt(sectorType);
+    }
+
+    public void setSectorType (int sectorType){
+        this.sectorType = sectorType;
     }
 
     @Override

@@ -35,6 +35,7 @@ public class BasicHexagonGridView   extends SurfaceView
     private int cellColor;
 
     private Sector[][] sectors;
+    Map map;
 
     private Context context;
 
@@ -148,8 +149,16 @@ public class BasicHexagonGridView   extends SurfaceView
         return fillPaint;
     }
 
+    public void setFillPaint(int color) {
+        fillPaint.setColor(color);
+    }
+
     public Paint wallPaint(){
         return wallPaint;
+    }
+
+    public void setWallPaint(int color) {
+        wallPaint.setColor(color);
     }
 
     public Path combPath(){
@@ -180,6 +189,11 @@ public class BasicHexagonGridView   extends SurfaceView
         mapThread.setRunning(true);
     }
 
+    public Map map(){
+        return map;
+    }
+
+
     /**************** moves *********************/
     public void addMove(int col, int row, Move move){
         sectors[col][row].addMove(move);
@@ -193,6 +207,7 @@ public class BasicHexagonGridView   extends SurfaceView
     /*****************initializing stuff*********/
 
     public void initialize(Map map){
+        this.map = map;
         this.sectors = map.sectors();
         initialize(sectors.length, sectors[0].length);
     }
