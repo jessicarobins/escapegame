@@ -152,11 +152,14 @@ public class PlayerChoiceAdapter extends ArrayAdapter<Player> {
 
     @Override
     public Player getItem(int position){
+        int color;
         String name = playerNameValues.get("theFirstEditTextAtPos:"+position);
         if(name ==null)
-            name = "default value";
-
-        int color = buttonColorValues.get("button"+position);
+            name = players.get(position).name();
+        if(buttonColorValues.containsKey("button" + position))
+            color = buttonColorValues.get("button"+position);
+        else
+            color = players.get(position).color();
 
         return new Player(name, color);
     }

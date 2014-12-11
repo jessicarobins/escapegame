@@ -55,7 +55,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
+        getPlayerList();
         setUpWindow();
         initializePlayers();
         initializeMap();
@@ -124,7 +124,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         Point size = new Point();
         this.getWindowManager().getDefaultDisplay().getSize(size);
 
-        int w = size.x/25;
+        int w = size.x/(25 - (players.size()-4));
         int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, w, getResources().getDisplayMetrics());
         sidebar.getLayoutParams().width = width;
     }
@@ -136,12 +136,12 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         hexagonMap.setOnCellClickListener(this);
     }
 
-    private void initializePlayers(){
+    private void getPlayerList(){
         //gets the player data from the previous screen
         players = getIntent().getParcelableArrayListExtra("players");
-        for(int i = 0; i< players.size(); i++){
-            System.out.println("player " + i + " = " + players.get(i).name());
-        }
+    }
+
+    private void initializePlayers(){
 
         //sets up the sidebar with player info
         playerSidebarAdapter = new PlayerSidebarAdapter(this, players);

@@ -57,6 +57,8 @@ public class PlayerSidebarAdapter extends ArrayAdapter<Player>{
         }
 
         TextView playerID = (TextView) convertView.findViewById(R.id.player_id);
+        final LinearLayout halo = (LinearLayout) convertView.findViewById(R.id.halo);
+        LinearLayout currentTurn = (LinearLayout) convertView.findViewById(R.id.currentTurn);
 
         //size the buttons so they all fit on the screen
 
@@ -65,9 +67,10 @@ public class PlayerSidebarAdapter extends ArrayAdapter<Player>{
         Point size = new Point();
         display.getSize(size);
 
-        int h = Math.min(size.x, size.y);
-        playerID.setTextSize( (h/16) / players.size());
-
+        int h = size.y;
+        int w = parent.getWidth();
+        playerID.setTextSize( w/5);
+        //playerID.setTextSize( parent.getWidth()/2 / players.size());
 
 
         playerID.setBackgroundColor(players.get(position).color());
@@ -97,7 +100,7 @@ public class PlayerSidebarAdapter extends ArrayAdapter<Player>{
 
         //make the halo for aliens/humans
 
-        final LinearLayout halo = (LinearLayout) convertView.findViewById(R.id.halo);
+
         halo.setTag("halo"+position);
         if(!haloColors.containsKey(halo.getTag()))
             haloColors.put(halo.getTag().toString(), new Integer(colors[2]));
@@ -119,7 +122,7 @@ public class PlayerSidebarAdapter extends ArrayAdapter<Player>{
         else
             halo.setBackgroundColor(convertView.getResources().getColor(R.color.neutral));
         */
-        LinearLayout currentTurn = (LinearLayout) convertView.findViewById(R.id.currentTurn);
+
         if(players.get(position).turn())
             currentTurn.setBackgroundColor(convertView.getResources().getColor(R.color.current_turn));
         else
