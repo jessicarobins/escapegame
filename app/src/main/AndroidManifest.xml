@@ -10,7 +10,6 @@
         <activity
             android:name=".ChoosePlayersActivity"
             android:label="@string/choose_players_title" >
-
         </activity>
         <activity
             android:name=".GamePlay"
@@ -30,6 +29,10 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".HelpActivity"
+            android:label="@string/title_activity_help" >
         </activity>
     </application>
 

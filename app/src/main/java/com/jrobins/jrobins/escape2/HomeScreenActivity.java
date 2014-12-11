@@ -20,6 +20,7 @@ public class HomeScreenActivity extends Activity {
         setContentView(R.layout.activity_home_screen);
 
         setUpPlayButton();
+        setUpHelp();
     }
 
 
@@ -59,4 +60,17 @@ public class HomeScreenActivity extends Activity {
         });
     }
 
+    private void setUpHelp(){
+        button = ( Button ) findViewById(R.id.rules);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                intent = new Intent(HomeScreenActivity.this, HelpActivity.class);
+
+                startActivity(intent);
+            }
+
+        });
+    }
 }
