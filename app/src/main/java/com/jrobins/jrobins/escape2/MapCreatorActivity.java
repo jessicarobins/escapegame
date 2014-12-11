@@ -8,13 +8,16 @@ import android.view.Window;
 import android.view.WindowManager;
 
 
-public class MapCreatorActivity extends Activity {
+public class MapCreatorActivity extends Activity implements MapCreatorView.OnCellClickListener{
+
+    private MapCreatorView hexagonMap;
+    Map map;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setUpWindow();
-
+        initializeHexagonMap();
     }
 
 
@@ -50,5 +53,26 @@ public class MapCreatorActivity extends Activity {
         setContentView(R.layout.activity_map_creator);
 
 
+    }
+
+    private void initializeHexagonMap(){
+        hexagonMap = (MapCreatorView) findViewById(R.id.map);
+        //don't need to initialize
+        this.map = hexagonMap.map();
+        hexagonMap.setOnCellClickListener(this);
+    }
+
+    //this is what happens when we click hexagons
+    @Override
+    public void onCellClick(int column, int row)
+    {
+        //need to check that we are even in the array
+        if(column < map.sectors().length && row < map.sectors()[0].length && column>=0 && row >=0) {
+            //if the cell is not special
+            if (!map.sectors()[column][row].isSpecial()) {
+                //hexagonMap.setCell(column, row, !hexagonMap.isCellSet(column, row));
+                hexagonMap.changeSectorType(column, row);
+            }
+        }
     }
 }

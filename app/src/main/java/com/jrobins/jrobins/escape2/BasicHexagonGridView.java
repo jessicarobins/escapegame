@@ -35,6 +35,7 @@ public class BasicHexagonGridView   extends SurfaceView
     private int cellColor;
 
     private Sector[][] sectors;
+    Map map;
 
     private Context context;
 
@@ -176,6 +177,10 @@ public class BasicHexagonGridView   extends SurfaceView
         this.cellWidth = (int) cellWidth;
     }
 
+    public Map map(){
+        return map;
+    }
+
 
     /**************** moves *********************/
     public void addMove(int col, int row, Move move){
@@ -190,6 +195,7 @@ public class BasicHexagonGridView   extends SurfaceView
     /*****************initializing stuff*********/
 
     public void initialize(Map map){
+        this.map = map;
         this.sectors = map.sectors();
         initialize(sectors.length, sectors[0].length);
     }

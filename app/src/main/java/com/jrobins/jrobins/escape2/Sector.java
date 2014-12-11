@@ -216,6 +216,10 @@ public class Sector implements Parcelable{
         this.sectorType = sectorTypeToInt(sectorType);
     }
 
+    public void setSectorType (int sectorType){
+        this.sectorType = sectorType;
+    }
+
     @Override
     public int describeContents() {
         return 0;
