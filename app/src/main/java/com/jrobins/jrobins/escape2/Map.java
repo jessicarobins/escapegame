@@ -12,6 +12,12 @@ public class Map implements Parcelable {
     private Sector [][] sectors;
     private String name;
 
+    public Map(){
+        this.name = "My Super Awesome Map";
+        this.sectors = initializeDefaultSectors();
+    }
+
+
     public Map(String name, Sector[][] sectors){
         this.name = name;
         this.sectors = sectors;
@@ -57,6 +63,33 @@ public class Map implements Parcelable {
 
     public void setSectors( Sector[][]sectors){
         this.sectors = sectors;
+    }
+
+    public Sector[][] initializeDefaultSectors(){
+        Sector[][] sectors = new Sector[23][14];
+        //set alien start
+        sectors[11][5] = new Sector(11, 5, Sector.ALIEN_START);
+
+        //set human start
+        sectors[11][7] = new Sector(11, 7, Sector.HUMAN_START);
+
+        //set 4 escape hatches
+        sectors[2][2] = new Sector(2, 2, Sector.ESCAPE_HATCH);
+        sectors[2][11] = new Sector(2, 11, Sector.ESCAPE_HATCH);
+        sectors[20][2] = new Sector(20, 2, Sector.ESCAPE_HATCH);
+        sectors[20][11] = new Sector(20, 11, Sector.ESCAPE_HATCH);
+
+        //initialize the rest as invalid
+
+        for(int col = 0; col < sectors.length; col++){
+            for(int row = 0; row < sectors[0].length; row++){
+                if(sectors[col][row] == null){
+                    sectors[col][row] = new Sector(col, row, Sector.INVALID);
+                }
+            }
+        }
+
+        return sectors;
     }
 
     @Override

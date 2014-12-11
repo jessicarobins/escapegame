@@ -39,32 +39,25 @@
     <string name="welcome_button_create_map">Create Map</string>
     <string name="welcome_button_buy_map">Buy Map</string>
 
-
-    <!--help screen-->
+    <!-- help screen -->
     <string name="title_activity_help">Help</string>
     <string name="help_welcome">This app is to be used in conjunction with the Escape from the Aliens
         in Outer Space board game.</string>
-
     <string name="help_players_title">Choosing players</string>
-    <string name="help_players_text">
-             &#8226; Select the number of players using the dropdown\n
-            &#8226; Change the names of players by selecting a text box and changing the name.\n
-            &#8226; Touch the colored box to change player color\n
-    </string>
-    
+    <string name="help_players_text">             • Select the number of players using the dropdown\n
+            • Change the names of players by selecting a text box and changing the name.\n
+            • Touch the colored box to change player color\n</string>
     <string name="help_map_title">Choosing a map</string>
-
     <string name="help_map_text">Just touch one\n</string>
-
     <string name="help_gameplay_title">Gameplay</string>
-    <string name="help_gameplay_text">
-        &#8226; The number at the top of the sidebar represents the current round.\n
-        &#8226; The player with the yellow outline is the one whose turn it is.\n
-        &#8226; Touch a hexagon to add a move indicator to it for the current player and round.\n
-        &#8226; Touch the right arrow at the bottom of the player list to move on to the next
-            player\&apos;s turn.\n
-        &#8226; Touch any player\&apos;s colored square to add an indicator for human vs. alien.\n
-        &#8226; Pinch to zoom and drag to scroll.\n
-    </string>
+    <string name="help_gameplay_text">        • The number at the top of the sidebar represents the current round.\n
+        • The player with the yellow outline is the one whose turn it is.\n
+        • Touch a hexagon to add a move indicator to it for the current player and round.\n
+        • Touch the right arrow at the bottom of the player list to move on to the next
+            player\'s turn.\n
+        • Touch any player\'s colored square to add an indicator for human vs. alien.\n
+        • Pinch to zoom and drag to scroll.\n</string>
+    <string name="title_activity_map_creator">MapCreatorActivity</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>

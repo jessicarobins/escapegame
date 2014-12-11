@@ -144,8 +144,16 @@ public class BasicHexagonGridView   extends SurfaceView
         return fillPaint;
     }
 
+    public void setFillPaint(int color) {
+        fillPaint.setColor(color);
+    }
+
     public Paint wallPaint(){
         return wallPaint;
+    }
+
+    public void setWallPaint(int color) {
+        wallPaint.setColor(color);
     }
 
     public Path combPath(){
