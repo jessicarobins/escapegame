@@ -75,7 +75,7 @@ public class PlayerChoiceAdapter extends ArrayAdapter<Player> {
 
         }*/
         playerName.setText(playerNameValues.get(playerName.getTag().toString()));
-        
+
         //playerName.requestFocus();
 
         //playerName.setText("Player " + position);
@@ -137,6 +137,9 @@ public class PlayerChoiceAdapter extends ArrayAdapter<Player> {
 
         return convertView ;
     }
+
+
+
 
     public String getPlayerName(int position){
         //here you need to recreate the id for the first editText

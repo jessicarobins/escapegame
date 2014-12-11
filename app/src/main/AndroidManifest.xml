@@ -10,7 +10,8 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.jrobins.jrobins.escape2.ChoosePlayersActivity"
-            android:label="@string/choose_players_title" >
+            android:label="@string/choose_players_title"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
