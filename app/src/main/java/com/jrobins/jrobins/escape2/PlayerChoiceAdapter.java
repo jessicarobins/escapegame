@@ -10,10 +10,12 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -73,7 +75,8 @@ public class PlayerChoiceAdapter extends ArrayAdapter<Player> {
 
         }*/
         playerName.setText(playerNameValues.get(playerName.getTag().toString()));
-
+        
+        //playerName.requestFocus();
 
         //playerName.setText("Player " + position);
 
@@ -87,6 +90,7 @@ public class PlayerChoiceAdapter extends ArrayAdapter<Player> {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                hideSoftKeyboard();
                 showAlertDialog(button);
             }
         });
@@ -171,7 +175,7 @@ public class PlayerChoiceAdapter extends ArrayAdapter<Player> {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // do something here
+                hideSoftKeyboard();
                 button.setBackgroundColor(colors[position]);
                 buttonColorValues.put(button.getTag().toString(), new Integer(colors[position]));
                 alertDialog.dismiss();
@@ -189,5 +193,10 @@ public class PlayerChoiceAdapter extends ArrayAdapter<Player> {
         //lp.x=-170;
         //lp.y=100;
         alertDialog.getWindow().setAttributes(lp);
+    }
+
+    private void hideSoftKeyboard() {
+        InputMethodManager inputMethodManager = (InputMethodManager)  activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
 }

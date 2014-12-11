@@ -11,10 +11,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -56,6 +60,7 @@ public class ChoosePlayersActivity extends Activity implements OnItemSelectedLis
         initializeColorList();
         initializePlayerList();
         setUpPlayerListView();
+        setupKeyboardHiding(findViewById(R.id.parent));
         setUpSpinner();
         setUpPlayButton();
     }
@@ -118,6 +123,7 @@ public class ChoosePlayersActivity extends Activity implements OnItemSelectedLis
         playerArrayAdapter = new PlayerChoiceAdapter(this, players);
         playerListView = (ListView) findViewById(R.id.playerList);
         playerListView.setAdapter(playerArrayAdapter);
+        playerListView.setItemsCanFocus(true);
     }
 
     private void changePlayerListView(int numberOfPlayers) {
@@ -248,5 +254,38 @@ public class ChoosePlayersActivity extends Activity implements OnItemSelectedLis
         }
     }
 
+    public void setupKeyboardHiding(View view) {
+
+        //Set up touch listener for non-text box views to hide keyboard.
+        if(!(view instanceof EditText)) {
+
+            view.setOnTouchListener(new View.OnTouchListener() {
+
+                public boolean onTouch(View v, MotionEvent event) {
+                    hideSoftKeyboard();
+                    return false;
+                }
+
+            });
+        }
+
+
+
+        //If a layout container, iterate over children and seed recursion.
+        if (view instanceof ViewGroup) {
+
+            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+
+                View innerView = ((ViewGroup) view).getChildAt(i);
+
+                setupKeyboardHiding(innerView);
+            }
+        }
+    }
+
+    private void hideSoftKeyboard() {
+        InputMethodManager inputMethodManager = (InputMethodManager)  this.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), 0);
+    }
 
 }
