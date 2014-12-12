@@ -212,6 +212,10 @@ public class BasicHexagonGridView   extends SurfaceView
         mapThread.setRunning(true);
     }
 
+    public boolean threadIsRunning(){
+        return mapThread.isRunning();
+    }
+
     public Map map(){
         return map;
     }

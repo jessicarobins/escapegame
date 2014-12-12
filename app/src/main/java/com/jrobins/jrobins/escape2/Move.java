@@ -7,9 +7,9 @@ public class Move {
     private Player player; //can use player.color() for color - might need other stuff eventually?
     private int turnNumber;
     private int certainty; //0 = bluff, 1 = certain, 2 = uncertain
-    final private static int BLUFF = 0;
-    final private static int CERTAIN = 1;
-    final private static int UNCERTAIN = 2;
+    final public static int BLUFF = 0;
+    final public static int CERTAIN = 1;
+    final public static int UNCERTAIN = 2;
 
     public Move(Player p, int turnNumber, int certainty){
         this.player = p;

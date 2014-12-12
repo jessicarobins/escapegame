@@ -40,7 +40,8 @@ public class ChooseMapActivity extends Activity {
     @Override
     protected void onPause(){
         super.onPause();
-        map.stopThread();
+        if(map != null && map.threadIsRunning())
+            map.stopThread();
 
     }
 

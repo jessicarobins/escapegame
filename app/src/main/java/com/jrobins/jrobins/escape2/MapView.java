@@ -23,22 +23,25 @@ import java.util.ArrayList;
 
 public class MapView extends BasicHexagonGridView {
 
+    //some helpful constants
+    final public int UNSET = 0;
+    final public int CERTAIN = 1;
+    final public int GUESS = 2;
+
     //the max number of moves in a row per hexagon
     private final int MAX_MOVES = 3;
 
     //paints!
-    //private Paint wallPaint = new Paint();
-    //private Paint fillPaint = new Paint();
+
     private Paint textPaint = new Paint();
     private Paint labelPaint = new Paint();
 
 
     private int moveWidth;
 
-    //private int columns;
-    //private int rows;
-    private boolean[][] cellSet;
-    //private int cellColor;
+    //3 values, 0, 1, 2 to be unset, certain, guess
+    private int[][] cellSet;
+
 
     //private Sector[][] sectors;
 
@@ -114,7 +117,9 @@ public class MapView extends BasicHexagonGridView {
     public void initialize(Sector[][] sectors){
 
         super.initialize(sectors);
-        this.cellSet = new boolean[sectors.length][sectors[0].length];
+
+        //all values initialized to 0
+        this.cellSet = new int[sectors.length][sectors[0].length];
     }
 
 
@@ -159,37 +164,41 @@ public class MapView extends BasicHexagonGridView {
 
 
 
-    public boolean isCellSet(int column, int row)
+    public int isCellSet(int column, int row)
     {
         return cellSet[column][row];
     }
 
-    public void setCell(int column, int row, boolean isSet, Move move)
+    public void setCell(int column, int row, int isSet, Move move)
     {
-        if (isSet){ //cell is now set
+
+        //if we are adding a certain move, we need to add a new move
+        if (isSet == CERTAIN){ //cell is now set
             //add move to array
             //sectors[column][row].addMove(move);
+            move.setCertainty(Move.CERTAIN);
             super.addMove(column, row, move);
         }
-        else { //isSet == false, cell is now not set
+        //if we are adding a guess, we need to delete the old move and
+        //  add the guess
+        else if(isSet == GUESS){
+            super.removeLastMove(column, row);
+            move.setCertainty(Move.UNCERTAIN);
+            super.addMove(column, row, move);
+        }
+        //otherwise we remove it
+        else {
             //remove move from array
             //sectors[column][row].removeLastMove();
             super.removeLastMove(column, row);
         }
 
         cellSet[column][row] = isSet;
-        /*Point p = super.findHexagon(column, row);
-        Path x = super.getHexPath(cellWidth(), p.x-offsetX, p.y-offsetY);
-        x.computeBounds(rectf, true);
-        rectf.round(rect);
-        invalidate(rect);*/
-        //Point p = findHexagonTopLeft(column, row);
-        //invalidate(p.x, p.y, p.x + cellWidth()/2, p.y+cellHeight());
-        //invalidate();
+
     }
 
     public void resetAllCells(){
-        cellSet = new boolean[columns()][rows()];
+        cellSet = new int[columns()][rows()];
     }
 
     @Override
@@ -201,32 +210,6 @@ public class MapView extends BasicHexagonGridView {
         moveWidth = cellWidth()/7;
     }
 
-    /*
-    @Override
-    protected void onDraw(Canvas canvas)
-    {
-        super.onDraw(canvas);
-
-        canvas.save();
-
-        //canvas.translate(originX, originY);
-        //canvas.scale(mScaleFactor, mScaleFactor, originX, originY);
-        canvas.scale(mScaleFactor, mScaleFactor);
-        canvas.translate(offsetX, offsetY);
-
-        setCellWidth(cellWidth()*mScaleFactor);
-        moveWidth = cellWidth()/7;
-
-        //not sure if we need to do this again because we are doing it in the superclass
-        //i think we do though
-        canvas.drawColor(getResources().getColor(R.color.map_background));
-        drawGridWithZigZagRows(canvas);
-
-
-        canvas.restore();
-
-        mScaleFactor = 1.f;
-    }*/
 
 
     /****** touch events stay *************************/
@@ -370,6 +353,8 @@ public class MapView extends BasicHexagonGridView {
 
     }
 
+  
+
     private void drawMove(Canvas canvas, Move move, float centerX, float centerY, int size){
 
         //get rectangle
@@ -378,9 +363,19 @@ public class MapView extends BasicHexagonGridView {
         //set the fillpaint to be the player color
         fillPaint().setColor(move.color());
         wallPaint().setStrokeWidth(1f);
-        //draw rectangle
-        canvas.drawRect(moveSquare, fillPaint());
-        canvas.drawRect(moveSquare, wallPaint());
+
+        //if the move is not a guess, draw a square
+        if(move.certainty() == Move.CERTAIN) {
+            //draw rectangle
+            canvas.drawRect(moveSquare, fillPaint());
+            canvas.drawRect(moveSquare, wallPaint());
+        }
+        else {
+            canvas.drawCircle(centerX, centerY, size / 2, fillPaint());
+            canvas.drawCircle(centerX, centerY, size / 2, wallPaint());
+
+        }
+
         if(size>20)
             drawTextInMoveSquare(canvas, move, size);
     }
@@ -392,6 +387,7 @@ public class MapView extends BasicHexagonGridView {
     private void drawTextInMoveSquare(Canvas canvas, Move move, int sizeOfMove){
         //find the right text color - this is certainty color, should be text
 
+        /* doing certainty a different way
         int certainty = move.certainty();
         switch (certainty) {
             case 0: textPaint.setColor(getResources().getColor(R.color.bluff));
@@ -400,7 +396,7 @@ public class MapView extends BasicHexagonGridView {
                 break;
             case 2: textPaint.setColor(getResources().getColor(R.color.uncertain));
                 break;
-        }
+        }*/
         //draw number inside rectangle
         textPaint.setTextSize((int)(sizeOfMove/1.5));
 
@@ -413,6 +409,7 @@ public class MapView extends BasicHexagonGridView {
     private void drawTextInMoveSquare(Canvas canvas, Move move){
         //find the right text color - this is certainty color, should be text
 
+        /* doing certainty a different way
         int certainty = move.certainty();
         switch (certainty) {
             case 0: textPaint.setColor(getResources().getColor(R.color.bluff));
@@ -421,7 +418,7 @@ public class MapView extends BasicHexagonGridView {
                 break;
             case 2: textPaint.setColor(getResources().getColor(R.color.uncertain));
                 break;
-        }
+        }*/
         //draw number inside rectangle
         textPaint.setTextSize(cellWidth()/10);
 
@@ -433,7 +430,7 @@ public class MapView extends BasicHexagonGridView {
     }
 
     private void setMoveSquare(float centerX, float centerY){
-        moveSquare.set(centerX - moveWidth/2, centerY-moveWidth/2, centerX+moveWidth/2, centerY + moveWidth/2);
+        moveSquare.set(centerX - moveWidth / 2, centerY - moveWidth / 2, centerX + moveWidth / 2, centerY + moveWidth / 2);
     }
 
 

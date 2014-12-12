@@ -68,7 +68,8 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
     @Override
     protected void onPause(){
         super.onPause();
-        hexagonMap.stopThread();
+        if(hexagonMap.threadIsRunning())
+            hexagonMap.stopThread();
 
     }
 
@@ -103,7 +104,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
             //if the cell is not invalid - we don't want invalid sectors to be clickable
             if (map.sectors()[column][row].isNormal()) {
                 //hexagonMap.setCell(column, row, !hexagonMap.isCellSet(column, row));
-                hexagonMap.setCell(column, row, !hexagonMap.isCellSet(column, row), new Move(players.get(currentPlayer), turnNumber, 2));
+                hexagonMap.setCell(column, row, (hexagonMap.isCellSet(column, row)+1)%3, new Move(players.get(currentPlayer), turnNumber, 2));
             }
         }
     }

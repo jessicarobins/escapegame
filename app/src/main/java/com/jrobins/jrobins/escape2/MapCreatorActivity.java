@@ -23,7 +23,8 @@ public class MapCreatorActivity extends Activity implements MapCreatorView.OnCel
     @Override
     protected void onPause(){
         super.onPause();
-        hexagonMap.stopThread();
+        if(hexagonMap.threadIsRunning())
+            hexagonMap.stopThread();
 
     }
 

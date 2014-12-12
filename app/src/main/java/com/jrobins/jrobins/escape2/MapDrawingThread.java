@@ -64,6 +64,9 @@ public class MapDrawingThread extends Thread {
 
     }
 
+    public boolean isRunning(){
+        return running;
+    }
 
 
     @Override
