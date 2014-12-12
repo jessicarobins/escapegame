@@ -112,12 +112,20 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
     @Override
     public void onCellClick(int column, int row)
     {
+
+
         //need to check that we are even in the array
         if(column < map.sectors().length && row < map.sectors()[0].length && column>=0 && row >=0) {
             //if the cell is not invalid - we don't want invalid sectors to be clickable
             if (map.sectors()[column][row].isNormal()) {
                 //hexagonMap.setCell(column, row, !hexagonMap.isCellSet(column, row));
-                hexagonMap.setCell(column, row, (hexagonMap.isCellSet(column, row)+1)%3, new Move(players.get(currentPlayer), turnNumber, 2));
+                for(int i = 0; i < playerSidebarAdapter.getCount(); i++){
+                    if (playerSidebarAdapter.getItem(i).turn() == true) {
+                        currentPlayer = i;
+                        break;
+                    }
+                }
+                hexagonMap.setCell(column, row, (hexagonMap.isCellSet(column, row)+1)%3, new Move(playerSidebarAdapter.getItem(currentPlayer), turnNumber, 2));
             }
         }
     }
@@ -172,7 +180,8 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
     private void setUpTurnLogic(){
         turnNumber = 1;
         currentPlayer = 0;
-        players.get(currentPlayer).setTurn(true);
+        //players.get(currentPlayer).setTurn(true);
+        playerSidebarAdapter.getItem(currentPlayer).setTurn(true);
         turnNumberTextBox = (TextView) findViewById(R.id.turnNumber);
         advanceTurnButton = (Button) findViewById(R.id.advance_turn);
 

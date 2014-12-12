@@ -182,7 +182,8 @@ public class MapView extends BasicHexagonGridView {
         //if we are adding a guess, we need to delete the old move and
         //  add the guess
         else if(isSet == GUESS){
-            super.removeLastMove(column, row);
+            //super.removeLastMove(column, row);
+            super.removeMove(column, row, move);
             move.setCertainty(Move.UNCERTAIN);
             super.addMove(column, row, move);
         }
@@ -190,7 +191,8 @@ public class MapView extends BasicHexagonGridView {
         else {
             //remove move from array
             //sectors[column][row].removeLastMove();
-            super.removeLastMove(column, row);
+            //super.removeLastMove(column, row);
+            super.removeMove(column, row, move);
         }
 
         cellSet[column][row] = isSet;

@@ -56,9 +56,9 @@ public class PlayerSidebarAdapter extends ArrayAdapter<Player>{
             convertView  = (LinearLayout)inflater.inflate(R.layout.player_sidebar, parent, false);
         }
 
-        TextView playerID = (TextView) convertView.findViewById(R.id.player_id);
+        final TextView playerID = (TextView) convertView.findViewById(R.id.player_id);
         final LinearLayout halo = (LinearLayout) convertView.findViewById(R.id.halo);
-        LinearLayout currentTurn = (LinearLayout) convertView.findViewById(R.id.currentTurn);
+        final LinearLayout currentTurn = (LinearLayout) convertView.findViewById(R.id.currentTurn);
 
         //size the buttons so they all fit on the screen
 
@@ -107,13 +107,39 @@ public class PlayerSidebarAdapter extends ArrayAdapter<Player>{
 
         halo.setBackgroundColor(haloColors.get(halo.getTag()));
 
+
+        final int p = position;
         playerID.setClickable(true);
         playerID.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showAlertDialog(halo);
+                //remove everybody else's turn
+                for(int i = 0; i < players.size(); i++){
+                    if (i!=p) {
+                        players.get(i).setTurn(false);
+                        //currentTurn.setBackgroundColor(v.getResources().getColor(android.R.color.black));
+                    }
+                }
+
+                //set it to be this player's turn
+                players.get(p).setTurn(true);
+                notifyDataSetChanged();
+                //currentTurn.setBackgroundColor(v.getResources().getColor(R.color.current_turn));
             }
         });
+
+        playerID.setLongClickable(true);
+
+
+        playerID.setOnLongClickListener(new View.OnLongClickListener() {
+            public boolean onLongClick(View arg0) {
+                showAlertDialog(halo);
+
+                return true;
+            }
+        });
+
+
         /*
         if (players.get(position).isAlien())
             halo.setBackgroundColor(convertView.getResources().getColor(R.color.alien));
@@ -166,5 +192,14 @@ public class PlayerSidebarAdapter extends ArrayAdapter<Player>{
         //lp.x=-170;
         //lp.y=100;
         alertDialog.getWindow().setAttributes(lp);
+    }
+
+    @Override
+    public Player getItem(int position){
+        return players.get(position);
+    }
+
+    public int getCount(){
+        return players.size();
     }
 }

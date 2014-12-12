@@ -183,6 +183,11 @@ public class Sector implements Parcelable{
         moves.remove(moves.size()-1);
     }
 
+    public void removeMove(Move m){
+        moves.remove(m);
+
+    }
+
     public boolean isValid(){
         //returns true if this is a sector that's not invalid (i.e., sectorType!=0)
         return (sectorType !=0);

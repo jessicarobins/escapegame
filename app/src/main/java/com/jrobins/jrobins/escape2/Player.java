@@ -30,6 +30,18 @@ public class Player implements Parcelable {
         setColor(color);
     }
 
+    @Override
+    public boolean equals(Object o){
+        if(!(o instanceof Player))
+            return false;
+        Player p = (Player)o;
+        if(!p.name().equals(name))
+            return false;
+        if(p.color() != color)
+            return false;
+        return true;
+    }
+
     public String name(){
         return name;
     }

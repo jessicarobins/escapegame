@@ -231,6 +231,10 @@ public class BasicHexagonGridView   extends SurfaceView
 
     }
 
+    public void removeMove(int col, int row, Move move){
+        sectors[col][row].removeMove(move);
+    }
+
     /*****************initializing stuff*********/
 
     public void initialize(Map map){

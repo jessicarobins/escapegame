@@ -25,6 +25,10 @@ public class Move {
         return turnNumber;
     }
 
+    public Player player() {
+        return player;
+    }
+
     public String turnNumberToString(){
         if(turnNumber<10)
             return "0"+turnNumber;
@@ -48,4 +52,15 @@ public class Move {
         this.certainty = certainty;
     }
 
+    @Override
+    public boolean equals(Object obj){
+        if (!(obj instanceof Move))
+            return false;
+        Move m = (Move)obj;
+        if(m.turnNumber() != turnNumber)
+            return false;
+        if(!player.equals(m.player()))
+            return false;
+        return true;
+    }
 }
