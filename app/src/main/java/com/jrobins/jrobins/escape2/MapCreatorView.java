@@ -2,15 +2,20 @@ package com.jrobins.jrobins.escape2;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Point;
+import android.graphics.PointF;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.View;
 
 
 public class MapCreatorView extends MapView {
     //clicking
     //private OnCellClickListener listener;
     //private GestureDetector mGestureDetector;
+
+    PointF touchDown; //to begin the dragging & dropping
 
     public MapCreatorView(Context context) {
         super(context);
@@ -24,25 +29,11 @@ public class MapCreatorView extends MapView {
         //set wallpaint to be white
         setWallPaint(Color.GRAY);
 
-        //set this to not be a static view
-        //setMapThread(new MapDrawingThread(getHolder(),context, this, false));
 
-        //initialize the pan thing
-        //mGestureDetector = new GestureDetector(context, new GestureListener());
-
-        //initialize with a blank default map
         initialize(new Map());
     }
 
-/*
-    //clicking
-    @Override
-    public boolean onTouchEvent(MotionEvent event)
-    {
-        mGestureDetector.onTouchEvent(event);
-        return true;
 
-    }*/
 
 
 
@@ -52,40 +43,64 @@ public class MapCreatorView extends MapView {
                 (sectors()[column][row].sectorType()+1)%3);
     }
 
-    /*
-    private class GestureListener extends GestureDetector.SimpleOnGestureListener {
+/*
+    private class DragAndDropListener extends GestureListener {
 
 
         @Override
-        public boolean onSingleTapConfirmed(MotionEvent event) {
+        public boolean onTouch(View v, MotionEvent event) {
+            // TODO Auto-generated method stub
+
+            Point sectorLocation;
+            Point newPosition;
 
 
-            if (listener != null) {
-                float x = event.getX();
-                float y = event.getY();
-
-                int radius = cellWidth() / 2;
-                int cellHeight = (int) (((float) radius) * Math.sqrt(3));
-                int side = radius * 3 / 2;
-
-
-                int ci = (int) Math.floor(x / (float) side);
-                int cx = (int) (x - side * ci);
-
-                int ty = (int) (y - (ci % 2) * cellHeight / 2);
-                int cj = (int) Math.floor((float) ty / (float) cellHeight);
-                int cy = ty - cellHeight * cj;
-
-                if (cx > Math.abs(radius / 2 - radius * cy / cellHeight)) {
-                    listener.onCellClick(ci, cj);
-                } else {
-                    listener.onCellClick(ci - 1, cj + (ci % 2) - ((cy < cellHeight / 2) ? 1 : 0));
+            switch(event.getAction())
+            {
+                case MotionEvent.ACTION_DOWN:
+                {
+                    touchDown = new PointF(event.getRawX(), event.getRawY());
+                    break;
                 }
+                case MotionEvent.ACTION_MOVE:
+                {
+                    //RelativeLayout.LayoutParams par = (RelativeLayout.LayoutParams) v.getLayoutParams();
 
+                    //find the sector
+                    sectorLocation = getSectorFromTouchPoint((int)touchDown.x,(int)touchDown.y);
+
+                    float yDeff = ((event.getRawY() - touchDown.y)   / cellRadius() ) * cellRadius();
+                    float xDeff = ((event.getRawX() - touchDown.x)  / cellRadius() ) * cellRadius();
+
+                    if(Math.abs(xDeff) >= cellRadius())
+                    {
+                        par.leftMargin += (int)(xDeff / gridCellSize) * gridCellSize;
+                        touchDown.x = event.getRawX() - (xDeff % gridCellSize);
+                    }
+
+                    if(Math.abs(yDeff) >= gridCellSize)
+                    {
+                        par.topMargin += (int)(yDeff / gridCellSize) * gridCellSize;
+                        touchDown.y = event.getRawY() - (yDeff % gridCellSize);
+                    }
+
+                    v.setLayoutParams(par);
+                    break;
+                }
+                default :
+                {
+
+                    break;
+                }
             }
+
+
             return true;
         }
 
 
-    }*/
+
+
+    }
+*/
 }

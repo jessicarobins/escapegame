@@ -169,13 +169,36 @@ public class BasicHexagonGridView   extends SurfaceView
         return cellWidth;
     }
 
+    public int cellRadius(){
+        return cellWidth/2;
+    }
+
+    public int cellSide() {
+        return cellRadius()*3/2;
+    }
+
     public int cellHeight(){
         return (int)(Math.sqrt(3)*cellWidth/2);
     }
 
-    public int cellRadius(){
-        return cellWidth/2;
+    public Point getSectorFromTouchPoint(int x, int y){
+        //get the location in the sectors matrix of the sector, given the place the user touched
+
+        int ci = (int) Math.floor(x / (float) cellSide());
+        int cx = (int) (x - cellSide() * ci);
+
+        int ty = (int) (y - (ci % 2) * cellHeight() / 2);
+        int cj = (int) Math.floor((float) ty / (float) cellHeight());
+        int cy = ty - cellHeight() * cj;
+
+        if (cx > Math.abs(cellRadius() / 2 - cellRadius() * cy / cellHeight())) {
+            return new Point(ci, cj);
+        } else {
+            return new Point(ci - 1, cj + (ci % 2) - ((cy < cellHeight() / 2) ? 1 : 0));
+        }
     }
+
+
 
     public void setCellWidth(float cellWidth){
         this.cellWidth = (int) cellWidth;

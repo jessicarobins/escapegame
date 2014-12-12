@@ -506,7 +506,7 @@ public class MapView extends BasicHexagonGridView {
         }
     }
 
-    private class GestureListener extends GestureDetector.SimpleOnGestureListener {
+    protected class GestureListener extends GestureDetector.SimpleOnGestureListener {
 
 
         @Override

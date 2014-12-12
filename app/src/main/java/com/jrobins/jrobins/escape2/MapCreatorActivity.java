@@ -20,6 +20,12 @@ public class MapCreatorActivity extends Activity implements MapCreatorView.OnCel
         initializeHexagonMap();
     }
 
+    @Override
+    protected void onPause(){
+        super.onPause();
+        hexagonMap.stopThread();
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
