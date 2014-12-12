@@ -74,6 +74,19 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
     }
 
     @Override
+    protected void onResume(){
+        super.onResume();
+        //this is where we'd restore from cache i think
+        if(hexagonMap != null)
+            hexagonMap.startThread();
+        else {
+            initializeMap();
+            initializeHexagonMap();
+        }
+
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_game_play, menu);
