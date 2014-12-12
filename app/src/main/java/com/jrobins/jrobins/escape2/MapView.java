@@ -353,7 +353,7 @@ public class MapView extends BasicHexagonGridView {
 
     }
 
-  
+
 
     private void drawMove(Canvas canvas, Move move, float centerX, float centerY, int size){
 
@@ -371,9 +371,10 @@ public class MapView extends BasicHexagonGridView {
             canvas.drawRect(moveSquare, wallPaint());
         }
         else {
+            fillPaint().setAlpha(100);
             canvas.drawCircle(centerX, centerY, size / 2, fillPaint());
             canvas.drawCircle(centerX, centerY, size / 2, wallPaint());
-
+            fillPaint().setAlpha(255);
         }
 
         if(size>20)
