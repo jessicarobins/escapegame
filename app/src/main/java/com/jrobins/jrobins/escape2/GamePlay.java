@@ -36,6 +36,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
     private Map map;
     //private Sector[][] sectors;
     private int turnNumber; //this is really the round but they call it turn in the game
+    private int prevTurnNumber; //so we can edit previous turns
     private int currentPlayer; //the index of the  player whose turn it is within the round (turn)...
 
     //adapters
@@ -44,9 +45,10 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
     //views
     private ListView playerListView;
     private MapView hexagonMap;
-    private TableLayout mapGrid;
     private TextView turnNumberTextBox;
+    private TextView prevTurnNumberTextBox;
     private Button advanceTurnButton;
+    private Button prevTurnButton;
     private LinearLayout sidebar;
 
 
@@ -182,9 +184,10 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         currentPlayer = 0;
         //players.get(currentPlayer).setTurn(true);
         playerSidebarAdapter.getItem(currentPlayer).setTurn(true);
+        prevTurnNumberTextBox = (TextView) findViewById(R.id.prevTurnNumber);
         turnNumberTextBox = (TextView) findViewById(R.id.turnNumber);
         advanceTurnButton = (Button) findViewById(R.id.advance_turn);
-
+        prevTurnButton = (Button) findViewById(R.id.previous_turn);
         advanceTurnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -192,6 +195,27 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
             }
 
         });
+
+        prevTurnButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                prevTurn();
+            }
+
+        });
+    }
+    private void prevTurn() {
+        for(int i = 0; i < playerSidebarAdapter.getCount(); i++) {
+            playerSidebarAdapter.getItem(i).setTurn(false);
+        }
+        prevTurnNumber--;
+        currentPlayer = 0;
+
+        prevTurnNumberTextBox.setText(prevTurnNumber+"");
+        playerSidebarAdapter.getItem(currentPlayer).setTurn(true);
+
+        playerSidebarAdapter.notifyDataSetChanged();
+        playerListView.setSelectionAfterHeaderView();
     }
 
     private void advanceTurn() {
@@ -212,13 +236,14 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         //if(currentPlayer == (players.size()-1)) {
             //increment turn number
             turnNumber++;
-
+        prevTurnNumber = turnNumber;
             //sent the currentturn array index back to 0
             currentPlayer = 0;
 
             //increment the number that's at the top
 
             turnNumberTextBox.setText(turnNumber+"");
+            prevTurnNumberTextBox.setText(turnNumber+"");
             // do we need to redraw after this? no
 
 

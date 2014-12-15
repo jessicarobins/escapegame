@@ -38,12 +38,23 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 >
-
                 <TextView
                     android:layout_width="wrap_content"
 
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textStyle="bold"
+                    android:text="1"
+                    android:background="@android:color/black"
+                    android:id="@+id/turnNumber"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center_horizontal"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="1"
                     android:background="@android:color/black"
                     android:id="@+id/prevTurnNumber"
@@ -51,17 +62,7 @@
                     android:gravity="center_horizontal"
                     />
 
-                <TextView
-                    android:layout_width="wrap_content"
 
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="1"
-                    android:background="@android:color/black"
-                    android:id="@+id/turnNumber"
-                    android:layout_gravity="center_horizontal"
-                    android:gravity="center_horizontal"
-                    />
                 </LinearLayout>
 
 
