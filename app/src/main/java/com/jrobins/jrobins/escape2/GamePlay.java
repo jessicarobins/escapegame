@@ -127,7 +127,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
                         break;
                     }
                 }
-                hexagonMap.setCell(column, row, (hexagonMap.isCellSet(column, row)+1)%3, new Move(playerSidebarAdapter.getItem(currentPlayer), turnNumber, 2));
+                hexagonMap.setCell(column, row, (hexagonMap.isCellSet(column, row)+1)%3, new Move(playerSidebarAdapter.getItem(currentPlayer), prevTurnNumber, Move.CERTAIN));
             }
         }
     }
@@ -181,6 +181,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
     /******* turn logic**********/
     private void setUpTurnLogic(){
         turnNumber = 1;
+        prevTurnNumber = 1;
         currentPlayer = 0;
         //players.get(currentPlayer).setTurn(true);
         playerSidebarAdapter.getItem(currentPlayer).setTurn(true);
@@ -188,6 +189,12 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         turnNumberTextBox = (TextView) findViewById(R.id.turnNumber);
         advanceTurnButton = (Button) findViewById(R.id.advance_turn);
         prevTurnButton = (Button) findViewById(R.id.previous_turn);
+        turnNumberTextBox.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                resetToCurrentTurn();
+            }
+        });
         advanceTurnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -199,11 +206,29 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         prevTurnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                prevTurn();
+                if(prevTurnNumber>1)
+                    prevTurn();
             }
 
         });
     }
+
+    private void resetToCurrentTurn(){
+        for(int i = 0; i < playerSidebarAdapter.getCount(); i++) {
+            playerSidebarAdapter.getItem(i).setTurn(false);
+        }
+        prevTurnNumber = turnNumber;
+        currentPlayer = 0;
+
+        prevTurnNumberTextBox.setText(prevTurnNumber+"");
+        playerSidebarAdapter.getItem(currentPlayer).setTurn(true);
+
+        playerSidebarAdapter.notifyDataSetChanged();
+        playerListView.setSelectionAfterHeaderView();
+
+        hexagonMap.loadPreviousCellSet(prevTurnNumber);
+    }
+
     private void prevTurn() {
         for(int i = 0; i < playerSidebarAdapter.getCount(); i++) {
             playerSidebarAdapter.getItem(i).setTurn(false);
@@ -216,6 +241,8 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
 
         playerSidebarAdapter.notifyDataSetChanged();
         playerListView.setSelectionAfterHeaderView();
+
+        hexagonMap.loadPreviousCellSet(prevTurnNumber);
     }
 
     private void advanceTurn() {
@@ -228,6 +255,9 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         for(int i = 0; i < playerSidebarAdapter.getCount(); i++) {
             playerSidebarAdapter.getItem(i).setTurn(false);
         }
+
+        //reset the boolean values in the map
+        hexagonMap.resetAllCells( (prevTurnNumber != turnNumber) );
 
         //remove current player's turn
         //players.get(currentPlayer).setTurn(false);
@@ -251,8 +281,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         //else
             //currentPlayer++;
 
-        //reset the boolean values in the map
-        hexagonMap.resetAllCells();
+
         
         //set next player's turn
         //players.get(currentPlayer).setTurn(true);
