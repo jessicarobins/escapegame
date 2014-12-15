@@ -42,6 +42,7 @@ public class MapView extends BasicHexagonGridView {
     //3 values, 0, 1, 2 to be unset, certain, guess
     private int[][] cellSet; //the current cell set
     private ArrayList<int[][]> masterCellSet; //so we can save all the previous turns' moves...
+    private ArrayList<ArrayList<int[][]>> allPlayerMasterCellSets;
 
     //private Sector[][] sectors;
 
@@ -121,6 +122,7 @@ public class MapView extends BasicHexagonGridView {
         //all values initialized to 0
         this.cellSet = new int[sectors.length][sectors[0].length];
         masterCellSet = new ArrayList<int[][]>();
+        allPlayerMasterCellSets = new ArrayList<ArrayList<int[][]>>();
     }
 
 
@@ -213,11 +215,21 @@ public class MapView extends BasicHexagonGridView {
 
     }
 
-    public void loadPreviousCellSet(int turnNumber){
-        // this is for editting previous turns
-        masterCellSet.add(cellSet);
-        cellSet = masterCellSet.get(turnNumber-1);
+    public void changePlayerCellSet(int player){
+        masterCellSet = allPlayerMasterCellSets.get(player);
+    }
 
+    public void loadPreviousCellSet(int turnNumber){
+        // this is for editing previous turns
+        //masterCellSet.add(cellSet);
+        cellSet = masterCellSet.get(turnNumber-1);
+    }
+
+    public void loadPreviousCellSet(int turnNumber, boolean previousTurn){
+        // this is for editing previous turns
+        if(!previousTurn)
+            masterCellSet.add(cellSet);
+        cellSet = masterCellSet.get(turnNumber-1);
     }
 
     @Override

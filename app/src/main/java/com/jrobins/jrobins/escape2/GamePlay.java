@@ -114,7 +114,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
     @Override
     public void onCellClick(int column, int row)
     {
-
+        Move m;
 
         //need to check that we are even in the array
         if(column < map.sectors().length && row < map.sectors()[0].length && column>=0 && row >=0) {
@@ -127,7 +127,16 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
                         break;
                     }
                 }
-                hexagonMap.setCell(column, row, (hexagonMap.isCellSet(column, row)+1)%3, new Move(playerSidebarAdapter.getItem(currentPlayer), prevTurnNumber, Move.CERTAIN));
+                m = new Move(playerSidebarAdapter.getItem(currentPlayer), prevTurnNumber, Move.CERTAIN);
+
+                int i = map.sectors()[column][row].moves().indexOf(m);
+                if (i>=0){
+                    map.sectors()[column][row].moves().get(i).incrementCertainty();
+                }
+                else {
+                    map.sectors()[column][row].moves().add(m);
+                }
+                //hexagonMap.setCell(column, row, (hexagonMap.isCellSet(column, row)+1)%3, new Move(playerSidebarAdapter.getItem(currentPlayer), prevTurnNumber, Move.CERTAIN));
             }
         }
     }
@@ -217,6 +226,10 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         for(int i = 0; i < playerSidebarAdapter.getCount(); i++) {
             playerSidebarAdapter.getItem(i).setTurn(false);
         }
+
+
+
+
         prevTurnNumber = turnNumber;
         currentPlayer = 0;
 
@@ -226,13 +239,16 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         playerSidebarAdapter.notifyDataSetChanged();
         playerListView.setSelectionAfterHeaderView();
 
-        hexagonMap.loadPreviousCellSet(prevTurnNumber);
+        hexagonMap.loadPreviousCellSet(prevTurnNumber, true);
     }
 
     private void prevTurn() {
         for(int i = 0; i < playerSidebarAdapter.getCount(); i++) {
             playerSidebarAdapter.getItem(i).setTurn(false);
         }
+
+        hexagonMap.loadPreviousCellSet(prevTurnNumber-1, (prevTurnNumber != turnNumber));
+
         prevTurnNumber--;
         currentPlayer = 0;
 
@@ -242,7 +258,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         playerSidebarAdapter.notifyDataSetChanged();
         playerListView.setSelectionAfterHeaderView();
 
-        hexagonMap.loadPreviousCellSet(prevTurnNumber);
+
     }
 
     private void advanceTurn() {
@@ -273,7 +289,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
             //increment the number that's at the top
 
             turnNumberTextBox.setText(turnNumber+"");
-            prevTurnNumberTextBox.setText(turnNumber+"");
+            prevTurnNumberTextBox.setText(prevTurnNumber+"");
             // do we need to redraw after this? no
 
 

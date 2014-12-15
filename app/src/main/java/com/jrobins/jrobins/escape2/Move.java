@@ -40,6 +40,10 @@ public class Move {
         return certainty;
     }
 
+    public void incrementCertainty(){
+        certainty= (certainty+1)%3;
+    }
+
     public void setPlayer(Player p){
         this.player = p;
     }
