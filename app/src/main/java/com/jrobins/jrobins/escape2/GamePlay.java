@@ -121,6 +121,8 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
             //if the cell is not invalid - we don't want invalid sectors to be clickable
             if (map.sectors()[column][row].isNormal()) {
                 //hexagonMap.setCell(column, row, !hexagonMap.isCellSet(column, row));
+
+                //get the current player
                 for(int i = 0; i < playerSidebarAdapter.getCount(); i++){
                     if (playerSidebarAdapter.getItem(i).turn() == true) {
                         currentPlayer = i;
@@ -128,14 +130,15 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
                     }
                 }
                 m = new Move(playerSidebarAdapter.getItem(currentPlayer), prevTurnNumber, Move.CERTAIN);
-
+                /*
                 int i = map.sectors()[column][row].moves().indexOf(m);
                 if (i>=0){
                     map.sectors()[column][row].moves().get(i).incrementCertainty();
                 }
                 else {
                     map.sectors()[column][row].moves().add(m);
-                }
+                }*/
+                hexagonMap.setCell(column, row, m);
                 //hexagonMap.setCell(column, row, (hexagonMap.isCellSet(column, row)+1)%3, new Move(playerSidebarAdapter.getItem(currentPlayer), prevTurnNumber, Move.CERTAIN));
             }
         }

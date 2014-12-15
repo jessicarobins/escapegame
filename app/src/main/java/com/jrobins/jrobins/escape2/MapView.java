@@ -202,6 +202,36 @@ public class MapView extends BasicHexagonGridView {
 
     }
 
+    public void setCell(int column, int row, Move m)
+    {
+        Move existingMove;
+        int i = sectors()[column][row].moves().indexOf(m);
+        //if this move already exists
+        if (i>=0){
+            existingMove = sectors()[column][row].moves().get(i);
+
+            //get the certainty
+            switch(existingMove.certainty()) {
+                case Move.CERTAIN: {//if it's certain, make it uncertain
+                    existingMove.setCertainty(Move.UNCERTAIN);
+                    break;
+                }
+                case Move.UNCERTAIN: {
+                    //if it's uncertain, remove it
+                    removeMove(column, row, existingMove);
+                    break;
+                    //map.sectors()[column][row].moves().get(i).incrementCertainty();
+                }
+            }
+        }
+        else {
+            //add a new move
+            //sectors()[column][row].moves().add(m);
+            super.addMove(column, row, m);
+        }
+
+    }
+
     public void resetAllCells(){
         masterCellSet.add(cellSet);
         cellSet = new int[columns()][rows()];
