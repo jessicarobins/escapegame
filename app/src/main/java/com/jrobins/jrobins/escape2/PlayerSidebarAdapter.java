@@ -202,4 +202,6 @@ public class PlayerSidebarAdapter extends ArrayAdapter<Player>{
     public int getCount(){
         return players.size();
     }
+
+
 }

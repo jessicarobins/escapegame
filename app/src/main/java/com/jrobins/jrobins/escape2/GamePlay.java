@@ -196,11 +196,20 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
 
     private void advanceTurn() {
 
+
+        //we need to figure out who the current player is...
+        //playerSidebarAdapter.getItem(currentPlayer).setTurn(false);
+        //players.get(currentPlayer).setTurn(false);
+
+        for(int i = 0; i < playerSidebarAdapter.getCount(); i++) {
+            playerSidebarAdapter.getItem(i).setTurn(false);
+        }
+
         //remove current player's turn
-        players.get(currentPlayer).setTurn(false);
+        //players.get(currentPlayer).setTurn(false);
 
         //if the player is the last one in the array, increment the turn count
-        if(currentPlayer == (players.size()-1)) {
+        //if(currentPlayer == (players.size()-1)) {
             //increment turn number
             turnNumber++;
 
@@ -213,17 +222,19 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
             // do we need to redraw after this? no
 
 
-        }
-        else
-            currentPlayer++;
+        //}
+        //else
+            //currentPlayer++;
 
         //reset the boolean values in the map
         hexagonMap.resetAllCells();
         
         //set next player's turn
-        players.get(currentPlayer).setTurn(true);
+        //players.get(currentPlayer).setTurn(true);
+        playerSidebarAdapter.getItem(currentPlayer).setTurn(true);
 
         playerSidebarAdapter.notifyDataSetChanged();
+        playerListView.setSelectionAfterHeaderView();
 
     }
 

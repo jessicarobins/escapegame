@@ -4,12 +4,13 @@
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:orientation="vertical"
-    android:gravity="center">
+    android:gravity="center"
+    android:background="@android:color/black">
     <LinearLayout
         android:layout_height="wrap_content"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:background="@android:color/black"
-        android:padding="2dp"
+        android:padding="3dp"
         android:id="@+id/currentTurn"
         android:layout_gravity="center"
         android:gravity="center"
