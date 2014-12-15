@@ -124,7 +124,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
 
                 //get the current player
                 for(int i = 0; i < playerSidebarAdapter.getCount(); i++){
-                    if (playerSidebarAdapter.getItem(i).turn() == true) {
+                    if (playerSidebarAdapter.getItem(i).turn()) {
                         currentPlayer = i;
                         break;
                     }
@@ -226,88 +226,49 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
     }
 
     private void resetToCurrentTurn(){
-        for(int i = 0; i < playerSidebarAdapter.getCount(); i++) {
-            playerSidebarAdapter.getItem(i).setTurn(false);
-        }
-
-
-
+        resetAllPlayerTurns();
 
         prevTurnNumber = turnNumber;
-        currentPlayer = 0;
 
         prevTurnNumberTextBox.setText(prevTurnNumber+"");
-        playerSidebarAdapter.getItem(currentPlayer).setTurn(true);
 
-        playerSidebarAdapter.notifyDataSetChanged();
-        playerListView.setSelectionAfterHeaderView();
-
-        hexagonMap.loadPreviousCellSet(prevTurnNumber, true);
     }
 
     private void prevTurn() {
-        for(int i = 0; i < playerSidebarAdapter.getCount(); i++) {
-            playerSidebarAdapter.getItem(i).setTurn(false);
-        }
+        resetAllPlayerTurns();
 
-        hexagonMap.loadPreviousCellSet(prevTurnNumber-1, (prevTurnNumber != turnNumber));
+        //hexagonMap.loadPreviousCellSet(prevTurnNumber-1, (prevTurnNumber != turnNumber));
 
         prevTurnNumber--;
-        currentPlayer = 0;
 
         prevTurnNumberTextBox.setText(prevTurnNumber+"");
-        playerSidebarAdapter.getItem(currentPlayer).setTurn(true);
-
-        playerSidebarAdapter.notifyDataSetChanged();
-        playerListView.setSelectionAfterHeaderView();
-
 
     }
 
-    private void advanceTurn() {
-
-
-        //we need to figure out who the current player is...
-        //playerSidebarAdapter.getItem(currentPlayer).setTurn(false);
-        //players.get(currentPlayer).setTurn(false);
-
-        for(int i = 0; i < playerSidebarAdapter.getCount(); i++) {
-            playerSidebarAdapter.getItem(i).setTurn(false);
+    private void advanceTurn(){
+        //if we are at the very end, the right arrow advances the round
+        if(prevTurnNumber == turnNumber)
+            advanceRound();
+        else{
+            prevTurnNumber++;
+            prevTurnNumberTextBox.setText(prevTurnNumber+"");
         }
+    }
+
+    //if we are at the very end, the right arrow advances the round
+    private void advanceRound() {
+        resetAllPlayerTurns();
 
         //reset the boolean values in the map
-        hexagonMap.resetAllCells( (prevTurnNumber != turnNumber) );
+        //hexagonMap.resetAllCells( (prevTurnNumber != turnNumber) );
 
-        //remove current player's turn
-        //players.get(currentPlayer).setTurn(false);
-
-        //if the player is the last one in the array, increment the turn count
-        //if(currentPlayer == (players.size()-1)) {
-            //increment turn number
-            turnNumber++;
+        //increment turn number
+        turnNumber++;
         prevTurnNumber = turnNumber;
-            //sent the currentturn array index back to 0
-            currentPlayer = 0;
 
-            //increment the number that's at the top
-
-            turnNumberTextBox.setText(turnNumber+"");
-            prevTurnNumberTextBox.setText(prevTurnNumber+"");
-            // do we need to redraw after this? no
-
-
-        //}
-        //else
-            //currentPlayer++;
-
-
-        
-        //set next player's turn
-        //players.get(currentPlayer).setTurn(true);
-        playerSidebarAdapter.getItem(currentPlayer).setTurn(true);
-
-        playerSidebarAdapter.notifyDataSetChanged();
-        playerListView.setSelectionAfterHeaderView();
+        //increment the number that's at the top
+        turnNumberTextBox.setText(turnNumber+"");
+        prevTurnNumberTextBox.setText(prevTurnNumber+"");
 
     }
 
@@ -345,5 +306,17 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
                 playerIndex++;
         }
         return moves;
+    }
+
+    private void resetAllPlayerTurns(){
+        for(int i = 0; i < playerSidebarAdapter.getCount(); i++) {
+            playerSidebarAdapter.getItem(i).setTurn(false);
+        }
+
+        currentPlayer = 0;
+        playerSidebarAdapter.getItem(currentPlayer).setTurn(true);
+
+        playerSidebarAdapter.notifyDataSetChanged();
+        playerListView.setSelectionAfterHeaderView();
     }
 }
