@@ -604,7 +604,7 @@ public class MapView extends BasicHexagonGridView {
         @Override
         public boolean onSingleTapConfirmed(MotionEvent event) {
 
-            /*
+
             if (listener != null) {
                 float x = event.getX() - offsetX;
                 float y = event.getY() - offsetY;
@@ -627,9 +627,9 @@ public class MapView extends BasicHexagonGridView {
                     listener.onCellClick(ci - 1, cj + (ci % 2) - ((cy < cellHeight / 2) ? 1 : 0));
                 }
 
-            }*/
+            }/*
             Point p = pxtoHex((int)(event.getX() - offsetX), (int) (event.getY() - offsetY));
-            listener.onCellClick(p.x, p.y);
+            listener.onCellClick(p.x, p.y);*/
             return true;
         }
 
