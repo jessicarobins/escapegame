@@ -16,11 +16,42 @@
         android:gravity="center"
         android:background="@android:color/black"
         >
+
+
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="2dp"
+            android:id="@+id/playerList"
+            android:layout_gravity="center"
+            android:background="@android:color/black"
+            />
+
+
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent">
+
+
+        <com.jrobins.jrobins.escape2.MapView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+            android:id="@+id/hexagonMap"/>
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:background="@android:color/black">
+            android:background="@android:color/black"
+            android:layout_gravity="right">
             <Button
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="0dp"
@@ -64,7 +95,7 @@
                     />
 
 
-                </LinearLayout>
+            </LinearLayout>
 
 
 
@@ -79,31 +110,10 @@
                 android:gravity="right"
 
                 />
-            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
 
 
-        <ListView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="2dp"
-            android:id="@+id/playerList"
-            android:layout_gravity="center"
-            android:background="@android:color/black"
-            />
-
-
-
-    </LinearLayout>
-
-
-
-        <com.jrobins.jrobins.escape2.MapView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-
-            android:id="@+id/hexagonMap"/>
 
 
 
