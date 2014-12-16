@@ -126,9 +126,9 @@ public class PlayerChoiceAdapter extends ArrayAdapter<Player> {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-
-                    players.get(p).setName(playerName.getText().toString());
+                    
                     System.out.println("setting name to " + playerName.getText().toString());
+                    hideSoftKeyboard();
                     return true;
                 }
                 return false;
