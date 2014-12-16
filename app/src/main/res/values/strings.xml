@@ -33,7 +33,7 @@
 
     <!-- welcome screen -->
     <string name="title_activity_home_screen">Escape from the Aliens in Outer Space</string>
-    <string name="welcome">Yo</string>
+    <string name="welcome">This is where a logo will go</string>
     <string name="welcome_button_start">Start Game</string>
     <string name="welcome_button_rules">Help</string>
     <string name="welcome_button_create_map">Create Map</string>
