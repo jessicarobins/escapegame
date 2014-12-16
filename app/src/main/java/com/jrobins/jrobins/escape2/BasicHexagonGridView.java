@@ -71,6 +71,7 @@ public class BasicHexagonGridView   extends SurfaceView
     /**************** surfaceholder implementation ******/
     @Override
     public void surfaceCreated(SurfaceHolder holder){
+
         if (mapThread.getState() == Thread.State.NEW) {
 
             mapThread.setRunning(true);

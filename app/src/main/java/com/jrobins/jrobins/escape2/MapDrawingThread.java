@@ -86,7 +86,7 @@ public class MapDrawingThread extends Thread {
 
                 surfaceHolder.unlockCanvasAndPost(canvas);
                 if(staticImage)
-                running = false;
+                    running = false;
             }
 
         }

@@ -32,11 +32,11 @@ public class MapView extends BasicHexagonGridView {
     private final int MAX_MOVES = 3;
 
     //paints!
-
     private Paint textPaint = new Paint();
     private Paint labelPaint = new Paint();
 
 
+    Context context;
     private int moveWidth;
 
     //3 values, 0, 1, 2 to be unset, certain, guess
@@ -111,6 +111,12 @@ public class MapView extends BasicHexagonGridView {
 
         //threads
         setMapThread(new MapDrawingThread(getHolder(),context, this, false));
+    }
+
+    public void newThread(){
+        if (!mapThread.isAlive()) {
+            mapThread = new MapDrawingThread(getHolder(), context, this, false);
+        }
     }
 
     //initialize moved to basichexagongridview

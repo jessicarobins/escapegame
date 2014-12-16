@@ -80,11 +80,13 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         super.onResume();
         //this is where we'd restore from cache i think
         if(hexagonMap != null)
-            hexagonMap.startThread();
+            hexagonMap.newThread();
+
         else {
-            initializeMap();
+            //initializeMap();
             initializeHexagonMap();
         }
+
 
     }
 
