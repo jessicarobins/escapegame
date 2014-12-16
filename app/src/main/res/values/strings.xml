@@ -44,18 +44,27 @@
     <string name="help_welcome">This app is to be used in conjunction with the Escape from the Aliens
         in Outer Space board game.</string>
     <string name="help_players_title">Choosing players</string>
-    <string name="help_players_text">             • Select the number of players using the dropdown\n
+    <string name="help_players_text">• Select the number of players using the dropdown\n
             • Change the names of players by selecting a text box and changing the name.\n
             • Touch the colored box to change player color\n</string>
     <string name="help_map_title">Choosing a map</string>
     <string name="help_map_text">Just touch one\n</string>
     <string name="help_gameplay_title">Gameplay</string>
-    <string name="help_gameplay_text">        • The number at the top of the sidebar represents the current round.\n
-        • The player with the yellow outline is the one whose turn it is.\n
-        • Touch a hexagon to add a move indicator to it for the current player and round.\n
-        • Touch the right arrow at the bottom of the player list to move on to the next
-            player\'s turn.\n
-        • Touch any player\'s colored square to add an indicator for human vs. alien.\n
+    <string name="help_gameplay_text">• Turn navigation is in the upper right corner\n
+        • The number on top represents the current turn in the game.\n
+        • The number on the bottom represents the current turn that you are editing.\n
+        • Touch the right arrow to increment the turn that you are editing. If you are editing the current
+            game turn, touching the right arrow will start a new turn.\n
+        • Touch the left arrow to edit a previous turn.\n
+        • Touch the current turn number to return to editing the current turn.\n
+        • The player with the yellow outline is the one whose turn you are editing.\n
+        • Touch a different player box to change the currently selected player.\n
+        • Touch a sector to add a move indicator to it for the current player and turn.\n
+        • Touching the hexagon again will turn the move indicator into a circle. You can use circles to
+            indicate guesses.\n
+        • Touch the sector a third time to remove the move from that turn and player.\n
+        • Touch and hold any player\'s colored square to add an indicator for human vs. alien. This will
+            add a red halo around the player box for humans, and a green halo for aliens.\n
         • Pinch to zoom and drag to scroll.\n</string>
     <string name="title_activity_map_creator">MapCreatorActivity</string>
     <string name="hello_world">Hello world!</string>
