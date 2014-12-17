@@ -170,16 +170,32 @@ public class ChoosePlayersActivity extends Activity implements OnItemSelectedLis
             public void onClick(View v) {
                 players = new ArrayList<Player>();
                 Player p;
-
+                ArrayList <Integer> colors = new ArrayList<Integer>();
                 for(int i = 0; i<playerArrayAdapter.getCount();i++){
                     p = (Player)playerArrayAdapter.getItem(i);
+                    if(!colors.contains(p.color()))
+                        colors.add(p.color());
+                    else {
+                        //error message
+                        new AlertDialog.Builder(ChoosePlayersActivity.this)
+                                .setTitle("Choose a different color")
+                                .setMessage("Two players cannot be the same color.")
+                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // do nothing
+                                    }
+                                })
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                        return;
+                    }
 
                     //this is where we check to see if they have a name
                     if (p.name()==null || p.name().length() == 0){
                         //error message
                         new AlertDialog.Builder(ChoosePlayersActivity.this)
                                 .setTitle("Enter player name")
-                                .setMessage("Player names can't be blank yo")
+                                .setMessage("Player names can't be blank")
                                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
                                         // do nothing
@@ -229,17 +245,7 @@ public class ChoosePlayersActivity extends Activity implements OnItemSelectedLis
     }
 
     private void initializeColorList(){
-        /*
-        colors = new int[8];
-        colors[0] = getResources().getColor(android.R.color.holo_purple);
-        colors[1] = getResources().getColor(android.R.color.holo_blue_bright);
-        colors[2] = getResources().getColor(android.R.color.holo_green_light);
-        colors[3] = getResources().getColor(android.R.color.holo_red_light);
-        colors[4] = getResources().getColor(android.R.color.holo_orange_light);
-        colors[5] = getResources().getColor(android.R.color.holo_blue_dark);
-        colors[6] = getResources().getColor(android.R.color.darker_gray);
-        colors[7] = getResources().getColor(android.R.color.holo_green_dark);
-        */
+
         colors = getResources().getIntArray(R.array.player_color_choices);
     }
 
