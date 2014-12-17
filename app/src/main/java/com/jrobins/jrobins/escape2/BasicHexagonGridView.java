@@ -199,59 +199,54 @@ public class BasicHexagonGridView   extends SurfaceView
         }
     }
 
-    public Point pxtoHex(int mx, int my) {
-        Point p = new Point(-1,-1);
+    public Point pixelToHex(int px, int py){
+        //q = col, r = row
+        //get an approx axial coord
+        px -= cellRadius();
+        py -= cellHeight()*3/2;
+        double q = (2./3 * px / cellRadius());
+        double r = (-1./3 * px + 1./3*Math.sqrt(3) * py) / cellRadius();
 
-        int h = cellHeight();			// h = basic dimension: height (distance between two adj centresr aka size)
-        int r = h/2;			// r = radius of inscribed circle
-        int s = (int) (h / 1.73205);	// s = (h/2)/cos(30)= (h/2) / (sqrt(3)/2) = h / sqrt(3)
-        int t = (int) (r / 1.73205);	// t = (h/2) tan30 = (h/2) 1/sqrt(3) = h / (2 sqrt(3)) = r / sqrt(3)
-        boolean XYVertex = false;
+        //use hex rounding to convert fractional coord into integer cube coord
 
-        if (XYVertex) mx += t;
+        //convert axial to cube so we can use hexrounding function
+        /*# convert axial to cube
+            x = q
+            z = r
+            y = -x-z
+        */
+        double x = q;
+        double z = r;
+        double y = -x-z;
 
-        int x = (int) (mx / (s+t)); //this gives a quick value for x. It works only on odd cols and doesn't handle the triangle sections. It assumes that the hexagon is a rectangle with width s+t (=1.5*s).
-        int y = (int) ((my - (x%2)*r)/h); //this gives the row easily. It needs to be offset by h/2 (=r)if it is in an even column
+        //hexrounding function:
 
-        /******FIX for clicking in the triangle spaces (on the left side only)*******/
-        //dx,dy are the number of pixels from the hex boundary. (ie. relative to the hex clicked in)
-        int dx = mx - x*(s+t);
-        int dy = my - y*h;
+        long rx = Math.round(x);
+        long ry = Math.round(y);
+        long rz = Math.round(z);
 
-        if (my - (x%2)*r < 0) return p; // prevent clicking in the open halfhexes at the top of the screen
+        double x_diff = Math.abs(rx - x);
+        double y_diff = Math.abs(ry - y);
+        double z_diff = Math.abs(rz - z);
 
-        //System.out.println("dx=" + dx + " dy=" + dy + "  > " + dx*r/t + " <");
+        if ( (x_diff > y_diff) && (x_diff > z_diff) )
+            rx = -ry-rz;
+        else if (y_diff > z_diff)
+            ry = -rx-rz;
+        else
+            rz = -rx-ry;
 
-        //even columns
-        if (x%2==0) {
-            if (dy > r) {	//bottom half of hexes
-                if (dx * r /t < dy - r) {
-                    x--;
-                }
-            }
-            if (dy < r) {	//top half of hexes
-                if ((t - dx)*r/t > dy ) {
-                    x--;
-                    y--;
-                }
-            }
-        } else {  // odd columns
-            if (dy > h) {	//bottom half of hexes
-                if (dx * r/t < dy - h) {
-                    x--;
-                    y++;
-                }
-            }
-            if (dy < h) {	//top half of hexes
-                //System.out.println("" + (t- dx)*r/t +  " " + (dy - r));
-                if ((t - dx)*r/t > dy - r) {
-                    x--;
-                }
-            }
-        }
-        p.x=x;
-        p.y=y;
-        return p;
+        //rx, ry, rz is the cube coords. convert to odd-q vertical layout
+        /*# convert cube to odd-q offset
+            q = x
+            r = z + (x - (x&1)) / 2
+        */
+        //rx-=1;
+        //rz-=1;
+        //ry-=1;
+        int fq = (int)(rx);
+        int fr = (int) (rz + (rx - (rx&1)) / 2);
+        return new Point(fq, fr+1);
     }
 
 
