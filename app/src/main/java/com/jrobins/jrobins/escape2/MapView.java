@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
@@ -59,6 +60,10 @@ public class MapView extends BasicHexagonGridView {
     private ScaleGestureDetector mScaleDetector;
     private float mScaleFactor = 1.f;
 
+    private Matrix drawMatrix;
+    private Matrix tempMatrix;
+    float lastFocusX;
+    float lastFocusY;
     private float originX = 0f; // current position of viewport
     private float originY = 0f;
 
@@ -103,6 +108,8 @@ public class MapView extends BasicHexagonGridView {
         labelPaint.setTextSize(20);
 
 
+        drawMatrix = new Matrix();
+        tempMatrix = new Matrix();
         //initialize zoom thing
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
 
@@ -140,9 +147,9 @@ public class MapView extends BasicHexagonGridView {
 
         //canvas.translate(originX, originY);
         //canvas.scale(mScaleFactor, mScaleFactor, originX, originY);
-        canvas.scale(mScaleFactor, mScaleFactor);
-        canvas.translate(offsetX, offsetY);
-
+        //canvas.scale(mScaleFactor, mScaleFactor);
+        //canvas.translate(offsetX, offsetY);
+        canvas.setMatrix(drawMatrix);
         setCellWidth(cellWidth()*mScaleFactor);
         moveWidth = cellWidth()/7;
 
@@ -449,7 +456,7 @@ public class MapView extends BasicHexagonGridView {
     }
 
     private void setMoveSquare(float centerX, float centerY, int size){
-        moveSquare.set(centerX - size/2, centerY-size/2, centerX+size/2, centerY + size/2);
+        moveSquare.set(centerX - size / 2, centerY - size / 2, centerX + size / 2, centerY + size / 2);
     }
 
     private void drawTextInMoveSquare(Canvas canvas, Move move, int sizeOfMove){
@@ -466,7 +473,7 @@ public class MapView extends BasicHexagonGridView {
                 break;
         }*/
         //draw number inside rectangle
-        textPaint.setTextSize((int)(sizeOfMove/1.5));
+        textPaint.setTextSize((int) (sizeOfMove / 1.5));
 
         textPaint.getTextBounds(move.turnNumberToString(), 0, move.turnNumberToString().length(), rect);
         float x = moveSquare.centerX() - rect.exactCenterX();
@@ -529,8 +536,10 @@ public class MapView extends BasicHexagonGridView {
         @Override
         public boolean onScaleBegin(ScaleGestureDetector detector) {
 
-            getParent().requestDisallowInterceptTouchEvent(true);
-            super.onScaleBegin(detector);
+            //getParent().requestDisallowInterceptTouchEvent(true);
+            //super.onScaleBegin(detector);
+            lastFocusX = detector.getFocusX();
+            lastFocusY = detector.getFocusY();
             return true;
         }
 
@@ -543,23 +552,42 @@ public class MapView extends BasicHexagonGridView {
 
             //float fx = detector.getFocusX();
             //float fy = detector.getFocusY();
-            originX = detector.getFocusX();
-            originY = detector.getFocusY();
+            //originX = detector.getFocusX();
+            //originY = detector.getFocusY();
 
             //originX += fx/mScaleFactor; // move origin to focus
             //originY += fy/mScaleFactor;
 
 
-            mScaleFactor *= detector.getScaleFactor();
+            //mScaleFactor *= detector.getScaleFactor();
 
             // Don't let the object get too small or too large.
-            mScaleFactor = Math.max(0.1f, Math.min(mScaleFactor, 5.0f));
+            //mScaleFactor = Math.max(0.1f, Math.min(mScaleFactor, 5.0f));
 
             //originX -= fx/mScaleFactor; // move back, allow us to zoom with (fx,fy) as center
             //originY -= fy/mScaleFactor;
 
 
-            //invalidate();
+            Matrix transformationMatrix = new Matrix();
+            float focusX = detector.getFocusX();
+            float focusY = detector.getFocusY();
+
+            //Zoom focus is where the fingers are centered,
+            transformationMatrix.postTranslate(-focusX, -focusY);
+
+            transformationMatrix.postScale(detector.getScaleFactor(), detector.getScaleFactor());
+
+            /* Adding focus shift to allow for scrolling with two pointers down. Remove it to
+            skip this functionality. This could be done in fewer lines, but for clarity I do it this way here */
+            //Edited after comment by chochim
+            float focusShiftX = focusX - lastFocusX;
+            float focusShiftY = focusY - lastFocusY;
+            offsetX = focusX + focusShiftX;
+            offsetY = focusY + focusShiftY;
+            transformationMatrix.postTranslate(focusX + focusShiftX, focusY + focusShiftY);
+            drawMatrix.postConcat(transformationMatrix);
+            lastFocusX = focusX;
+            lastFocusY = focusY;
             return true;
         }
 
@@ -594,10 +622,10 @@ public class MapView extends BasicHexagonGridView {
                     mCurrentViewport.bottom + viewportOffsetY);
             */
 
-            offsetX -=distanceX;
-            offsetY -=distanceY;
+            //offsetX -=distanceX;
+            //offsetY -=distanceY;
+            drawMatrix.postTranslate(-distanceX, -distanceY);
 
-            //invalidate();
             return true;
         }
 
@@ -628,7 +656,16 @@ public class MapView extends BasicHexagonGridView {
                 }
 
             }*/
-            Point p = pixelToHex((int)(event.getX() - offsetX), (int) (event.getY() - offsetY));
+
+            //Point p = pixelToHex((int)(event.getX() - offsetX), (int) (event.getY() - offsetY));
+            tempMatrix.reset();
+            float[] transformedPoint = new float[]{event.getX(), event.getY()};
+
+            drawMatrix.invert(tempMatrix);
+
+            tempMatrix.mapPoints(transformedPoint);
+
+            Point p = pixelToHex((int)transformedPoint[0], (int)transformedPoint[1]);
             listener.onCellClick(p.x, p.y);
             return true;
         }
