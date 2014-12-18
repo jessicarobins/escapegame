@@ -58,12 +58,18 @@ public class MapView extends BasicHexagonGridView {
 
     //zooming
     private ScaleGestureDetector mScaleDetector;
-    private float mScaleFactor = 1.f;
+
 
     private Matrix drawMatrix;
     private Matrix tempMatrix;
+    private float saveScale = 1.f;
+    final private float MIN_SCALE = .75f;
+    final private float MAX_SCALE = 8.f;
     float lastFocusX;
     float lastFocusY;
+    float origWidth;
+    float origHeight;
+
     private float originX = 0f; // current position of viewport
     private float originY = 0f;
 
@@ -118,6 +124,9 @@ public class MapView extends BasicHexagonGridView {
 
         //threads
         setMapThread(new MapDrawingThread(getHolder(),context, this, false));
+
+        origHeight = getHeight();
+        origWidth = getWidth();
     }
 
     public void newThread(){
@@ -150,7 +159,7 @@ public class MapView extends BasicHexagonGridView {
         //canvas.scale(mScaleFactor, mScaleFactor);
         //canvas.translate(offsetX, offsetY);
         canvas.setMatrix(drawMatrix);
-        setCellWidth(cellWidth()*mScaleFactor);
+        setCellWidth(cellWidth());
         moveWidth = cellWidth()/7;
 
         //not sure if we need to do this again because we are doing it in the superclass
@@ -161,7 +170,7 @@ public class MapView extends BasicHexagonGridView {
 
         canvas.restore();
 
-        mScaleFactor = 1.f;
+
 
     }
 
@@ -546,27 +555,18 @@ public class MapView extends BasicHexagonGridView {
         @Override
         public boolean onScale(ScaleGestureDetector detector) {
 
-           /* if (detector.getScaleFactor() < 0.01)
-                return false; // ignore small changes*/
-
-
-            //float fx = detector.getFocusX();
-            //float fy = detector.getFocusY();
-            //originX = detector.getFocusX();
-            //originY = detector.getFocusY();
-
-            //originX += fx/mScaleFactor; // move origin to focus
-            //originY += fy/mScaleFactor;
-
-
-            //mScaleFactor *= detector.getScaleFactor();
+            // get scale
+            float factor = detector.getScaleFactor();
 
             // Don't let the object get too small or too large.
-            //mScaleFactor = Math.max(0.1f, Math.min(mScaleFactor, 5.0f));
+            if (factor * saveScale > MAX_SCALE) {
+                factor = MAX_SCALE / saveScale;
+            } else if (factor * saveScale < MIN_SCALE) {
+                factor = MIN_SCALE / saveScale;
+            }
 
-            //originX -= fx/mScaleFactor; // move back, allow us to zoom with (fx,fy) as center
-            //originY -= fy/mScaleFactor;
-
+            // store local scale
+            saveScale *= factor;
 
             Matrix transformationMatrix = new Matrix();
             float focusX = detector.getFocusX();
@@ -575,7 +575,12 @@ public class MapView extends BasicHexagonGridView {
             //Zoom focus is where the fingers are centered,
             transformationMatrix.postTranslate(-focusX, -focusY);
 
-            transformationMatrix.postScale(detector.getScaleFactor(), detector.getScaleFactor());
+            //mScaleFactor *= detector.getScaleFactor();
+
+            // Don't let the object get too small or too large.
+            //mScaleFactor = Math.max(0.1f, Math.min(mScaleFactor, 5.0f));
+
+            transformationMatrix.postScale(factor, factor);
 
             /* Adding focus shift to allow for scrolling with two pointers down. Remove it to
             skip this functionality. This could be done in fewer lines, but for clarity I do it this way here */
@@ -591,12 +596,7 @@ public class MapView extends BasicHexagonGridView {
             return true;
         }
 
-        @Override
-        public void onScaleEnd(ScaleGestureDetector detector1) {
-            getParent().requestDisallowInterceptTouchEvent(false);
-            super.onScaleEnd(detector1);
 
-        }
     }
 
     protected class GestureListener extends GestureDetector.SimpleOnGestureListener {
@@ -632,32 +632,6 @@ public class MapView extends BasicHexagonGridView {
         @Override
         public boolean onSingleTapConfirmed(MotionEvent event) {
 
-
-            /*if (listener != null) {
-                float x = event.getX() - offsetX;
-                float y = event.getY() - offsetY;
-
-                int radius = cellWidth() / 2;
-                int cellHeight = (int) (((float) radius) * Math.sqrt(3));
-                int side = radius * 3 / 2;
-
-
-                int ci = (int) Math.floor(x / (float) side);
-                int cx = (int) (x - side * ci);
-
-                int ty = (int) (y - (ci % 2) * cellHeight / 2);
-                int cj = (int) Math.floor((float) ty / (float) cellHeight);
-                int cy = ty - cellHeight * cj;
-
-                if (cx > Math.abs(radius / 2 - radius * cy / cellHeight)) {
-                    listener.onCellClick(ci, cj);
-                } else {
-                    listener.onCellClick(ci - 1, cj + (ci % 2) - ((cy < cellHeight / 2) ? 1 : 0));
-                }
-
-            }*/
-
-            //Point p = pixelToHex((int)(event.getX() - offsetX), (int) (event.getY() - offsetY));
             tempMatrix.reset();
             float[] transformedPoint = new float[]{event.getX(), event.getY()};
 
