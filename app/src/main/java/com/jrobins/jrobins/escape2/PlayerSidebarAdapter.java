@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -60,7 +61,7 @@ public class PlayerSidebarAdapter extends ArrayAdapter<Player>{
         final LinearLayout halo = (LinearLayout) convertView.findViewById(R.id.halo);
         final LinearLayout currentTurn = (LinearLayout) convertView.findViewById(R.id.currentTurn);
 
-        currentTurn.setLayoutParams(new LinearLayout.LayoutParams(parent.getWidth(),parent.getWidth()));
+        currentTurn.setLayoutParams(new AbsListView.LayoutParams(parent.getWidth(),parent.getWidth()));
         //size the buttons so they all fit on the screen
 
 
