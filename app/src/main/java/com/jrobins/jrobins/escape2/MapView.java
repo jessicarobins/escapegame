@@ -40,10 +40,6 @@ public class MapView extends BasicHexagonGridView {
     Context context;
     private int moveWidth;
 
-    //3 values, 0, 1, 2 to be unset, certain, guess
-    private int[][] cellSet; //the current cell set
-    private ArrayList<int[][]> masterCellSet; //so we can save all the previous turns' moves...
-    private ArrayList<ArrayList<int[][]>> allPlayerMasterCellSets;
 
     //private Sector[][] sectors;
 
@@ -135,17 +131,6 @@ public class MapView extends BasicHexagonGridView {
         }
     }
 
-    //initialize moved to basichexagongridview
-    @Override
-    public void initialize(Sector[][] sectors){
-
-        super.initialize(sectors);
-
-        //all values initialized to 0
-        this.cellSet = new int[sectors.length][sectors[0].length];
-        masterCellSet = new ArrayList<int[][]>();
-        allPlayerMasterCellSets = new ArrayList<ArrayList<int[][]>>();
-    }
 
 
     /*****surfaceview thing******/
@@ -188,42 +173,6 @@ public class MapView extends BasicHexagonGridView {
     }
 
 
-
-    public int isCellSet(int column, int row)
-    {
-        return cellSet[column][row];
-    }
-
-    public void setCell(int column, int row, int isSet, Move move)
-    {
-
-        //if we are adding a certain move, we need to add a new move
-        if (isSet == CERTAIN){ //cell is now set
-            //add move to array
-            //sectors[column][row].addMove(move);
-            move.setCertainty(Move.CERTAIN);
-            super.addMove(column, row, move);
-        }
-        //if we are adding a guess, we need to delete the old move and
-        //  add the guess
-        else if(isSet == GUESS){
-            //super.removeLastMove(column, row);
-            super.removeMove(column, row, move);
-            move.setCertainty(Move.UNCERTAIN);
-            super.addMove(column, row, move);
-        }
-        //otherwise we remove it
-        else {
-            //remove move from array
-            //sectors[column][row].removeLastMove();
-            //super.removeLastMove(column, row);
-            super.removeMove(column, row, move);
-        }
-
-        cellSet[column][row] = isSet;
-
-    }
-
     public void setCell(int column, int row, Move m)
     {
         Move existingMove;
@@ -254,35 +203,7 @@ public class MapView extends BasicHexagonGridView {
 
     }
 
-    public void resetAllCells(){
-        masterCellSet.add(cellSet);
-        cellSet = new int[columns()][rows()];
 
-    }
-
-    public void resetAllCells(boolean previousTurn){
-        if(!previousTurn)
-            masterCellSet.add(cellSet);
-        cellSet = new int[columns()][rows()];
-
-    }
-
-    public void changePlayerCellSet(int player){
-        masterCellSet = allPlayerMasterCellSets.get(player);
-    }
-
-    public void loadPreviousCellSet(int turnNumber){
-        // this is for editing previous turns
-        //masterCellSet.add(cellSet);
-        cellSet = masterCellSet.get(turnNumber-1);
-    }
-
-    public void loadPreviousCellSet(int turnNumber, boolean previousTurn){
-        // this is for editing previous turns
-        if(!previousTurn)
-            masterCellSet.add(cellSet);
-        cellSet = masterCellSet.get(turnNumber-1);
-    }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh)
@@ -460,7 +381,7 @@ public class MapView extends BasicHexagonGridView {
             fillPaint().setAlpha(255);
         }
 
-        if(size>20)
+        if(size>10)
             drawTextInMoveSquare(canvas, move, size);
     }
 
