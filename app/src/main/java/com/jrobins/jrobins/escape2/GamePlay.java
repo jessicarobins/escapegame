@@ -49,7 +49,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
     private TextView prevTurnNumberTextBox;
     private Button advanceTurnButton;
     private Button prevTurnButton;
-    private LinearLayout sidebar;
+    //private LinearLayout sidebar;
 
 
 
@@ -58,6 +58,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         super.onCreate(savedInstanceState);
 
         getPlayerList();
+
         setUpWindow();
         initializePlayers();
         initializeMap();
@@ -158,13 +159,15 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
 
         //set width of sidebar based on screen width
 
-        sidebar = (LinearLayout) findViewById(R.id.sidebar);
+        //sidebar = (LinearLayout) findViewById(R.id.sidebar);
+        playerListView = (ListView) findViewById(R.id.playerList);
         Point size = new Point();
         this.getWindowManager().getDefaultDisplay().getSize(size);
 
         int w = size.x/(25 - (players.size()-4));
         int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, w, getResources().getDisplayMetrics());
-        sidebar.getLayoutParams().width = width;
+        playerListView.getLayoutParams().width = width;
+        
     }
 
     private void initializeHexagonMap(){
@@ -183,7 +186,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
 
         //sets up the sidebar with player info
         playerSidebarAdapter = new PlayerSidebarAdapter(this, players);
-        playerListView = (ListView) findViewById(R.id.playerList);
+
         playerListView.setAdapter(playerSidebarAdapter);
     }
 
