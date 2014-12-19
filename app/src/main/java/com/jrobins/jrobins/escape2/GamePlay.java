@@ -60,6 +60,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         getPlayerList();
 
         setUpWindow();
+        setUpSidebar();
         initializePlayers();
         initializeMap();
         //createTestMap(4,5);
@@ -160,14 +161,19 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         //set width of sidebar based on screen width
 
         //sidebar = (LinearLayout) findViewById(R.id.sidebar);
+
+
+    }
+
+    private void setUpSidebar(){
         playerListView = (ListView) findViewById(R.id.playerList);
         Point size = new Point();
         this.getWindowManager().getDefaultDisplay().getSize(size);
 
-        int w = size.x/(25 - (players.size()-4));
-        int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, w, getResources().getDisplayMetrics());
-        playerListView.getLayoutParams().width = width;
-        
+        //int w = size.x/(25 - (players.size()-4));
+        int w = size.y/(players.size()+1);
+        //int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, w, getResources().getDisplayMetrics());
+        playerListView.getLayoutParams().width = w;
     }
 
     private void initializeHexagonMap(){
