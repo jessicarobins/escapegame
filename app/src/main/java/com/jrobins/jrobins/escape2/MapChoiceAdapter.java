@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -61,6 +62,7 @@ public class MapChoiceAdapter extends ArrayAdapter<Map> {
         int y = (int)(size.x*(.65));
         map.setMinimumHeight(y);
         map.setMinimumWidth(parent.getWidth());
+        map.setLayoutParams(new LinearLayout.LayoutParams(parent.getWidth(), y));
         //map.setMinimumWidth(100);
         //map.setMinimumHeight(100);
 
