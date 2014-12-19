@@ -1,14 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_gravity="center"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:background="@android:color/black">
-    <LinearLayout
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:background="@android:color/black"
         android:padding="3dp"
         android:id="@+id/currentTurn"
@@ -16,8 +10,8 @@
         android:gravity="center"
         >
         <LinearLayout
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
             android:background="@color/neutral"
             android:padding="4dp"
             android:id="@+id/halo"
@@ -26,14 +20,14 @@
             >
             <TextView
 
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:gravity="center"
+                android:padding="3dp"
                 android:text="Pl"
                 android:textColor="@android:color/black"
                 android:id="@+id/player_id" />
         </LinearLayout>
     </LinearLayout>
 
-</LinearLayout>

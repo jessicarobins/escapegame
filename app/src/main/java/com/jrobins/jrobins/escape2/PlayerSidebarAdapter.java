@@ -60,16 +60,13 @@ public class PlayerSidebarAdapter extends ArrayAdapter<Player>{
         final LinearLayout halo = (LinearLayout) convertView.findViewById(R.id.halo);
         final LinearLayout currentTurn = (LinearLayout) convertView.findViewById(R.id.currentTurn);
 
+        currentTurn.setLayoutParams(new LinearLayout.LayoutParams(parent.getWidth(),parent.getWidth()));
         //size the buttons so they all fit on the screen
 
-        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
 
-        int h = size.y;
         int w = parent.getWidth();
         playerID.setTextSize( w/5);
+
         //playerID.setTextSize( parent.getWidth()/2 / players.size());
 
 
@@ -80,11 +77,12 @@ public class PlayerSidebarAdapter extends ArrayAdapter<Player>{
         Paint textPaint = playerID.getPaint();
 
         textPaint.getTextBounds("MM",0,2,bounds);
-        h = bounds.width();
+        int h = bounds.width();
 
-        playerID.setWidth((int)(h*1.25));
-        playerID.setHeight((int)(h*1.25));
-
+        //playerID.setWidth((int)(h*1.25));
+        //playerID.setHeight((int)(h*1.25));
+        //playerID.setWidth(w);
+        //playerID.setHeight(w);
 
 
         if (playerName.length() == 1)
@@ -106,6 +104,7 @@ public class PlayerSidebarAdapter extends ArrayAdapter<Player>{
             haloColors.put(halo.getTag().toString(), new Integer(colors[2]));
 
         halo.setBackgroundColor(haloColors.get(halo.getTag()));
+
 
 
         final int p = position;
