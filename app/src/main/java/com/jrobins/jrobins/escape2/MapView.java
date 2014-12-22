@@ -131,7 +131,13 @@ public class MapView extends BasicHexagonGridView {
         }
     }
 
+    public GestureDetector gestureDetector(){
+        return mGestureDetector;
+    }
 
+    public OnCellClickListener listener(){
+        return listener;
+    }
 
     /*****surfaceview thing******/
     @Override
@@ -520,6 +526,18 @@ public class MapView extends BasicHexagonGridView {
 
     }
 
+    @Override
+    public Point pixelToHex(int px, int py){
+        tempMatrix.reset();
+        float[] transformedPoint = new float[]{px, py};
+
+        drawMatrix.invert(tempMatrix);
+
+        tempMatrix.mapPoints(transformedPoint);
+
+        return super.pixelToHex((int)transformedPoint[0], (int)transformedPoint[1]);
+    }
+
     protected class GestureListener extends GestureDetector.SimpleOnGestureListener {
 
 
@@ -560,10 +578,12 @@ public class MapView extends BasicHexagonGridView {
 
             tempMatrix.mapPoints(transformedPoint);
 
-            Point p = pixelToHex((int)transformedPoint[0], (int)transformedPoint[1]);
+            Point p = pixelToHex((int)event.getX(), (int)event.getY());
             listener.onCellClick(p.x, p.y);
             return true;
         }
+
+
 
         /*
         @Override

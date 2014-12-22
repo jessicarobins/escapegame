@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,7 +16,12 @@ public class MapCreatorView extends MapView {
     //private OnCellClickListener listener;
     //private GestureDetector mGestureDetector;
 
+    //dragging & dropping
+
     PointF touchDown; //to begin the dragging & dropping
+    boolean dragged = false; //this is if we are drag and dropping. otherwise we are clicking.
+    boolean editing = false;
+    GestureDetector longPressListener;
 
     public MapCreatorView(Context context) {
         super(context);
@@ -29,9 +35,10 @@ public class MapCreatorView extends MapView {
         //set wallpaint to be white
         setWallPaint(Color.GRAY);
 
-
+        longPressListener = new GestureDetector(context, new LongPressListener());
         initialize(new Map());
     }
+
 
 
 
@@ -43,64 +50,88 @@ public class MapCreatorView extends MapView {
                 (sectors()[column][row].sectorType()+1)%3);
     }
 
-/*
-    private class DragAndDropListener extends GestureListener {
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event)
+    {
+        //super.onTouchEvent(event);
+        longPressListener.onTouchEvent(event);
+        Point sectorLocation;
+
+        int sectorType = 0; //the type of the sector being moved
 
 
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            // TODO Auto-generated method stub
-
-            Point sectorLocation;
-            Point newPosition;
-
-
-            switch(event.getAction())
+        switch(event.getAction())
+        {
+            case MotionEvent.ACTION_DOWN:
             {
-                case MotionEvent.ACTION_DOWN:
-                {
+                Log.d("mapcreation", "action down");
+                dragged=false;
+                //get the point we touched
+                touchDown = new PointF(event.getX(), event.getY());
+
+                return true;
+            }
+            case MotionEvent.ACTION_MOVE:
+            {
+                Log.d("mapcreation", "action move");
+                dragged = true;
+                //find the original sector
+
+
+                //draw a hexagon? sector? around the person's finger
+
+                return true;
+            }
+            case MotionEvent.ACTION_UP: {
+                Log.d("mapcreation", "action up. editing: " + editing + " dragged: " + dragged);
+                if(editing && dragged){
+                    //find location of old sector
+                    sectorLocation = pixelToHex((int)touchDown.x,(int)touchDown.y);
+                    //make that sector invalid - gotta do this here not in action_down
+                    //  because clicking is a thing - actually maybe we can even do it in action_up?
+                    //  no that would still be clicking.
+                    sectorType = sectors()[sectorLocation.x][sectorLocation.y].sectorType();
+                    sectors()[sectorLocation.x][sectorLocation.y].setSectorType(Sector.INVALID);
+
+                    //find the new sector
+
+                    touchDown = new PointF(event.getX(), event.getY());
+                    sectorLocation = pixelToHex((int)touchDown.x,(int)touchDown.y);
+
+                    //set the sector where the finger is to be the sector type of the old sector
+                    sectors()[sectorLocation.x][sectorLocation.y].setSectorType(sectorType);
+
+                }
+                /*else {
                     touchDown = new PointF(event.getRawX(), event.getRawY());
-                    break;
-                }
-                case MotionEvent.ACTION_MOVE:
-                {
-                    //RelativeLayout.LayoutParams par = (RelativeLayout.LayoutParams) v.getLayoutParams();
-
-                    //find the sector
-                    sectorLocation = getSectorFromTouchPoint((int)touchDown.x,(int)touchDown.y);
-
-                    float yDeff = ((event.getRawY() - touchDown.y)   / cellRadius() ) * cellRadius();
-                    float xDeff = ((event.getRawX() - touchDown.x)  / cellRadius() ) * cellRadius();
-
-                    if(Math.abs(xDeff) >= cellRadius())
-                    {
-                        par.leftMargin += (int)(xDeff / gridCellSize) * gridCellSize;
-                        touchDown.x = event.getRawX() - (xDeff % gridCellSize);
-                    }
-
-                    if(Math.abs(yDeff) >= gridCellSize)
-                    {
-                        par.topMargin += (int)(yDeff / gridCellSize) * gridCellSize;
-                        touchDown.y = event.getRawY() - (yDeff % gridCellSize);
-                    }
-
-                    v.setLayoutParams(par);
-                    break;
-                }
-                default :
-                {
-
-                    break;
-                }
+                    sectorLocation = pixelToHex((int)touchDown.x,(int)touchDown.y);
+                    listener().onCellClick(sectorLocation.x, sectorLocation.y);
+                }*/
+                return true;
             }
 
+            default :
+            {
 
-            return true;
+                return true;
+            }
         }
 
+    }
 
+    protected class LongPressListener extends GestureListener {
+        @Override
+        public void onLongPress(MotionEvent event){
+            editing = true;
+        }
 
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent event) {
+            editing = false;
+            return super.onSingleTapConfirmed(event);
+        }
 
     }
-*/
+
 }

@@ -37,6 +37,8 @@ public class BasicHexagonGridView   extends SurfaceView
     private Sector[][] sectors;
     Map map;
 
+
+
     private Context context;
 
     //multithreading
