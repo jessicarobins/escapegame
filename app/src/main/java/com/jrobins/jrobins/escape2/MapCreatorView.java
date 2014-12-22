@@ -1,7 +1,10 @@
 package com.jrobins.jrobins.escape2;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.util.AttributeSet;
@@ -22,6 +25,8 @@ public class MapCreatorView extends MapView {
     boolean dragged = false; //this is if we are drag and dropping. otherwise we are clicking.
     boolean editing = false;
     GestureDetector longPressListener;
+    Path dragPath;
+    Paint dragPaint = new Paint();
 
     public MapCreatorView(Context context) {
         super(context);
@@ -34,13 +39,19 @@ public class MapCreatorView extends MapView {
         setFillPaint(Color.BLACK);
         //set wallpaint to be white
         setWallPaint(Color.GRAY);
-
+        dragPaint.setStyle(Paint.Style.FILL);
         longPressListener = new GestureDetector(context, new LongPressListener());
         initialize(new Map());
     }
 
-
-
+    @Override
+    public void doDraw(Canvas canvas){
+        super.doDraw(canvas);
+        if(dragPath != null){
+            //draw dragpath
+            canvas.drawPath(dragPath, dragPaint);
+        }
+    }
 
 
 
@@ -76,11 +87,11 @@ public class MapCreatorView extends MapView {
             {
                 Log.d("mapcreation", "action move");
                 dragged = true;
-                //find the original sector
+
 
 
                 //draw a hexagon? sector? around the person's finger
-
+                dragPath = getHexPath(cellWidth(), event.getX(), event.getY());
                 return true;
             }
             case MotionEvent.ACTION_UP: {
@@ -101,13 +112,10 @@ public class MapCreatorView extends MapView {
 
                     //set the sector where the finger is to be the sector type of the old sector
                     sectors()[sectorLocation.x][sectorLocation.y].setSectorType(sectorType);
-
+                    editing = false;
+                    dragged = false;
                 }
-                /*else {
-                    touchDown = new PointF(event.getRawX(), event.getRawY());
-                    sectorLocation = pixelToHex((int)touchDown.x,(int)touchDown.y);
-                    listener().onCellClick(sectorLocation.x, sectorLocation.y);
-                }*/
+
                 return true;
             }
 
@@ -132,6 +140,11 @@ public class MapCreatorView extends MapView {
             return super.onSingleTapConfirmed(event);
         }
 
+    }
+
+    private void setPaint(int color){
+
+        dragPaint.setColor(color);
     }
 
 }

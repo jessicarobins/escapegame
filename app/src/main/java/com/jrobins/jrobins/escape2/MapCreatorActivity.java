@@ -1,6 +1,7 @@
 package com.jrobins.jrobins.escape2;
 
 import android.app.Activity;
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
