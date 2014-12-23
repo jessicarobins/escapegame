@@ -7,11 +7,13 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by jessica.robins on 12/23/2014.
@@ -69,6 +71,43 @@ public class MapTxtParser {
             }
         }
         return sectors;
+    }
+
+    public static List<Map> readMapsFromExternalStorage(Activity activity){
+        if(!hasExternalStoragePrivateFile(activity))
+            return null;
+
+        List<Map> maps = new ArrayList<Map>();
+        File mapFile = new File (activity.getExternalFilesDir(null), "myMaps.txt");
+
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader(mapFile));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+        String line;
+        int lineNumber = 0;
+        Map map = new Map();
+        try {
+            while (( line = reader.readLine()) != null) {
+                //if line number is even, it's a name
+                if(lineNumber%2 == 0){
+                    map.setName(line);
+                }
+                //otherwise it's the map data
+                else {
+                    map.setSectors(readSectors(line));
+                    maps.add(map);
+                }
+                lineNumber++;
+            }
+        } catch (IOException e) {
+            return null;
+        }
+
+        return maps;
     }
 
     public static void writeMapToExternalStorage(Activity activity, Map map){

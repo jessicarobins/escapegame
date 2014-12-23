@@ -1,6 +1,8 @@
 package com.jrobins.jrobins.escape2;
 
 import android.content.Context;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,6 +66,13 @@ public class ColorChoiceGridViewAdapter extends BaseAdapter {
             view.setText(" ");
         view.setGravity(Gravity.CENTER);
         view.setTextSize(30);
+        Rect bounds = new Rect();
+        Paint textPaint = view.getPaint();
+
+        textPaint.getTextBounds("MM",0,2,bounds);
+        int h = bounds.width();
+        view.setHeight(h);
+        view.setWidth(h);
         return view;
     }
 }

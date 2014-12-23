@@ -170,6 +170,8 @@ public class PlayerSidebarAdapter extends ArrayAdapter<Player>{
 
         gridView.setAdapter(new ColorChoiceGridViewAdapter(getContext(), colors, labels));
         gridView.setNumColumns(3);
+
+        gridView.setLayoutParams(new GridView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         builder.setView(gridView);
         final AlertDialog alertDialog = builder.create();
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -182,16 +184,18 @@ public class PlayerSidebarAdapter extends ArrayAdapter<Player>{
             }
         });
 
-        alertDialog.show();
-        //alertDialog.getWindow().setLayout(400, 800);
-        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
 
-        lp.copyFrom(alertDialog.getWindow().getAttributes());
-        lp.width = 300;
+        alertDialog.getWindow().setLayout(400, 800);
+        //WindowManager.LayoutParams lp = new WindowManager.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+        //lp.copyFrom(alertDialog.getWindow().getAttributes());
+        //lp.width = 300;
         //lp.height = 800;
         //lp.x=-170;
         //lp.y=100;
-        alertDialog.getWindow().setAttributes(lp);
+        //alertDialog.getWindow().setAttributes(lp);
+
+        alertDialog.show();
     }
 
     @Override
