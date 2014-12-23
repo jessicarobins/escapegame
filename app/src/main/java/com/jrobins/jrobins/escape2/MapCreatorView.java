@@ -28,6 +28,12 @@ public class MapCreatorView extends MapView {
     Path dragPath;
     Paint dragPaint = new Paint();
 
+
+    //for dragging
+    Point sectorLocation; // the sector being moved
+    int sectorType = 0; //the type of the sector being moved
+    Sector draggedSector;
+
     public MapCreatorView(Context context) {
         super(context);
     }
@@ -67,53 +73,51 @@ public class MapCreatorView extends MapView {
     {
         //super.onTouchEvent(event);
         longPressListener.onTouchEvent(event);
-        Point sectorLocation;
-
-        int sectorType = 0; //the type of the sector being moved
-
-
+        if (event.getPointerCount() > 1){
+            scaleGestureDetector().onTouchEvent(event);
+            return true;
+        }
         switch(event.getAction())
         {
             case MotionEvent.ACTION_DOWN:
             {
                 Log.d("mapcreation", "action down");
-                dragged=false;
+                //dragged=false;
                 //get the point we touched
                 touchDown = new PointF(event.getX(), event.getY());
-
+                sectorLocation = pixelToHex((int)touchDown.x,(int)touchDown.y);
                 return true;
             }
             case MotionEvent.ACTION_MOVE:
             {
                 Log.d("mapcreation", "action move");
                 dragged = true;
-
-
-
-                //draw a hexagon? sector? around the person's finger
-                dragPath = getHexPath(cellWidth(), event.getX(), event.getY());
+                /*if(editing) {
+                    //draw a hexagon? sector? around the person's finger
+                    dragPath = getHexPath(scaledCellRadius(), event.getX(), event.getY());
+                    draggedSector = sectors()[sectorLocation.x][sectorLocation.y];
+                    setPaint(draggedSector.color());
+                }*/
+                if(editing)
+                    drawDrag(event.getX(), event.getY());
                 return true;
             }
             case MotionEvent.ACTION_UP: {
                 Log.d("mapcreation", "action up. editing: " + editing + " dragged: " + dragged);
                 if(editing && dragged){
-                    //find location of old sector
-                    sectorLocation = pixelToHex((int)touchDown.x,(int)touchDown.y);
-                    //make that sector invalid - gotta do this here not in action_down
-                    //  because clicking is a thing - actually maybe we can even do it in action_up?
-                    //  no that would still be clicking.
-                    sectorType = sectors()[sectorLocation.x][sectorLocation.y].sectorType();
-                    sectors()[sectorLocation.x][sectorLocation.y].setSectorType(Sector.INVALID);
+
+                    //make the old sector invalid - gotta do this here not in action_down
+                    //  because clicking is a thing - needs to be moved to action_move eventually
+                    /*sectorType = sectors()[sectorLocation.x][sectorLocation.y].sectorType();
+                    sectors()[sectorLocation.x][sectorLocation.y].setSectorType(Sector.INVALID);*/
 
                     //find the new sector
-
                     touchDown = new PointF(event.getX(), event.getY());
                     sectorLocation = pixelToHex((int)touchDown.x,(int)touchDown.y);
 
                     //set the sector where the finger is to be the sector type of the old sector
                     sectors()[sectorLocation.x][sectorLocation.y].setSectorType(sectorType);
-                    editing = false;
-                    dragged = false;
+                    resetDrag();
                 }
 
                 return true;
@@ -126,12 +130,26 @@ public class MapCreatorView extends MapView {
             }
         }
 
+
+
     }
 
     protected class LongPressListener extends GestureListener {
         @Override
         public void onLongPress(MotionEvent event){
+            //we are editing
             editing = true;
+            //set everything up
+            //find the sector we are dragging
+            draggedSector = sectors()[sectorLocation.x][sectorLocation.y];
+            //set the color
+            setPaint(draggedSector.color());
+            //get the sector type of the old sector
+            sectorType = sectors()[sectorLocation.x][sectorLocation.y].sectorType();
+            //set the old sector to be invalid
+            sectors()[sectorLocation.x][sectorLocation.y].setSectorType(Sector.INVALID);
+            //start drawing the drag
+            drawDrag(event.getX(), event.getY());
         }
 
         @Override
@@ -144,7 +162,18 @@ public class MapCreatorView extends MapView {
 
     private void setPaint(int color){
 
-        dragPaint.setColor(color);
+        dragPaint.setColor(getResources().getColor(color));
     }
 
+    private void drawDrag(float centerX, float centerY){
+        //get the path
+        dragPath = getHexPath(scaledCellRadius()*1.25f, centerX, centerY);
+        //draw the letter
+    }
+
+    private void resetDrag(){
+        dragPath = null;
+        editing = false;
+        dragged = false;
+    }
 }

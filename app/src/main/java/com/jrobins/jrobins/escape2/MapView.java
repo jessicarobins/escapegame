@@ -135,6 +135,16 @@ public class MapView extends BasicHexagonGridView {
         return mGestureDetector;
     }
 
+    public ScaleGestureDetector scaleGestureDetector(){
+        return mScaleDetector;
+    }
+
+
+
+    public int scaledCellRadius(){
+        return (int)(super.cellRadius()*saveScale);
+    }
+
     public OnCellClickListener listener(){
         return listener;
     }
