@@ -82,11 +82,7 @@ public class MapCreatorView extends MapView {
         //  or if it's not even in a sector
         longPressListener.setIsLongpressEnabled(false);
 
-        //scaling
-        if (event.getPointerCount() > 1){
-            scaleGestureDetector().onTouchEvent(event);
-            return true;
-        }
+
 
         switch(event.getAction())
         {
@@ -147,6 +143,7 @@ public class MapCreatorView extends MapView {
                         sectors()[sectorLocation.x][sectorLocation.y].setSectorType(sectorType);
                     }
                     resetDrag();
+                    return true;
                 }
 
                 break;
@@ -159,6 +156,11 @@ public class MapCreatorView extends MapView {
             }
         }
         longPressListener.onTouchEvent(event);
+        //scaling
+        if (event.getPointerCount() > 1){
+            scaleGestureDetector().onTouchEvent(event);
+            return true;
+        }
         return true;
 
 
@@ -188,6 +190,7 @@ public class MapCreatorView extends MapView {
         @Override
         public boolean onSingleTapConfirmed(MotionEvent event) {
             editing = false;
+
             return super.onSingleTapConfirmed(event);
         }
 
