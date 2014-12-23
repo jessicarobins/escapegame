@@ -184,6 +184,10 @@ public class BasicHexagonGridView   extends SurfaceView
         return (int)(Math.sqrt(3)*cellWidth/2);
     }
 
+    public Sector sectorAt(Point p){
+        return sectors[p.x][p.y];
+    }
+
     public Point getSectorFromTouchPoint(int x, int y){
         //get the location in the sectors matrix of the sector, given the place the user touched
 
@@ -253,7 +257,10 @@ public class BasicHexagonGridView   extends SurfaceView
 
     //to use with pixeltohex to make sure the point is in the array
     public boolean isValidPoint(Point p){
-        return (p.x<sectors.length && p.y<sectors[0].length);
+        return (p.x<sectors.length &&
+                p.y<sectors[0].length &&
+                p.x>=0 &&
+                p.y>=0);
     }
 
 
