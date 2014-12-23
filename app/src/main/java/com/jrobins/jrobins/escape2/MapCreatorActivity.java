@@ -1,24 +1,40 @@
 package com.jrobins.jrobins.escape2;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.os.Bundle;
+import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 
 public class MapCreatorActivity extends Activity implements MapCreatorView.OnCellClickListener{
 
     private MapCreatorView hexagonMap;
     Map map;
+    Button saveButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setUpWindow();
         initializeHexagonMap();
+        setUpSaveButton();
     }
 
     @Override
@@ -69,6 +85,69 @@ public class MapCreatorActivity extends Activity implements MapCreatorView.OnCel
         setContentView(R.layout.activity_map_creator);
 
 
+    }
+
+    private void setUpSaveButton(){
+        saveButton = (Button) findViewById(R.id.save);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveMap();
+            }
+
+        });
+    }
+
+    private void saveMap(){
+        //pop up to enter map name
+        getMapName();
+
+    }
+
+    private void getMapName(){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Map name");
+
+        // Set up the input
+        final EditText input = new EditText(this);
+        input.setText(map.name());
+        builder.setView(input);
+
+        // Set up the buttons
+        builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //set the name
+                //need to check at some point if this is null or blank
+                map.setName(input.getText().toString());
+
+                //write the map to the file
+                writeMapToFile();
+
+                //close the editor
+                closeMapEditor();
+
+                //should display some sort of toast or something
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+    private void writeMapToFile(){
+        MapTxtParser.writeMapToExternalStorage(this, map);
+    }
+
+    private void closeMapEditor(){
+        Intent intent = new Intent(MapCreatorActivity.this, HomeScreenActivity.class);
+        startActivity(intent);
     }
 
     private void initializeHexagonMap(){

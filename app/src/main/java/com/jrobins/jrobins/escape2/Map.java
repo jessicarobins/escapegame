@@ -33,23 +33,6 @@ public class Map implements Parcelable {
                 sectors[col][row] = source.readParcelable(Sector.class.getClassLoader());
             }
         }
-        /*
-        List sectorCol = new ArrayList();
-        source.readTypedList(sectorCol, Sector.CREATOR);
-        int rows = sectorCol.size();
-        sectors = new Sector[source.dataAvail()+1][rows];
-        sectors[0] = (Sector[])sectorCol.toArray();
-        for(int col = 1; col<source.dataAvail();col++){
-            source.readTypedList(sectorCol, Sector.CREATOR);
-            sectors[col] = (Sector[])sectorCol.toArray();
-        }*/
-        //source.
-        /*for(int col = 0; col<sectors.length; col++){
-            for(int row = 0; row<sectors[0].length; row++){
-                sectors[col][row] = new Sector(source.readInt(), source.readInt(), source.readInt());
-
-            }
-        }*/
 
     }
 
@@ -59,6 +42,22 @@ public class Map implements Parcelable {
 
     public String name(){
         return name;
+    }
+
+    public String toString() {
+        StringBuilder mapString = new StringBuilder();
+
+        mapString.append(name+"\n");
+        for(int col = 0; col < sectors.length; col++){
+            for(int row = 0; row < sectors[0].length;row++){
+                mapString.append(sectors[col][row].sectorType());
+            }
+        }
+        return mapString.toString();
+    }
+
+    public void setName(String name){
+        this.name = name;
     }
 
     public void setSectors( Sector[][]sectors){
