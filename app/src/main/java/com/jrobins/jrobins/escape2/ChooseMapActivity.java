@@ -84,15 +84,19 @@ public class ChooseMapActivity extends Activity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_default_maps) {
-            if(!viewingDefaultMaps)
+            if(!viewingDefaultMaps) {
                 changeMapList(defaultMaps);
+                viewingDefaultMaps = true;
+            }
             return true;
         }
 
         if (id == R.id.action_my_maps) {
             if(viewingDefaultMaps) {
-                if(myMaps != null)
+                if(myMaps != null) {
                     changeMapList(myMaps);
+                    viewingDefaultMaps = false;
+                }
                 else
                     Toast.makeText(this, "You have no maps", Toast.LENGTH_SHORT).show();
             }
@@ -151,9 +155,12 @@ public class ChooseMapActivity extends Activity {
     }
 
     private void changeMapList(List<Map> maps){
+        mapChoiceAdapter = new MapChoiceAdapter(this, maps);
+        mapListView.setAdapter(mapChoiceAdapter);
+        /*
         mapChoiceAdapter.clear();
         mapChoiceAdapter.addAll(maps);
-        mapChoiceAdapter.notifyDataSetChanged();
+        mapChoiceAdapter.notifyDataSetChanged();*/
     }
 
     private void getPlayers(){
