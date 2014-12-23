@@ -274,7 +274,17 @@ public class MapView extends BasicHexagonGridView {
         canvas.drawText(label, centerX - rect.exactCenterX(), centerY - rect.exactCenterY(), labelPaint);
     }
 
+    public void drawSectorLabel(Canvas canvas, String label, float cellWidth, float centerX, float centerY){
+        //Rect textBounds;
 
+        //float x,y;
+        //textBounds = new Rect();
+        labelPaint.setTextSize(cellWidth/2);
+        labelPaint.getTextBounds(label, 0, label.length(), rect);
+        //x = centerX - rect.exactCenterX();
+        //y = centerY - rect.exactCenterY();
+        canvas.drawText(label, centerX - rect.exactCenterX(), centerY - rect.exactCenterY(), labelPaint);
+    }
 
 
     private void drawMoves(Canvas canvas, ArrayList<Move> moves){

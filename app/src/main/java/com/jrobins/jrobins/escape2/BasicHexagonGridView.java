@@ -251,6 +251,11 @@ public class BasicHexagonGridView   extends SurfaceView
         return new Point(fq, fr+1);
     }
 
+    //to use with pixeltohex to make sure the point is in the array
+    public boolean isValidPoint(Point p){
+        return (p.x<sectors.length && p.y<sectors[0].length);
+    }
+
 
     public void setCellWidth(float cellWidth){
         this.cellWidth = (int) cellWidth;

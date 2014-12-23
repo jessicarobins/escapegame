@@ -143,6 +143,17 @@ public class Sector implements Parcelable{
         return null;
     }
 
+    public static String label(int sectorType){
+        switch(sectorType){
+            case 0: return null;
+            case 1: case 2: return  null;
+            case 3: return "A";
+            case 4: return "H";
+            case 5: return "E";
+        }
+        return null;
+    }
+
     public ArrayList<Move> moves(){
         return moves;
     }

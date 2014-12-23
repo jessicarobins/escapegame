@@ -77,6 +77,7 @@ public class MapCreatorView extends MapView {
     {
         //super.onTouchEvent(event);
         longPressListener.onTouchEvent(event);
+
         if (event.getPointerCount() > 1){
             scaleGestureDetector().onTouchEvent(event);
             return true;
@@ -89,6 +90,7 @@ public class MapCreatorView extends MapView {
                 //dragged=false;
                 //get the point we touched
                 touchDown = new PointF(event.getX(), event.getY());
+
                 sectorLocation = pixelToHex((int)touchDown.x,(int)touchDown.y);
                 return true;
             }
@@ -102,8 +104,10 @@ public class MapCreatorView extends MapView {
                     draggedSector = sectors()[sectorLocation.x][sectorLocation.y];
                     setPaint(draggedSector.color());
                 }*/
-                if(editing)
+                if(editing) {
                     setDragPath(event.getX(), event.getY());
+                    touchDown.set(event.getX(), event.getY());
+                }
                 return true;
             }
             case MotionEvent.ACTION_UP: {
@@ -116,7 +120,8 @@ public class MapCreatorView extends MapView {
                     sectors()[sectorLocation.x][sectorLocation.y].setSectorType(Sector.INVALID);*/
 
                     //find the new sector
-                    touchDown = new PointF(event.getX(), event.getY());
+                    //touchDown = new PointF(event.getX(), event.getY());
+                    touchDown.set(event.getX(), event.getY());
                     sectorLocation = pixelToHex((int)touchDown.x,(int)touchDown.y);
 
                     //set the sector where the finger is to be the sector type of the old sector
@@ -141,19 +146,26 @@ public class MapCreatorView extends MapView {
     protected class LongPressListener extends GestureListener {
         @Override
         public void onLongPress(MotionEvent event){
-            //we are editing
-            editing = true;
-            //set everything up
+            //we only want to be able to longpress/drag special sectors
+
             //find the sector we are dragging
             draggedSector = sectors()[sectorLocation.x][sectorLocation.y];
-            //set the color
-            setPaint(draggedSector.color());
-            //get the sector type of the old sector
-            sectorType = sectors()[sectorLocation.x][sectorLocation.y].sectorType();
-            //set the old sector to be invalid
-            sectors()[sectorLocation.x][sectorLocation.y].setSectorType(Sector.INVALID);
-            //start drawing the drag
-            setDragPath(event.getX(), event.getY());
+
+            //if it's special, we do drag stuff. otherwise not.
+            if (draggedSector.isSpecial()) {
+                //we are editing
+                editing = true;
+                //set everything up
+
+                //set the color
+                setPaint(draggedSector.color());
+                //get the sector type of the old sector
+                sectorType = sectors()[sectorLocation.x][sectorLocation.y].sectorType();
+                //set the old sector to be invalid
+                sectors()[sectorLocation.x][sectorLocation.y].setSectorType(Sector.INVALID);
+                //start drawing the drag
+                setDragPath(event.getX(), event.getY());
+            }
         }
 
         @Override
@@ -178,7 +190,8 @@ public class MapCreatorView extends MapView {
     private void drawDrag(Canvas canvas){
         canvas.drawPath(dragPath, dragPaint);
         canvas.drawPath(dragPath, wallPaint());
-        //draw the letter
+        drawSectorLabel(canvas, Sector.label(sectorType), scaledCellRadius()*2, touchDown.x, touchDown.y);
+
     }
 
     private void resetDrag(){
