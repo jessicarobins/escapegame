@@ -27,6 +27,7 @@ public class MapCreatorView extends MapView {
     GestureDetector longPressListener;
     Path dragPath;
     Paint dragPaint = new Paint();
+    //Paint dragOutlinePaint = new Paint();
 
 
     //for dragging
@@ -46,6 +47,9 @@ public class MapCreatorView extends MapView {
         //set wallpaint to be white
         setWallPaint(Color.GRAY);
         dragPaint.setStyle(Paint.Style.FILL);
+        //dragOutlinePaint.setStyle(Paint.Style.STROKE);
+        //dragOutlinePaint.setColor(Color.GRAY);
+        //dragOutlinePaint.setStrokeWidth(5f);
         longPressListener = new GestureDetector(context, new LongPressListener());
         initialize(new Map());
     }
@@ -55,7 +59,7 @@ public class MapCreatorView extends MapView {
         super.doDraw(canvas);
         if(dragPath != null){
             //draw dragpath
-            canvas.drawPath(dragPath, dragPaint);
+            drawDrag(canvas);
         }
     }
 
@@ -99,7 +103,7 @@ public class MapCreatorView extends MapView {
                     setPaint(draggedSector.color());
                 }*/
                 if(editing)
-                    drawDrag(event.getX(), event.getY());
+                    setDragPath(event.getX(), event.getY());
                 return true;
             }
             case MotionEvent.ACTION_UP: {
@@ -149,7 +153,7 @@ public class MapCreatorView extends MapView {
             //set the old sector to be invalid
             sectors()[sectorLocation.x][sectorLocation.y].setSectorType(Sector.INVALID);
             //start drawing the drag
-            drawDrag(event.getX(), event.getY());
+            setDragPath(event.getX(), event.getY());
         }
 
         @Override
@@ -165,9 +169,15 @@ public class MapCreatorView extends MapView {
         dragPaint.setColor(getResources().getColor(color));
     }
 
-    private void drawDrag(float centerX, float centerY){
-        //get the path
+    private void setDragPath(float centerX, float centerY){
+        //set the path
         dragPath = getHexPath(scaledCellRadius()*1.25f, centerX, centerY);
+
+    }
+
+    private void drawDrag(Canvas canvas){
+        canvas.drawPath(dragPath, dragPaint);
+        canvas.drawPath(dragPath, wallPaint());
         //draw the letter
     }
 
