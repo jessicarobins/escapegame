@@ -92,6 +92,7 @@ public class MapTxtParser {
         Map map = new Map();
         try {
             while (( line = reader.readLine()) != null) {
+                Log.d("line", line);
                 //if line number is even, it's a name
                 if(lineNumber%2 == 0){
                     map.setName(line);
@@ -99,7 +100,7 @@ public class MapTxtParser {
                 //otherwise it's the map data
                 else {
                     map.setSectors(readSectors(line));
-                    maps.add(map);
+                    maps.add(new Map(map));
                 }
                 lineNumber++;
             }
@@ -120,9 +121,10 @@ public class MapTxtParser {
         File maps = new File (activity.getExternalFilesDir(null), "myMaps.txt");
 
         try {
-            FileOutputStream f = new FileOutputStream(maps);
+            FileOutputStream f = new FileOutputStream(maps,true);
             PrintWriter pw = new PrintWriter(f);
-            pw.println(map.toString());
+
+            pw.append(map.toString()+"\n");
             pw.flush();
             pw.close();
             f.close();

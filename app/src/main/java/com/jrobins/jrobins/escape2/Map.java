@@ -17,6 +17,11 @@ public class Map implements Parcelable {
         this.sectors = initializeDefaultSectors();
     }
 
+    public Map (Map map){
+        this.name = map.name;
+        this.sectors = map.sectors;
+    }
+
 
     public Map(String name, Sector[][] sectors){
         this.name = name;

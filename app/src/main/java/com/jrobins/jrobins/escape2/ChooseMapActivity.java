@@ -62,7 +62,7 @@ public class ChooseMapActivity extends Activity {
         super.onResume();
 
         initializeMapList();
-
+        viewingDefaultMaps = true;
 
     }
 
