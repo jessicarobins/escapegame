@@ -33,7 +33,7 @@ public class ChooseMapActivity extends Activity {
     BasicHexagonGridView map;
     ListView mapListView;
 
-    Menu optionsMenu;
+
     boolean viewingDefaultMaps = true;
 
 
@@ -71,7 +71,7 @@ public class ChooseMapActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_choose_map, menu);
-        optionsMenu = menu;
+
         return true;
     }
 
@@ -98,7 +98,7 @@ public class ChooseMapActivity extends Activity {
                     viewingDefaultMaps = false;
                 }
                 else
-                    Toast.makeText(this, "You have no maps", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "You have no maps. Go make some!", Toast.LENGTH_SHORT).show();
             }
             return true;
         }
