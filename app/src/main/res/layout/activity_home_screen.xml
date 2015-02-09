@@ -18,7 +18,14 @@
         android:id="@+id/start"
         android:layout_gravity="center_horizontal"
         />
+    <Button
 
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="@string/welcome_button_create_map"
+        android:id="@+id/create"
+        android:layout_gravity="center_horizontal"
+        />
     <Button
 
         android:layout_width="200dp"
@@ -29,23 +36,8 @@
 
         />
 
-    <Button
 
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:text="@string/welcome_button_create_map"
-        android:id="@+id/create"
-        android:layout_gravity="center_horizontal"
-         />
 
-    <Button
 
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:text="@string/welcome_button_buy_map"
-        android:id="@+id/buy"
-        android:layout_gravity="center_horizontal"
-        android:visibility="gone"
-        />
 
 </LinearLayout>

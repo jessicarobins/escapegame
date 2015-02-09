@@ -15,6 +15,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -29,12 +31,16 @@ public class MapCreatorActivity extends Activity implements MapCreatorView.OnCel
     Map map;
     Button saveButton;
 
+    //help
+    Button helpButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setUpWindow();
         initializeHexagonMap();
         setUpSaveButton();
+        setUpHelp();
     }
 
     @Override
@@ -98,6 +104,32 @@ public class MapCreatorActivity extends Activity implements MapCreatorView.OnCel
         });
     }
 
+    private void setUpHelp(){
+        helpButton = (Button) findViewById(R.id.help);
+
+        helpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showHelp();
+            }
+
+        });
+    }
+
+    private void showHelp(){
+        new AlertDialog.Builder(this)
+                .setTitle("Map Creator Help")
+                .setMessage(R.string.help_map_creation_text)
+
+                .setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+
+                .show();
+    }
+
     private void saveMap(){
         //pop up to enter map name
         getMapName();
@@ -124,6 +156,8 @@ public class MapCreatorActivity extends Activity implements MapCreatorView.OnCel
 
                 //write the map to the file
                 writeMapToFile();
+
+                Toast.makeText(getApplicationContext(), "Map saved", Toast.LENGTH_SHORT).show();
 
                 //close the editor
                 closeMapEditor();

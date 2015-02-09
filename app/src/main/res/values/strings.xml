@@ -36,8 +36,8 @@
     <string name="welcome">This is where a logo will go</string>
     <string name="welcome_button_start">Start Game</string>
     <string name="welcome_button_rules">Help</string>
-    <string name="welcome_button_create_map">Create Map</string>
-    <string name="welcome_button_buy_map">Buy Map</string>
+    <string name="welcome_button_create_map">Map Creator</string>
+
 
     <!-- help screen -->
     <string name="title_activity_help">Help</string>
@@ -69,4 +69,12 @@
     <string name="title_activity_map_creator">MapCreatorActivity</string>
     <string name="hello_world">Hello world!</string>
 
+
+    <!-- map creation help-->
+    <string name="help_map_creation_text">• Touch blank sectors once to add a safe sector, and twice
+        to add an unsafe sector.\n
+        • Touch and hold a special sector (alien start, human start, escape hatch) to allow dragging
+        and dropping.\n
+        • Touch the check icon to enter a name and save the map to the My  Maps section.
+    </string>
 </resources>
