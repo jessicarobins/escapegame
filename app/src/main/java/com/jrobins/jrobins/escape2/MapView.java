@@ -605,9 +605,10 @@ public class MapView extends BasicHexagonGridView {
                 distanceX = -(Math.abs(matrixX + width +distanceX-buffer));
             }
             //if image will go outside right bound
-            else if(matrixX - distanceX + width > getWidth()){
+            //  that means if the left of the matrix goes less than the buffer away from getwidth
+            else if(matrixX - distanceX > (getWidth() - buffer)){
                 //distanceX = getWidth() - matrixX - width;
-                distanceX = (Math.abs(distanceX- (matrixX + distanceX + width - getWidth())));
+                distanceX = Math.abs(-matrixX + getWidth()- buffer );
                 //System.out.println("image went outside right bound");
             }
             //if image will go oustside top bound
