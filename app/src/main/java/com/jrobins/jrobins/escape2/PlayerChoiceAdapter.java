@@ -115,12 +115,37 @@ public class PlayerChoiceAdapter extends ArrayAdapter<Player> {
                     //players.get(p).setName(playerName.getText().toString());
                     //System.out.println("setting player name = " +playerName.getText().toString());
                 }
-                PlayerChoiceAdapter.this.playerNameValues.put(playerName.getTag().toString(), s.toString());
+                //PlayerChoiceAdapter.this.playerNameValues.put(playerName.getTag().toString(), s.toString());
             }
             public void beforeTextChanged(CharSequence s, int start, int count, int after){}
             public void onTextChanged(CharSequence s, int start, int before, int count){}
         });
 
+        //clear 'player x' on edittext gaining focus
+        playerName.setOnFocusChangeListener(new View.OnFocusChangeListener()
+        {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus)
+            {
+                if (hasFocus==true)
+                {
+                    if (playerName.getText().toString().contains("Player"))
+                    {
+                        playerName.setText("");
+                        playerName.setHint(playerNameValues.get(playerName.getTag().toString()));
+                    }
+                }
+                else {
+                    //System.out.println("losing focus. setting name to " + playerName.getText().toString());
+                    //if the text field isn't blank, set it to be the new name. otherwise leave as is
+                    if(!playerName.getText().toString().equals(""))
+                        PlayerChoiceAdapter.this.playerNameValues.put(playerName.getTag().toString(), playerName.getText().toString());
+                    else //put the name back
+                        playerName.setText(playerNameValues.get(playerName.getTag().toString()));
+                }
+
+            }
+        });
 
         playerName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
