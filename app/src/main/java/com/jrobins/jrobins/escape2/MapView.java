@@ -593,30 +593,31 @@ public class MapView extends BasicHexagonGridView {
             float width = values[Matrix.MSCALE_X]*canvasWidth;
             float height = values[Matrix.MSCALE_Y]*canvasHeight;
 
-            System.out.println("canvasWidth = " + canvasWidth + " canvasHeight = " + canvasHeight + " getWidth() = " + getWidth() + " getHeight = " + getHeight() +
-                            " width = " + width + " height = " + height);
+
 
             //if image goes outside left
             if (matrixX + distanceX <= 0){
-                System.out.println("image went outside left bound");
-                return true;
+                //System.out.println("image went outside left bound");
+                //return true;
                 //distanceX = -matrixX;
+                distanceX = -(Math.abs(matrixX+distanceX));
             }
             //if image will go outside right bound
-            if(matrixX + distanceX + width > getWidth()){
-                distanceX = getWidth() - matrixX - width;
-                System.out.println("image went outside right bound");
+            else if(matrixX - distanceX + width > getWidth()){
+                //distanceX = getWidth() - matrixX - width;
+                distanceX = (Math.abs(distanceX- (matrixX + distanceX + width - getWidth())));
+                //System.out.println("image went outside right bound");
             }
             //if image will go oustside top bound
-            if (matrixY + distanceY <= 0){
+            else if (matrixY + distanceY <= 0){
                 distanceY = -(Math.abs(matrixY+distanceY));
-                System.out.println("image went outside top bound");
+                //System.out.println("image went outside top bound");
                 //return true;
             }
             //if image will go outside bottom bound
-            if(matrixY + distanceY + height > getHeight()){
-                distanceY = getHeight() - matrixY - height;
-                System.out.println("image went outside bottom bound");
+            else if( (matrixY - distanceY + height) > getHeight()){
+                //System.out.println("image went outside bottom bound");
+                distanceY = Math.abs(getHeight() - matrixY - height);
             }
 
             drawMatrix.postTranslate(-distanceX, -distanceY);
