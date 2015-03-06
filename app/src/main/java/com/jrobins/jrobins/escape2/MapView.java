@@ -593,14 +593,16 @@ public class MapView extends BasicHexagonGridView {
             float width = values[Matrix.MSCALE_X]*canvasWidth;
             float height = values[Matrix.MSCALE_Y]*canvasHeight;
 
-
+            float buffer = scaledCellRadius()*6;
 
             //if image goes outside left
-            if (matrixX + distanceX <= 0){
+            //if the right of the matrix is less than the buffer that means we are out of bounds
+            //  on the left
+            if ( (matrixX + width) + distanceX <= buffer){
                 //System.out.println("image went outside left bound");
                 //return true;
                 //distanceX = -matrixX;
-                distanceX = -(Math.abs(matrixX+distanceX));
+                distanceX = -(Math.abs(matrixX + width +distanceX-buffer));
             }
             //if image will go outside right bound
             else if(matrixX - distanceX + width > getWidth()){
