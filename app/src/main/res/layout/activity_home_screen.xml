@@ -18,6 +18,15 @@
         android:id="@+id/start"
         android:layout_gravity="center_horizontal"
         />
+
+    <Button
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="@string/welcome_button_resume"
+        android:id="@+id/resume"
+        android:layout_gravity="center_horizontal"
+        />
+
     <Button
 
         android:layout_width="200dp"
