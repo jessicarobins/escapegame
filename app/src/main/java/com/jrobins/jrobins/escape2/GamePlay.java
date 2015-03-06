@@ -1,6 +1,7 @@
 package com.jrobins.jrobins.escape2;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -90,6 +91,15 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         }
 
 
+    }
+
+    //when pressing the back button, we want to go all the way back to the home screen
+    //  (as opposed to back to the map creator screen)
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(GamePlay.this, HomeScreenActivity.class);
+
+        startActivity(intent);
     }
 
     @Override
