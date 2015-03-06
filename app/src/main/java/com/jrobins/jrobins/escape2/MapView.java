@@ -612,15 +612,16 @@ public class MapView extends BasicHexagonGridView {
                 //System.out.println("image went outside right bound");
             }
             //if image will go oustside top bound
-            else if (matrixY + distanceY <= 0){
-                distanceY = -(Math.abs(matrixY+distanceY));
+            //that means if the bottom edge is less than the buffer
+            else if (matrixY + height + distanceY <= buffer){
+                distanceY = -(Math.abs(matrixY + height +distanceY - buffer));
                 //System.out.println("image went outside top bound");
                 //return true;
             }
             //if image will go outside bottom bound
-            else if( (matrixY - distanceY + height) > getHeight()){
+            else if( (matrixY - distanceY) > (getHeight() - buffer)){
                 //System.out.println("image went outside bottom bound");
-                distanceY = Math.abs(getHeight() - matrixY - height);
+                distanceY = Math.abs(getHeight() - buffer - matrixY);
             }
 
             drawMatrix.postTranslate(-distanceX, -distanceY);
