@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.jrobins.jrobins.escape2.ChooseMapActivity">
     <item android:id="@+id/action_default_maps" android:title="Default Maps"
-        android:orderInCategory="100" android:showAsAction="always|withText" />
+        android:orderInCategory="100" android:showAsAction="ifRoom" android:visible="false" />
     <item android:id="@+id/action_my_maps" android:title="My Maps"
-        android:orderInCategory="100" android:showAsAction="always|withText" />
+        android:orderInCategory="100" android:showAsAction="never" android:visible="false"/>
 </menu>

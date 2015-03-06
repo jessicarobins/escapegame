@@ -25,6 +25,7 @@
         android:text="@string/welcome_button_create_map"
         android:id="@+id/create"
         android:layout_gravity="center_horizontal"
+        android:visibility="gone"
         />
     <Button
 
