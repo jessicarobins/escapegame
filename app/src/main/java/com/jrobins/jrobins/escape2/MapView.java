@@ -63,8 +63,10 @@ public class MapView extends BasicHexagonGridView {
     final private float MAX_SCALE = 8.f;
     float lastFocusX;
     float lastFocusY;
-    float origWidth;
-    float origHeight;
+    //float origWidth;
+    //float origHeight;
+    float canvasWidth;
+    float canvasHeight;
 
     private float originX = 0f; // current position of viewport
     private float originY = 0f;
@@ -86,7 +88,7 @@ public class MapView extends BasicHexagonGridView {
     public MapView(Context context, AttributeSet attrs)
     {
         super(context, attrs);
-
+        this.context = context;
         //wallpaint, fillpaint, cellcolor taken care of in basichexagongridview
 
 
@@ -121,8 +123,8 @@ public class MapView extends BasicHexagonGridView {
         //threads
         setMapThread(new MapDrawingThread(getHolder(),context, this, false));
 
-        origHeight = getHeight();
-        origWidth = getWidth();
+        //origHeight = getHeight();
+        //origWidth = getWidth();
     }
 
     public void newThread(){
@@ -171,7 +173,8 @@ public class MapView extends BasicHexagonGridView {
 
         canvas.restore();
 
-
+        canvasWidth = canvas.getWidth();
+        canvasHeight = canvas.getHeight();
 
     }
 
@@ -583,6 +586,39 @@ public class MapView extends BasicHexagonGridView {
 
             //offsetX -=distanceX;
             //offsetY -=distanceY;
+            float[] values = new float[9];
+            drawMatrix.getValues(values);
+            float matrixX = values[Matrix.MTRANS_X];
+            float matrixY = values[Matrix.MTRANS_Y];
+            float width = values[Matrix.MSCALE_X]*canvasWidth;
+            float height = values[Matrix.MSCALE_Y]*canvasHeight;
+
+            System.out.println("canvasWidth = " + canvasWidth + " canvasHeight = " + canvasHeight + " getWidth() = " + getWidth() + " getHeight = " + getHeight() +
+                            " width = " + width + " height = " + height);
+
+            //if image goes outside left
+            if (matrixX + distanceX <= 0){
+                System.out.println("image went outside left bound");
+                return true;
+                //distanceX = -matrixX;
+            }
+            //if image will go outside right bound
+            if(matrixX + distanceX + width > getWidth()){
+                distanceX = getWidth() - matrixX - width;
+                System.out.println("image went outside right bound");
+            }
+            //if image will go oustside top bound
+            if (matrixY + distanceY <= 0){
+                distanceY = -(Math.abs(matrixY+distanceY));
+                System.out.println("image went outside top bound");
+                //return true;
+            }
+            //if image will go outside bottom bound
+            if(matrixY + distanceY + height > getHeight()){
+                distanceY = getHeight() - matrixY - height;
+                System.out.println("image went outside bottom bound");
+            }
+
             drawMatrix.postTranslate(-distanceX, -distanceY);
 
             return true;
