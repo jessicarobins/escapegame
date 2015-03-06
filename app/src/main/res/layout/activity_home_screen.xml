@@ -25,6 +25,7 @@
         android:text="@string/welcome_button_resume"
         android:id="@+id/resume"
         android:layout_gravity="center_horizontal"
+        android:visibility="gone"
         />
 
     <Button

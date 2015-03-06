@@ -1,7 +1,9 @@
 package com.jrobins.jrobins.escape2;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -54,9 +56,9 @@ public class HomeScreenActivity extends Activity {
             @Override
             public void onClick(View v) {
 
-                intent = new Intent(HomeScreenActivity.this, ChoosePlayersActivity.class);
+            intent = new Intent(HomeScreenActivity.this, ChoosePlayersActivity.class);
 
-                startActivity(intent);
+            startActivity(intent);
             }
 
         });
@@ -92,6 +94,11 @@ public class HomeScreenActivity extends Activity {
 
     private void setUpResume(){
         button = ( Button ) findViewById(R.id.resume);
+        SharedPreferences prefs = getSharedPreferences("current_game", Context.MODE_PRIVATE);
+        boolean activeGame = prefs.getBoolean("activeGame", false);
+        if(activeGame) {
+            button.setVisibility(View.VISIBLE);
+        }
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

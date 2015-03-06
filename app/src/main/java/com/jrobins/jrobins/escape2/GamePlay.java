@@ -1,7 +1,9 @@
 package com.jrobins.jrobins.escape2;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -57,7 +59,22 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        final Thread.UncaughtExceptionHandler defaultHandler = Thread.getDefaultUncaughtExceptionHandler();
 
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread thread, Throwable throwable) {
+
+                // fix our issues for sharedpreferences
+                SharedPreferences sp = getSharedPreferences("current_game", Context.MODE_PRIVATE);
+                SharedPreferences.Editor ed = sp.edit();
+                ed.putBoolean("activeGame", false);
+                ed.commit();
+
+                // Handle everthing else
+                defaultHandler.uncaughtException(thread, throwable);
+            }
+        });
         getPlayerList();
 
         setUpWindow();
@@ -68,6 +85,29 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         initializeHexagonMap();
         setUpTurnLogic();
 
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        // Store our shared preference
+        SharedPreferences sp = getSharedPreferences("current_game", Context.MODE_PRIVATE);
+        SharedPreferences.Editor ed = sp.edit();
+        ed.putBoolean("activeGame", true);
+        ed.commit();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        // Store our shared preference
+        SharedPreferences sp = getSharedPreferences("current_game", Context.MODE_PRIVATE);
+        SharedPreferences.Editor ed = sp.edit();
+        ed.putBoolean("activeGame", false);
+        ed.commit();
     }
 
     @Override
@@ -89,8 +129,6 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
             //initializeMap();
             initializeHexagonMap();
         }
-
-
     }
 
     //when pressing the back button, we want to go all the way back to the home screen
