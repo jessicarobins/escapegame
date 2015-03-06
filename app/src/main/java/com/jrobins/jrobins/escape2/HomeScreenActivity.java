@@ -21,6 +21,7 @@ public class HomeScreenActivity extends Activity {
 
         setUpPlayButton();
         setUpHelp();
+        setUpResume();
         setUpMapCreator();
     }
 
@@ -83,6 +84,20 @@ public class HomeScreenActivity extends Activity {
 
                 intent = new Intent(HomeScreenActivity.this, MapCreatorActivity.class);
 
+                startActivity(intent);
+            }
+
+        });
+    }
+
+    private void setUpResume(){
+        button = ( Button ) findViewById(R.id.resume);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                intent = new Intent(HomeScreenActivity.this, GamePlay.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
             }
 
