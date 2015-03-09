@@ -56,8 +56,9 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
     private Button prevTurnButton;
     //private LinearLayout sidebar;
 
-    BroadcastReceiver mReceiver;
-    boolean locked = false;
+    //to deal with screen being locked
+    private BroadcastReceiver mReceiver;
+    private boolean locked = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,18 +81,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         });
 
 
-        try {
-            IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
-
-            filter.addAction(Intent.ACTION_SCREEN_OFF);
-            filter.addAction(Intent.ACTION_USER_PRESENT);
-
-            mReceiver = new ReceiverScreen();
-
-            registerReceiver(mReceiver, filter);
-        } catch (Exception e) {
-
-        }
+        setUpReceiver();
 
         getPlayerList();
 
@@ -406,6 +396,20 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         playerListView.setSelectionAfterHeaderView();
     }
 
+    private void setUpReceiver() {
+        try {
+            IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+
+            filter.addAction(Intent.ACTION_SCREEN_OFF);
+            filter.addAction(Intent.ACTION_USER_PRESENT);
+
+            mReceiver = new ReceiverScreen();
+
+            registerReceiver(mReceiver, filter);
+        } catch (Exception e) {
+
+        }
+    }
 
     protected class ReceiverScreen extends BroadcastReceiver {
 
