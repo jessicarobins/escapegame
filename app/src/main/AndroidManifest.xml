@@ -21,6 +21,13 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_game_play"
             android:theme="@style/FullscreenTheme" >
+            <receiver android:name="ReceiverScreen">
+                <intent-filter>
+                    <action android:name="android.intent.action.SCREEN_ON" />
+                    <action android:name="android.intent.action.SCREEN_OFF" />
+                    <action android:name="android.Intent.ACTION_USER_PRESENT" />
+                </intent-filter>
+            </receiver>
         </activity>
         <activity
             android:name=".ChooseMapActivity"

@@ -1,8 +1,10 @@
 package com.jrobins.jrobins.escape2;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Point;
@@ -54,7 +56,8 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
     private Button prevTurnButton;
     //private LinearLayout sidebar;
 
-
+    BroadcastReceiver mReceiver;
+    boolean locked = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +78,21 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
                 defaultHandler.uncaughtException(thread, throwable);
             }
         });
+
+
+        try {
+            IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+
+            filter.addAction(Intent.ACTION_SCREEN_OFF);
+            filter.addAction(Intent.ACTION_USER_PRESENT);
+
+            mReceiver = new ReceiverScreen();
+
+            registerReceiver(mReceiver, filter);
+        } catch (Exception e) {
+
+        }
+
         getPlayerList();
 
         setUpWindow();
@@ -121,13 +139,22 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
     @Override
     protected void onResume(){
         super.onResume();
-        //this is where we'd restore from cache i think
-        if(hexagonMap != null)
-            hexagonMap.newThread();
 
+        if(locked) {
+            System.out.println("screen was previously locked");
+            locked = false;
+            startActivity(new Intent(GamePlay.this, HomeScreenActivity.class));
+        }
         else {
-            //initializeMap();
-            initializeHexagonMap();
+
+            //this is where we'd restore from cache i think
+            if (hexagonMap != null)
+                hexagonMap.newThread();
+
+            else {
+                //initializeMap();
+                initializeHexagonMap();
+            }
         }
     }
 
@@ -377,5 +404,45 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
 
         playerSidebarAdapter.notifyDataSetChanged();
         playerListView.setSelectionAfterHeaderView();
+    }
+
+
+    protected class ReceiverScreen extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+
+            if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)){
+                /*if(hexagonMap != null && !hexagonMap.threadIsRunning())
+                    hexagonMap.newThread();
+
+                else {
+                    //initializeMap();
+                    initializeHexagonMap();
+                }*/
+
+            }
+            if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)){
+                System.out.println("screen off!");
+                /*
+                if(hexagonMap.threadIsRunning())
+                    hexagonMap.stopThread();
+                */
+                locked = true;
+
+            }
+            if (intent.getAction().equals(Intent.ACTION_USER_PRESENT)){
+                System.out.println("action user present");
+                /*System.out.println("is the thread running? " + hexagonMap.threadIsRunning());
+                if(hexagonMap != null && !hexagonMap.threadIsRunning())
+                    hexagonMap.newThread();
+                System.out.println("is the thread running NOW? " + hexagonMap.threadIsRunning());*/
+                /*if(hexagonMap.threadIsRunning())
+                    hexagonMap.stopThread();
+                startActivity(new Intent(GamePlay.this, HomeScreenActivity.class));*/
+            }
+        }
+
     }
 }
