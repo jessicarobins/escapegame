@@ -10,15 +10,15 @@ public class FontFitTextView extends TextView {
 
     public FontFitTextView(Context context) {
         super(context);
-        initialise();
+        initialize();
     }
 
     public FontFitTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initialise();
+        initialize();
     }
 
-    private void initialise() {
+    private void initialize() {
         mTestPaint = new Paint();
         mTestPaint.set(this.getPaint());
         //max size defaults to the initially specified text size unless it is too small
