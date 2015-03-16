@@ -32,6 +32,9 @@ public class MapView extends BasicHexagonGridView {
     //the max number of moves in a row per hexagon
     private final int MAX_MOVES = 3;
 
+    //min size a move square can be in order to put the text in
+    private final int MIN_MOVE_TEXT_SIZE = 18;
+
     //paints!
     private Paint textPaint = new Paint();
     private Paint labelPaint = new Paint();
@@ -380,7 +383,7 @@ public class MapView extends BasicHexagonGridView {
         //draw rectangle
         canvas.drawRect(moveSquare, fillPaint());
         canvas.drawRect(moveSquare, wallPaint());
-        if(moveWidth>22)
+        if(moveWidth>MIN_MOVE_TEXT_SIZE)
             drawTextInMoveSquare(canvas, move);
 
 
