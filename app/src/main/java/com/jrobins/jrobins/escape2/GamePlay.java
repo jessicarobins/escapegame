@@ -236,7 +236,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         this.getWindowManager().getDefaultDisplay().getSize(size);
 
         //int w = size.x/(25 - (players.size()-4));
-        int n = Math.max(players.size(),5);
+        int n = Math.max(players.size(),4);
         int w = size.y/(n+1);
         //int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, w, getResources().getDisplayMetrics());
         playerListView.getLayoutParams().width = w;
