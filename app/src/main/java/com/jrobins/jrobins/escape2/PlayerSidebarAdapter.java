@@ -169,7 +169,7 @@ public class PlayerSidebarAdapter extends ArrayAdapter<Player>{
         final String[] labels = getContext().getResources().getStringArray(R.array.halo_color_labels);
 
         gridView.setAdapter(new ColorChoiceGridViewAdapter(getContext(), colors, labels));
-        gridView.setNumColumns(3);
+        gridView.setNumColumns(4);
 
         gridView.setLayoutParams(new GridView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         builder.setView(gridView);

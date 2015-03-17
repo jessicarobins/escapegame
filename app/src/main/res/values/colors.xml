@@ -9,12 +9,14 @@
     <color name ="human">#DC143C</color>
     <color name="alien">#008B8B</color>
     <color name="neutral">#FFFFFF</color>
+    <color name="dead">#808080</color>
     <color name="current_turn">#FFD700</color>
 
     <array name="halo_colors">
         <item>@color/human</item>
         <item>@color/alien</item>
         <item>@color/neutral</item>
+        <item>@color/dead</item>
     </array>
 
     <!--hexagon colors -->

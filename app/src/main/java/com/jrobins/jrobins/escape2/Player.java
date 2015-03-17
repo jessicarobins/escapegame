@@ -9,7 +9,13 @@ import android.os.Parcelable;
 public class Player implements Parcelable {
     private String name;
     private int color;
-    private int human; //0 = dunno, 1 = human, 2 = alien
+    private int human; //0 = dunno, 1 = human, 2 = alien, 3 = dead
+
+    private final static int UNCERTAIN = 0;
+    private final static int HUMAN = 1;
+    private final static int ALIEN = 2;
+    private final static int DEAD = 3;
+
     boolean currentTurn;
 
     public Player(Parcel source) {
@@ -60,6 +66,10 @@ public class Player implements Parcelable {
 
     public boolean isAlien() {
         return (human == 2);
+    }
+
+    public boolean isDead() {
+        return (human == 3);
     }
 
     public boolean turn() {
