@@ -86,6 +86,7 @@ public class PlayerChoiceAdapter extends ArrayAdapter<Player> {
             buttonColorValues.put(button.getTag().toString(), new Integer(players.get(position).color()));
 
         button.setBackgroundColor(buttonColorValues.get(button.getTag()));
+        /*
         button.setClickable(true);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,7 +94,7 @@ public class PlayerChoiceAdapter extends ArrayAdapter<Player> {
                 hideSoftKeyboard();
                 showAlertDialog(button);
             }
-        });
+        });*/
 
         //playerNameValues.put(playerName.getTag().toString(), playerName.getText().toString());
 

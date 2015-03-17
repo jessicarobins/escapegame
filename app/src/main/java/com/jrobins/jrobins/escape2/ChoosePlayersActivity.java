@@ -173,6 +173,7 @@ public class ChoosePlayersActivity extends Activity implements OnItemSelectedLis
                 ArrayList <Integer> colors = new ArrayList<Integer>();
                 for(int i = 0; i<playerArrayAdapter.getCount();i++){
                     p = (Player)playerArrayAdapter.getItem(i);
+                    /*
                     if(!colors.contains(p.color()))
                         colors.add(p.color());
                     else {
@@ -188,7 +189,7 @@ public class ChoosePlayersActivity extends Activity implements OnItemSelectedLis
                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                 .show();
                         return;
-                    }
+                    }*/
 
                     //this is where we check to see if they have a name
                     if (p.name()==null || p.name().length() == 0){
