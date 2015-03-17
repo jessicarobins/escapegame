@@ -40,6 +40,7 @@ public class PlayerSidebarAdapter extends ArrayAdapter<Player>{
     HashMap<String, Integer> haloColors = new HashMap<String, Integer>();
     int[] colors;
 
+
     public PlayerSidebarAdapter(Activity activity, List<Player> players){
         super(activity, R.layout.player_sidebar, players);
         this.context = activity;
@@ -109,31 +110,44 @@ public class PlayerSidebarAdapter extends ArrayAdapter<Player>{
 
 
         final int p = position;
-        playerID.setClickable(true);
+        //playerID.setClickable(true);
+
         playerID.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //remove everybody else's turn
-                for(int i = 0; i < players.size(); i++){
-                    if (i!=p) {
-                        players.get(i).setTurn(false);
-                        //currentTurn.setBackgroundColor(v.getResources().getColor(android.R.color.black));
-                    }
-                }
 
-                //set it to be this player's turn
-                players.get(p).setTurn(true);
-                notifyDataSetChanged();
-                //currentTurn.setBackgroundColor(v.getResources().getColor(R.color.current_turn));
+                if (!haloColors.get("halo" + p).equals(colors[3])) {
+                    //remove everybody else's turn
+                    for (int i = 0; i < players.size(); i++) {
+                        if (i != p) {
+                            players.get(i).setTurn(false);
+                            //currentTurn.setBackgroundColor(v.getResources().getColor(android.R.color.black));
+                        }
+                    }
+
+                    //set it to be this player's turn
+                    players.get(p).setTurn(true);
+                    notifyDataSetChanged();
+                    //currentTurn.setBackgroundColor(v.getResources().getColor(R.color.current_turn));
+                }
             }
         });
+
+        //if the player is dead, dim the box
+        if(haloColors.get(halo.getTag()).equals(colors[3])) {
+            playerID.setBackgroundColor(colors[3]);
+            convertView.setClickable(false);
+        }
+
+            //playerID.setClickable(true);
+
 
         playerID.setLongClickable(true);
 
 
         playerID.setOnLongClickListener(new View.OnLongClickListener() {
             public boolean onLongClick(View arg0) {
-                showAlertDialog(halo);
+                showAlertDialog(halo, playerID);
 
                 return true;
             }
@@ -158,7 +172,7 @@ public class PlayerSidebarAdapter extends ArrayAdapter<Player>{
     }
 
 
-    private void showAlertDialog(final LinearLayout halo) {
+    private void showAlertDialog(final LinearLayout halo, final TextView playerID) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         //final Button button = (Button) findViewById(R.id.button);
         GridView gridView = new GridView(getContext());
@@ -179,7 +193,15 @@ public class PlayerSidebarAdapter extends ArrayAdapter<Player>{
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // do something here
                 halo.setBackgroundColor(colors[position]);
-                haloColors.put(halo.getTag().toString(), new Integer(colors[position]));
+                if(position == 3){
+                    playerID.setBackgroundColor(colors[position]);
+                    playerID.setClickable(false);
+                }
+                else {
+                    playerID.setBackgroundColor(players.get(position).color());
+                    //playerID.setClickable(true);
+                }
+                haloColors.put(halo.getTag().toString(), colors[position]);
                 alertDialog.dismiss();
             }
         });
