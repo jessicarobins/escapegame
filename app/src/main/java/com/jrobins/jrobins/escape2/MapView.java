@@ -205,11 +205,11 @@ public class MapView extends BasicHexagonGridView {
 
             //get the certainty
             switch(existingMove.certainty()) {
-                case Move.CERTAIN: {//if it's certain, make it uncertain
-                    existingMove.setCertainty(Move.UNCERTAIN);
+                case Move.UNCERTAIN: {//if it's uncertain, make it certain
+                    existingMove.setCertainty(Move.CERTAIN);
                     break;
                 }
-                case Move.UNCERTAIN: {
+                case Move.CERTAIN: {
                     //if it's uncertain, remove it
                     removeMove(column, row, existingMove);
                     break;

@@ -198,7 +198,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
                         break;
                     }
                 }
-                m = new Move(playerSidebarAdapter.getItem(currentPlayer), prevTurnNumber, Move.CERTAIN);
+                m = new Move(playerSidebarAdapter.getItem(currentPlayer), prevTurnNumber, Move.UNCERTAIN);
                 /*
                 int i = map.sectors()[column][row].moves().indexOf(m);
                 if (i>=0){
