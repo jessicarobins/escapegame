@@ -37,7 +37,7 @@ public class PlayerSidebarAdapter extends ArrayAdapter<Player>{
     private Activity context;
     private LayoutInflater inflater;
     public ArrayList<Player> players;
-    HashMap<String, Integer> haloColors = new HashMap<String, Integer>();
+    //HashMap<String, Integer> haloColors = new HashMap<String, Integer>();
     int[] colors;
 
 
@@ -100,12 +100,13 @@ public class PlayerSidebarAdapter extends ArrayAdapter<Player>{
 
         //make the halo for aliens/humans
 
-
+        /*
         halo.setTag("halo"+position);
         if(!haloColors.containsKey(halo.getTag()))
             haloColors.put(halo.getTag().toString(), new Integer(colors[2]));
-
-        halo.setBackgroundColor(haloColors.get(halo.getTag()));
+        */
+        halo.setBackgroundColor(colors[players.get(position).human()]);
+        //halo.setBackgroundColor(haloColors.get(halo.getTag()));
 
 
 
@@ -116,7 +117,7 @@ public class PlayerSidebarAdapter extends ArrayAdapter<Player>{
             @Override
             public void onClick(View v) {
 
-                if (!haloColors.get("halo" + p).equals(colors[3])) {
+                if (!players.get(p).isDead()) {
                     //remove everybody else's turn
                     for (int i = 0; i < players.size(); i++) {
                         if (i != p) {
@@ -134,9 +135,10 @@ public class PlayerSidebarAdapter extends ArrayAdapter<Player>{
         });
 
         //if the player is dead, dim the box
-        if(haloColors.get(halo.getTag()).equals(colors[3])) {
+        //if(haloColors.get(halo.getTag()).equals(colors[3])) {
+        if(players.get(p).isDead()) {
             playerID.setBackgroundColor(colors[3]);
-            convertView.setClickable(false);
+
         }
 
             //playerID.setClickable(true);
@@ -147,7 +149,7 @@ public class PlayerSidebarAdapter extends ArrayAdapter<Player>{
 
         playerID.setOnLongClickListener(new View.OnLongClickListener() {
             public boolean onLongClick(View arg0) {
-                showAlertDialog(halo, playerID);
+                showAlertDialog(halo, playerID, p);
 
                 return true;
             }
@@ -172,7 +174,7 @@ public class PlayerSidebarAdapter extends ArrayAdapter<Player>{
     }
 
 
-    private void showAlertDialog(final LinearLayout halo, final TextView playerID) {
+    private void showAlertDialog(final LinearLayout halo, final TextView playerID, final int p) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         //final Button button = (Button) findViewById(R.id.button);
         GridView gridView = new GridView(getContext());
@@ -193,15 +195,18 @@ public class PlayerSidebarAdapter extends ArrayAdapter<Player>{
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // do something here
                 halo.setBackgroundColor(colors[position]);
+                players.get(p).setHumanity(position);
                 if(position == 3){
                     playerID.setBackgroundColor(colors[position]);
+
                     playerID.setClickable(false);
                 }
                 else {
-                    playerID.setBackgroundColor(players.get(position).color());
+                    playerID.setBackgroundColor(players.get(p).color());
                     //playerID.setClickable(true);
                 }
-                haloColors.put(halo.getTag().toString(), colors[position]);
+                //haloColors.put(halo.getTag().toString(), colors[position]);
+                //players.get(p).setHumanity(position);
                 alertDialog.dismiss();
             }
         });
