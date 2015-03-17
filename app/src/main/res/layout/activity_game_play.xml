@@ -40,67 +40,116 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="@drawable/rounded_corners"
-            android:layout_gravity="right">
-            <Button
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:background="@drawable/ic_previous_item"
-                android:id="@+id/previous_turn"
-                android:layout_gravity="left"
-                android:gravity="left"
+            android:orientation="vertical"
+            android:layout_gravity="right"
+            android:background="@drawable/rounded_corners">
 
-                />
+
 
             <LinearLayout
                 android:layout_width="wrap_content"
 
                 android:layout_height="match_parent"
                 android:orientation="vertical"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
                 >
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
-
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textStyle="bold"
-                    android:text="1"
-                    android:background="@android:color/black"
-                    android:id="@+id/turnNumber"
+                    android:orientation="horizontal"
                     android:layout_gravity="center_horizontal"
                     android:gravity="center_horizontal"
-                    />
-                <TextView
+                    android:padding="10dp">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight=".25"
+                        android:layout_height="match_parent"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textStyle="bold"
+                        android:text="1"
+                        android:background="@android:color/black"
+                        android:id="@+id/turnNumber"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        />
+
+                    <Button
+                        style="?android:attr/buttonStyleInset"
+                        android:layout_width="0dp"
+                        android:layout_weight=".25"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ic_action_next_item"
+                        android:id="@+id/advance_player_turn"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+
+                        />
+                    <Button
+                        style="?android:attr/buttonStyleSmall"
+                        android:layout_width="0dp"
+                        android:layout_weight=".25"
+                        android:layout_height="wrap_content"
+                        android:background="@mipmap/ic_launcher_edit"
+                        android:id="@+id/show_edit_panel"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+
+                        />
+                    <Button
+                        style="?android:attr/buttonStyleSmall"
+                        android:layout_width="0dp"
+                        android:layout_weight=".25"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ic_action_help"
+                        android:id="@+id/help"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="wrap_content"
-
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="1"
-                    android:background="@android:color/black"
-                    android:id="@+id/prevTurnNumber"
-                    android:layout_gravity="center_horizontal"
-                    android:gravity="center_horizontal"
-                    />
+                    android:id="@+id/editTurnPanel"
+                    android:orientation="horizontal">
 
+                    <Button
+                        style="?android:attr/buttonStyleSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/ic_previous_item"
+                        android:id="@+id/previous_turn"
+                        android:layout_gravity="left"
+                        android:gravity="left"
 
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+
+                        android:text="1"
+                        android:background="@android:color/black"
+                        android:id="@+id/prevTurnNumber"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        />
+                    <Button
+                        style="?android:attr/buttonStyleSmall"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/ic_action_next_item"
+                        android:id="@+id/advance_turn"
+                        android:layout_gravity="right"
+                        android:gravity="right"
+
+                        />
+                </LinearLayout>
             </LinearLayout>
-
-
-
-            <Button
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:background="@drawable/ic_action_next_item"
-                android:id="@+id/advance_turn"
-                android:layout_gravity="right"
-                android:gravity="right"
-
-                />
         </LinearLayout>
     </FrameLayout>
 
