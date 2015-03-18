@@ -42,28 +42,18 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_gravity="right"
-            android:background="@drawable/rounded_corners">
-
-
+            >
 
             <LinearLayout
-                android:layout_width="wrap_content"
-
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_gravity="center_horizontal"
-                android:gravity="center_horizontal"
-                >
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_gravity="center_horizontal"
-                    android:gravity="center_horizontal"
-                    android:padding="10dp">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:background="@drawable/rounded_corners">
                     <TextView
                         android:layout_width="0dp"
-                        android:layout_weight=".25"
+                        android:layout_weight=".5"
                         android:layout_height="match_parent"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textStyle="bold"
@@ -77,7 +67,7 @@
                     <Button
                         style="?android:attr/buttonStyleInset"
                         android:layout_width="0dp"
-                        android:layout_weight=".25"
+                        android:layout_weight=".5"
                         android:layout_height="wrap_content"
                         android:background="@drawable/ic_action_next_item"
                         android:id="@+id/advance_player_turn"
@@ -85,30 +75,58 @@
                         android:gravity="center"
 
                         />
-                    <Button
-                        style="?android:attr/buttonStyleSmall"
-                        android:layout_width="0dp"
-                        android:layout_weight=".25"
-                        android:layout_height="wrap_content"
-                        android:background="@mipmap/ic_launcher_edit"
-                        android:id="@+id/show_edit_panel"
-                        android:layout_gravity="center"
-                        android:gravity="center"
 
-                        />
-                    <Button
-                        style="?android:attr/buttonStyleSmall"
-                        android:layout_width="0dp"
-                        android:layout_weight=".25"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/ic_action_help"
-                        android:id="@+id/help"
-                        android:layout_gravity="center"
-                        android:gravity="center"
+            </LinearLayout>
 
-                        />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/rounded_corners">
 
-                </LinearLayout>
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/ic_action_edit"
+                    android:id="@+id/show_edit_panel"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+
+                    />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/rounded_corners">
+
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_action_help"
+                    android:id="@+id/help"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:background="@drawable/rounded_corners"
+                >
+
 
                 <LinearLayout
                     android:layout_width="wrap_content"
