@@ -54,6 +54,14 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
     private TextView prevTurnNumberTextBox;
     private Button advanceTurnButton;
     private Button prevTurnButton;
+    private Button advanceAbsoluteTurnButton;
+    private LinearLayout advanceAbsoluteTurnLayout;
+    private Button editButton;
+    private LinearLayout editPanel;
+
+    //are we editing?
+    private boolean editing = false;
+
     //private LinearLayout sidebar;
 
     //to deal with screen being locked
@@ -92,6 +100,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         //createTestMap(4,5);
         initializeHexagonMap();
         setUpTurnLogic();
+        setUpEditButton();
 
     }
 
@@ -278,6 +287,8 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         turnNumberTextBox = (TextView) findViewById(R.id.turnNumber);
         advanceTurnButton = (Button) findViewById(R.id.advance_turn);
         prevTurnButton = (Button) findViewById(R.id.previous_turn);
+        advanceAbsoluteTurnButton = (Button) findViewById(R.id.advance_absolute_turn);
+
         turnNumberTextBox.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -297,6 +308,33 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
             public void onClick(View v) {
                 if(prevTurnNumber>1)
                     prevTurn();
+            }
+
+        });
+    }
+
+    private void setUpEditButton(){
+        editButton = (Button) findViewById(R.id.edit);
+        editPanel = (LinearLayout) findViewById(R.id.editPanel);
+        advanceAbsoluteTurnLayout = (LinearLayout) findViewById(R.id.advance_absolute_turn_layout);
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(editing){
+                    //hide the panel
+                    editPanel.setVisibility(View.GONE);
+                    advanceAbsoluteTurnLayout.setVisibility(View.VISIBLE);
+                    editButton.setBackgroundResource(R.drawable.ic_action_edit);
+                    editing = false;
+                }
+                else{
+                    //show the panel
+                    editPanel.setVisibility(View.VISIBLE);
+                    advanceAbsoluteTurnLayout.setVisibility(View.GONE);
+                    editButton.setBackgroundResource(R.drawable.ic_action_edit_selected);
+                    editing = true;
+                }
+
             }
 
         });

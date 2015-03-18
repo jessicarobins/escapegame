@@ -79,13 +79,14 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:orientation="horizontal"
-                    android:background="@drawable/rounded_corners">
+                    android:background="@drawable/rounded_corners"
+                    android:id="@+id/advance_absolute_turn_layout">
                         <Button
                             style="?android:attr/buttonStyleInset"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="@drawable/ic_action_next_item"
-                            android:id="@+id/advance_player_turn"
+                            android:id="@+id/advance_absolute_turn"
                             android:layout_gravity="center"
                             android:gravity="center"
 
@@ -105,7 +106,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/ic_action_edit"
-                        android:id="@+id/show_edit_panel"
+                        android:id="@+id/edit"
                         android:layout_gravity="center"
                         android:gravity="center"
 
@@ -142,6 +143,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_gravity="right"
+                android:id="@+id/editPanel"
+                android:visibility="gone"
                 >
 
                 <LinearLayout
@@ -153,7 +156,7 @@
                     android:orientation="horizontal"
                     android:background="@drawable/rounded_corners">
                     <Button
-                        style="?android:attr/buttonStyleInset"
+                        style="?android:attr/buttonStyleSmall"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
 
