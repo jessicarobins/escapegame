@@ -384,7 +384,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
     }
 
     private void prevTurn() {
-        resetAllPlayerTurns();
+        //resetAllPlayerTurns();
 
         //hexagonMap.loadPreviousCellSet(prevTurnNumber-1, (prevTurnNumber != turnNumber));
 
