@@ -453,6 +453,14 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         return (currentPlayer+i)%players.size();
     }
 
+    private int indexOfFirstValidPlayer(){
+        int i = 0;
+        while(players.get( i%players.size() ).isDead()){
+            i++;
+        }
+
+        return i%players.size();
+    }
 
     //if we are at the very end, the right arrow advances the round
     private void advanceRound() {
@@ -513,7 +521,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
             players.get(i).setTurn(false);
         }
 
-        currentPlayer = indexOfNextValidPlayer()%players.size();
+        currentPlayer = indexOfFirstValidPlayer()%players.size();
         //playerSidebarAdapter.getItem(currentPlayer).setTurn(true);
         players.get(currentPlayer).setTurn(true);
 
