@@ -409,43 +409,47 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         //we need to make sure the next player isn't dead. if they are, move on to the player after
         //  or the next round. if all but one of the players are dead, show some sort of pop up i guess.
 
-        //need this so we can make sure there are other alive players
-        int originalPlayer = currentPlayer;
+
 
         //remove current player's turn
-        players.get(currentPlayer).setTurn(false);
+        for (int i = 0; i < players.size(); i++) {
+            if(players.get(i).turn())
+                currentPlayer = i;
+            players.get(i).setTurn(false);
+        }
 
-        do {
-
-
-            //if the player is the last one in the array, increment the turn count
-            if (currentPlayer == (players.size() - 1)) {
-                //increment turn number
-                turnNumber++;
-                prevTurnNumber = turnNumber;
-
-                //sent the currentturn array index back to 0
-                currentPlayer = 0;
-
-                //increment the number that's at the top
-
-                turnNumberTextBox.setText(turnNumber + "");
-                // do we need to redraw after this? no
-
-
-            }
-            else {
-                currentPlayer++;
-
-            }
-            //if the current player is the same as the original player (e.g., all the other players
-            //  are dead - we've gone back to the beginning. display a pop up. or something.
-            if(currentPlayer == originalPlayer){
-                Toast.makeText(this, "Game over! " + players.get(originalPlayer).name() + " won!", Toast.LENGTH_SHORT).show();
+        int i = 1;
+        while(players.get( (currentPlayer+i)%players.size() ).isDead()){
+            if(i == players.size()-1){
+                Toast.makeText(this, "Game over! " + players.get(currentPlayer).name() + " won!", Toast.LENGTH_SHORT).show();
                 return;
             }
+            i++;
         }
-        while(players.get(currentPlayer).isDead());
+        currentPlayer = (currentPlayer+i)%players.size();
+
+        //if the player is the last one in the array, increment the turn count
+        if (currentPlayer == 0) {
+            //increment turn number
+            turnNumber++;
+            prevTurnNumber = turnNumber;
+
+            //sent the currentturn array index back to 0
+            //currentPlayer = 0;
+
+            //increment the number that's at the top
+            turnNumberTextBox.setText(turnNumber + "");
+
+        }
+
+        //if the current player is the same as the original player (e.g., all the other players
+        //  are dead - we've gone back to the beginning. display a pop up. or something.
+
+
+
+
+
+
 
         //set next player's turn
         players.get(currentPlayer).setTurn(true);
