@@ -100,7 +100,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         //createTestMap(4,5);
         initializeHexagonMap();
         setUpTurnLogic();
-        setUpEditButton();
+
 
     }
 
@@ -285,29 +285,57 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         playerSidebarAdapter.getItem(currentPlayer).setTurn(true);
         prevTurnNumberTextBox = (TextView) findViewById(R.id.prevTurnNumber);
         turnNumberTextBox = (TextView) findViewById(R.id.turnNumber);
-        advanceTurnButton = (Button) findViewById(R.id.advance_turn);
-        prevTurnButton = (Button) findViewById(R.id.previous_turn);
-        advanceAbsoluteTurnButton = (Button) findViewById(R.id.advance_absolute_turn);
 
-        turnNumberTextBox.setOnClickListener(new View.OnClickListener(){
+
+
+
+        setUpAbsTurnBox();
+        setUpAdvanceAbsTurnButton();
+        setUpAdvanceTurnButton();
+        setUpPrevTurnButton();
+        setUpEditButton();
+    }
+
+    private void setUpAbsTurnBox(){
+        LinearLayout absTurnBox = (LinearLayout) findViewById(R.id.absolute_turn_box);
+        absTurnBox.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 resetToCurrentTurn();
             }
         });
-        advanceTurnButton.setOnClickListener(new View.OnClickListener() {
+    }
+
+    private void setUpAdvanceAbsTurnButton(){
+        advanceAbsoluteTurnButton = (Button) findViewById(R.id.advance_absolute_turn);
+
+        advanceAbsoluteTurnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 advanceTurn();
             }
 
         });
+    }
 
+    private void setUpPrevTurnButton(){
+        prevTurnButton = (Button) findViewById(R.id.previous_turn);
         prevTurnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(prevTurnNumber>1)
                     prevTurn();
+            }
+
+        });
+    }
+
+    private void setUpAdvanceTurnButton(){
+        advanceTurnButton = (Button) findViewById(R.id.advance_turn);
+        advanceTurnButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                advanceEditTurn();
             }
 
         });
@@ -326,6 +354,8 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
                     advanceAbsoluteTurnLayout.setVisibility(View.VISIBLE);
                     editButton.setBackgroundResource(R.drawable.ic_action_edit);
                     editing = false;
+                    //set the turn currently being edited to the absolute turn number
+                    prevTurnNumber = turnNumber;
                 }
                 else{
                     //show the panel
@@ -333,6 +363,9 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
                     advanceAbsoluteTurnLayout.setVisibility(View.GONE);
                     editButton.setBackgroundResource(R.drawable.ic_action_edit_selected);
                     editing = true;
+                    //put the abs turn number in the text box representing the turn
+                    //  currently being edited
+                    prevTurnNumberTextBox.setText(turnNumber+"");
                 }
 
             }
@@ -360,7 +393,8 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
 
     }
 
-    private void advanceTurn(){
+    private void advanceEditTurn(){
+
         //if we are at the very end, the right arrow advances the round
         if(prevTurnNumber == turnNumber)
             advanceRound();
@@ -368,6 +402,39 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
             prevTurnNumber++;
             prevTurnNumberTextBox.setText(prevTurnNumber+"");
         }
+    }
+
+    private void advanceTurn(){
+        //we need to make sure the next player isn't dead. if they are, move on to the player after
+        //  or the next round. if all the players are dead, show some sort of pop up i guess.
+
+        //remove current player's turn
+        players.get(currentPlayer).setTurn(false);
+
+        //if the player is the last one in the array, increment the turn count
+        if(currentPlayer == (players.size()-1)) {
+            //increment turn number
+            turnNumber++;
+            prevTurnNumber = turnNumber;
+
+            //sent the currentturn array index back to 0
+            currentPlayer = 0;
+
+            //increment the number that's at the top
+
+            turnNumberTextBox.setText(turnNumber+"");
+            // do we need to redraw after this? no
+
+
+
+        }
+        else
+            currentPlayer++;
+
+        //set next player's turn
+        players.get(currentPlayer).setTurn(true);
+
+        playerSidebarAdapter.notifyDataSetChanged();
     }
 
     //if we are at the very end, the right arrow advances the round

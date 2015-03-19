@@ -187,6 +187,7 @@
             android:gravity="center"
             android:orientation="horizontal"
             android:background="@drawable/turn_number_box"
+            android:id="@+id/absolute_turn_box"
             >
             <TextView
                 android:layout_width="wrap_content"
