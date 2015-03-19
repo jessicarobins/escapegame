@@ -1,5 +1,7 @@
 <resources>
 
+    <color name="dark_gray">#808080</color>
+
     <!--welcome screen-->
     <color name="logo_color">#FFFFFFFF</color>
     <color name="button_color">#00000000</color>
@@ -42,7 +44,7 @@
 
     <!--color choice-->
 
-    <color name="bright_pink">#FF007F</color>
+
     <color name="red">#FF0000</color>
     <color name="orange">#FF7F00</color>
     <color name="yellow">#FFFF00</color>
@@ -54,9 +56,9 @@
     <color name="blue">#0000FF</color>
     <color name="violet">#7F00FF</color>
     <color name="magenta">#FF00FF</color>
+    <color name="bright_pink">#FF007F</color>
 
     <array name="player_color_choices">
-        <item>@color/bright_pink</item>
         <item>@color/red</item>
         <item>@color/orange</item>
         <item>@color/yellow</item>
@@ -68,6 +70,7 @@
         <item>@color/blue</item>
         <item>@color/violet</item>
         <item>@color/magenta</item>
+        <item>@color/bright_pink</item>
     </array>
 
 </resources>
