@@ -409,8 +409,6 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         //we need to make sure the next player isn't dead. if they are, move on to the player after
         //  or the next round. if all but one of the players are dead, show some sort of pop up i guess.
 
-
-
         //remove current player's turn
         for (int i = 0; i < players.size(); i++) {
             if(players.get(i).turn())
@@ -418,15 +416,13 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
             players.get(i).setTurn(false);
         }
 
-        int i = 1;
-        while(players.get( (currentPlayer+i)%players.size() ).isDead()){
-            if(i == players.size()-1){
-                Toast.makeText(this, "Game over! " + players.get(currentPlayer).name() + " won!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            i++;
+        int i = indexOfNextValidPlayer();
+        if (i == currentPlayer) {
+            Toast.makeText(this, "Game over! " + players.get(currentPlayer).name() + " won!", Toast.LENGTH_SHORT).show();
+            return;
         }
-        currentPlayer = (currentPlayer+i)%players.size();
+        else
+            currentPlayer = i;
 
         //if the player is the last one in the array, increment the turn count
         if (currentPlayer == 0) {
@@ -442,20 +438,21 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
 
         }
 
-        //if the current player is the same as the original player (e.g., all the other players
-        //  are dead - we've gone back to the beginning. display a pop up. or something.
-
-
-
-
-
-
-
         //set next player's turn
         players.get(currentPlayer).setTurn(true);
 
         playerSidebarAdapter.notifyDataSetChanged();
     }
+
+    private int indexOfNextValidPlayer(){
+        int i = 1;
+        while(players.get( (currentPlayer+i)%players.size() ).isDead()){
+            i++;
+        }
+
+        return (currentPlayer+i)%players.size();
+    }
+
 
     //if we are at the very end, the right arrow advances the round
     private void advanceRound() {
@@ -512,11 +509,13 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
 
     private void resetAllPlayerTurns(){
         for(int i = 0; i < playerSidebarAdapter.getCount(); i++) {
-            playerSidebarAdapter.getItem(i).setTurn(false);
+            //playerSidebarAdapter.getItem(i).setTurn(false);
+            players.get(i).setTurn(false);
         }
 
-        currentPlayer = 0;
-        playerSidebarAdapter.getItem(currentPlayer).setTurn(true);
+        currentPlayer = indexOfNextValidPlayer()%players.size();
+        //playerSidebarAdapter.getItem(currentPlayer).setTurn(true);
+        players.get(currentPlayer).setTurn(true);
 
         playerSidebarAdapter.notifyDataSetChanged();
         playerListView.setSelectionAfterHeaderView();
