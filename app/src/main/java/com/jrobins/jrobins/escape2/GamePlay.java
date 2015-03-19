@@ -26,6 +26,7 @@ import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -406,12 +407,17 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
 
     private void advanceTurn(){
         //we need to make sure the next player isn't dead. if they are, move on to the player after
-        //  or the next round. if all the players are dead, show some sort of pop up i guess.
+        //  or the next round. if all but one of the players are dead, show some sort of pop up i guess.
+
+        //need this so we can make sure there are other alive players
+        int originalPlayer = currentPlayer;
 
         //remove current player's turn
         players.get(currentPlayer).setTurn(false);
 
         do {
+
+
             //if the player is the last one in the array, increment the turn count
             if (currentPlayer == (players.size() - 1)) {
                 //increment turn number
@@ -428,8 +434,16 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
 
 
             }
-            else
+            else {
                 currentPlayer++;
+
+            }
+            //if the current player is the same as the original player (e.g., all the other players
+            //  are dead - we've gone back to the beginning. display a pop up. or something.
+            if(currentPlayer == originalPlayer){
+                Toast.makeText(this, "Game over! " + players.get(originalPlayer).name() + " won!", Toast.LENGTH_SHORT).show();
+                return;
+            }
         }
         while(players.get(currentPlayer).isDead());
 
