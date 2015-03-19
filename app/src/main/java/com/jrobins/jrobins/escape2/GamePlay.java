@@ -411,25 +411,27 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         //remove current player's turn
         players.get(currentPlayer).setTurn(false);
 
-        //if the player is the last one in the array, increment the turn count
-        if(currentPlayer == (players.size()-1)) {
-            //increment turn number
-            turnNumber++;
-            prevTurnNumber = turnNumber;
+        do {
+            //if the player is the last one in the array, increment the turn count
+            if (currentPlayer == (players.size() - 1)) {
+                //increment turn number
+                turnNumber++;
+                prevTurnNumber = turnNumber;
 
-            //sent the currentturn array index back to 0
-            currentPlayer = 0;
+                //sent the currentturn array index back to 0
+                currentPlayer = 0;
 
-            //increment the number that's at the top
+                //increment the number that's at the top
 
-            turnNumberTextBox.setText(turnNumber+"");
-            // do we need to redraw after this? no
+                turnNumberTextBox.setText(turnNumber + "");
+                // do we need to redraw after this? no
 
 
-
+            }
+            else
+                currentPlayer++;
         }
-        else
-            currentPlayer++;
+        while(players.get(currentPlayer).isDead());
 
         //set next player's turn
         players.get(currentPlayer).setTurn(true);
