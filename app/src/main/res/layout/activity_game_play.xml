@@ -41,8 +41,85 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:layout_gravity="right">
+
+            <!-- edit panel start -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="right"
+                android:id="@+id/editPanel"
+                android:visibility="gone"
+                >
+
+                <LinearLayout
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="3dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:background="@drawable/rounded_corners">
+                    <Button
+                        style="?android:attr/buttonStyleSmall"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+
+                        android:background="@drawable/ic_previous_item"
+                        android:id="@+id/previous_turn"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+
+                        />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="3dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:background="@drawable/turn_number_box">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/black"
+                        android:text="1"
+                        android:id="@+id/prevTurnNumber"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="3dp"
+                    android:orientation="horizontal"
+                    android:background="@drawable/rounded_corners">
+
+                    <Button
+                        style="?android:attr/buttonStyleSmall"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/ic_action_next_item"
+                        android:id="@+id/advance_turn"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+
+                        />
+
+                </LinearLayout>
+
+            </LinearLayout>
+            <!-- edit panel end-->
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -51,30 +128,10 @@
                 android:layout_gravity="right"
                 >
 
-                <LinearLayout
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_margin="3dp"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:background="@drawable/rounded_corners">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:textStyle="bold"
-                            android:text="1"
-                            android:background="@android:color/black"
-                            android:id="@+id/turnNumber"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            />
 
-                </LinearLayout>
                 <LinearLayout
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_margin="3dp"
                     android:layout_gravity="center"
                     android:gravity="center"
@@ -95,8 +152,8 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_margin="3dp"
                     android:orientation="horizontal"
                     android:background="@drawable/rounded_corners">
@@ -115,108 +172,36 @@
                 </LinearLayout>
 
 
-
-                <LinearLayout
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_margin="3dp"
-                    android:orientation="horizontal"
-                    android:background="@drawable/rounded_corners">
-
-                    <Button
-                        style="?android:attr/buttonStyleSmall"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/ic_action_help"
-                        android:id="@+id/help"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-
-                        />
-
-                </LinearLayout>
-
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_gravity="right"
-                android:id="@+id/editPanel"
-                android:visibility="gone"
-                >
-
-                <LinearLayout
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_margin="3dp"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:background="@drawable/rounded_corners">
-                    <Button
-                        style="?android:attr/buttonStyleSmall"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-
-                        android:background="@drawable/ic_previous_item"
-                        android:id="@+id/previous_turn"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-
-                        />
-
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_margin="3dp"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:background="@drawable/rounded_corners">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textStyle="bold"
-                        android:text="1"
-                        android:background="@android:color/black"
-                        android:id="@+id/prevTurnNumber"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_margin="3dp"
-                    android:orientation="horizontal"
-                    android:background="@drawable/rounded_corners">
-
-                    <Button
-                        style="?android:attr/buttonStyleSmall"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/ic_action_next_item"
-                        android:id="@+id/advance_turn"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-
-                        />
-
-                </LinearLayout>
-
-            </LinearLayout>
 
 
         </LinearLayout>
 
+        <!-- turn number, button right-->
+        <LinearLayout
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="3dp"
+            android:layout_gravity="bottom|right"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:background="@drawable/turn_number_box"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@android:color/black"
 
+                android:textStyle="bold"
+                android:text="1"
+                android:id="@+id/turnNumber"
+                android:layout_gravity="center"
+                android:gravity="center"
+                />
+
+        </LinearLayout>
 
 
     </FrameLayout>
