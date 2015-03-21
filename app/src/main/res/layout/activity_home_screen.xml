@@ -126,6 +126,19 @@
             android:visibility="gone"
             android:textColor="@drawable/homescreen_button_text_color"
             />
+
+        <Button
+
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="@string/welcome_button_settings"
+            android:id="@+id/settings"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@drawable/homescreen_button_text_color"
+            android:background="@color/button_color"
+
+
+            />
         <Button
 
             android:layout_width="200dp"

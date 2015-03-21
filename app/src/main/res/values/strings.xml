@@ -44,7 +44,7 @@
     <string name="welcome_button_resume">resume game</string>
     <string name="welcome_button_rules">help</string>
     <string name="welcome_button_create_map">map creator</string>
-
+    <string name="welcome_button_settings">settings</string>
 
     <!-- help screen -->
     <string name="title_activity_help">Help</string>

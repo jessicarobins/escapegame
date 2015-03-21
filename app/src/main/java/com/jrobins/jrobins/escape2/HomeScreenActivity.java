@@ -25,6 +25,7 @@ public class HomeScreenActivity extends Activity {
         setUpHelp();
         setUpResume();
         setUpMapCreator();
+        setUpSettings();
     }
 
 
@@ -85,6 +86,20 @@ public class HomeScreenActivity extends Activity {
             public void onClick(View v) {
 
                 intent = new Intent(HomeScreenActivity.this, MapCreatorActivity.class);
+
+                startActivity(intent);
+            }
+
+        });
+    }
+
+    private void setUpSettings(){
+        button = ( Button ) findViewById(R.id.settings);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                intent = new Intent(HomeScreenActivity.this, SettingsActivity.class);
 
                 startActivity(intent);
             }
