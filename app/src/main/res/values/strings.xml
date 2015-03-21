@@ -53,25 +53,34 @@
     <string name="help_players_title">Choosing players</string>
     <string name="help_players_text">• Select the number of players using the dropdown\n
             • Change the names of players by selecting a text box and changing the name.\n
-            • Touch the colored box to change player color\n</string>
+        </string>
     <string name="help_map_title">Choosing a map</string>
     <string name="help_map_text">Just touch one\n</string>
     <string name="help_gameplay_title">Gameplay</string>
-    <string name="help_gameplay_text">• Turn navigation is in the upper right corner\n
-        • The number on top represents the current turn in the game.\n
-        • The number on the bottom represents the current turn that you are editing.\n
+    <string name="help_gameplay_text">
+        • The number in the lower right corner of the screen represents the current round in the game.\n
+        • Turn navigation is in the upper right corner\n
+        • The player with the yellow outline is the player whose turn it is.\n
+        • Touch a sector to add a move indicator to it for the current player and turn.\n
+        • Touching the hexagon again will turn the move indicator into a square. You can use square to
+            indicate moves of which you are certain.\n
+        • Touch the sector a third time to remove the move from that turn and player.\n
+        • Touch the right arrow to increment the player turn. When the last player has gone, touching the right
+            arrow will increment the round. This option automatically skips dead players.\n
+        • Touch the pencil (edit) icon to display the Edit Turn panel.\n
+        • The number that displays in blue represents the current turn that you are editing.\n
         • Touch the right arrow to increment the turn that you are editing. If you are editing the current
             game turn, touching the right arrow will start a new turn.\n
         • Touch the left arrow to edit a previous turn.\n
         • Touch the current turn number to return to editing the current turn.\n
         • The player with the yellow outline is the one whose turn you are editing.\n
         • Touch a different player box to change the currently selected player.\n
-        • Touch a sector to add a move indicator to it for the current player and turn.\n
-        • Touching the hexagon again will turn the move indicator into a circle. You can use circles to
-            indicate guesses.\n
-        • Touch the sector a third time to remove the move from that turn and player.\n
-        • Touch and hold any player\'s colored square to add an indicator for human vs. alien. This will
+        • Touch the pencil again to remove the Edit Turn panel and return to moving through player turns.\n
+        • Touch and hold any player\'s colored square to add an indicator for human vs. alien vs. dead. This will
             add a red halo around the player box for humans, and a green halo for aliens.\n
+        • If you choose \'dead\' (X), that player\'s player box will be grayed out, and his/her turn will be skipped. You will
+            not be able to add moves for that player, although you can touch and hold his/her square to change the
+            player status back to human, alien, or uncertain.\n
         • Pinch to zoom and drag to scroll.\n</string>
     <string name="title_activity_map_creator">MapCreatorActivity</string>
     <string name="hello_world">Hello world!</string>
