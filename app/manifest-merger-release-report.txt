@@ -52,66 +52,48 @@ ADDED from AndroidManifest.xml:18:9
 		ADDED from AndroidManifest.xml:23:13
 	android:name
 		ADDED from AndroidManifest.xml:19:13
-receiver#com.jrobins.jrobins.escape2.ReceiverScreen
-ADDED from AndroidManifest.xml:24:13
-	android:name
-		ADDED from AndroidManifest.xml:24:23
-intent-filter#android.Intent.ACTION_USER_PRESENT+android.intent.action.SCREEN_OFF+android.intent.action.SCREEN_ON
-ADDED from AndroidManifest.xml:25:17
-action#android.intent.action.SCREEN_ON
-ADDED from AndroidManifest.xml:26:21
-	android:name
-		ADDED from AndroidManifest.xml:26:29
-action#android.intent.action.SCREEN_OFF
-ADDED from AndroidManifest.xml:27:21
-	android:name
-		ADDED from AndroidManifest.xml:27:29
-action#android.Intent.ACTION_USER_PRESENT
-ADDED from AndroidManifest.xml:28:21
-	android:name
-		ADDED from AndroidManifest.xml:28:29
 activity#com.jrobins.jrobins.escape2.ChooseMapActivity
-ADDED from AndroidManifest.xml:32:9
+ADDED from AndroidManifest.xml:26:9
 	android:label
+		ADDED from AndroidManifest.xml:28:13
+	android:name
+		ADDED from AndroidManifest.xml:27:13
+activity#com.jrobins.jrobins.escape2.HomeScreenActivity
+ADDED from AndroidManifest.xml:30:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:33:13
+	android:label
+		ADDED from AndroidManifest.xml:32:13
+	android:configChanges
 		ADDED from AndroidManifest.xml:34:13
 	android:name
-		ADDED from AndroidManifest.xml:33:13
-activity#com.jrobins.jrobins.escape2.HomeScreenActivity
-ADDED from AndroidManifest.xml:36:9
-	android:screenOrientation
-		ADDED from AndroidManifest.xml:39:13
-	android:label
-		ADDED from AndroidManifest.xml:38:13
-	android:configChanges
-		ADDED from AndroidManifest.xml:40:13
-	android:name
-		ADDED from AndroidManifest.xml:37:13
+		ADDED from AndroidManifest.xml:31:13
 intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
-ADDED from AndroidManifest.xml:42:13
+ADDED from AndroidManifest.xml:36:13
 action#android.intent.action.MAIN
-ADDED from AndroidManifest.xml:43:17
+ADDED from AndroidManifest.xml:37:17
 	android:name
-		ADDED from AndroidManifest.xml:43:25
+		ADDED from AndroidManifest.xml:37:25
 category#android.intent.category.LAUNCHER
-ADDED from AndroidManifest.xml:44:17
+ADDED from AndroidManifest.xml:38:17
 	android:name
-		ADDED from AndroidManifest.xml:44:27
+		ADDED from AndroidManifest.xml:38:27
 activity#com.jrobins.jrobins.escape2.HelpActivity
-ADDED from AndroidManifest.xml:47:9
+ADDED from AndroidManifest.xml:41:9
 	android:label
+		ADDED from AndroidManifest.xml:43:13
+	android:name
+		ADDED from AndroidManifest.xml:42:13
+activity#com.jrobins.jrobins.escape2.MapCreatorActivity
+ADDED from AndroidManifest.xml:45:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:48:13
+	android:label
+		ADDED from AndroidManifest.xml:47:13
+	android:configChanges
 		ADDED from AndroidManifest.xml:49:13
 	android:name
-		ADDED from AndroidManifest.xml:48:13
-activity#com.jrobins.jrobins.escape2.MapCreatorActivity
-ADDED from AndroidManifest.xml:51:9
-	android:screenOrientation
-		ADDED from AndroidManifest.xml:54:13
-	android:label
-		ADDED from AndroidManifest.xml:53:13
-	android:configChanges
-		ADDED from AndroidManifest.xml:55:13
-	android:name
-		ADDED from AndroidManifest.xml:52:13
+		ADDED from AndroidManifest.xml:46:13
 uses-sdk
 INJECTED from AndroidManifest.xml:0:0 reason: use-sdk injection requested
 MERGED from com.android.support:support-v4:21.0.2:15:5

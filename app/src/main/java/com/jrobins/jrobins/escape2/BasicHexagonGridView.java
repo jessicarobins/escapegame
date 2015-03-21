@@ -31,7 +31,9 @@ public class BasicHexagonGridView   extends SurfaceView
     private Path combPath;
 
     //widths of things
-    private int cellWidth;
+    private float cellWidth;
+
+
     private int cellColor;
 
     private Sector[][] sectors;
@@ -168,16 +170,16 @@ public class BasicHexagonGridView   extends SurfaceView
         return combPath;
     }
 
-    public int cellWidth(){
+    public float cellWidth(){
         return cellWidth;
     }
 
-    public int cellRadius(){
+    public float cellRadius(){
         return cellWidth/2;
     }
 
-    public int cellSide() {
-        return cellRadius()*3/2;
+    public float cellSide() {
+        return cellRadius();
     }
 
     public int cellHeight(){
@@ -399,12 +401,13 @@ public class BasicHexagonGridView   extends SurfaceView
     }
 
     //find the centerpoint of the hexagon based on its position in the array
+    /*
     public Point findHexagon(int col, int row){
         //x = size * 3/2 * q
         //y = size * sqrt(3) * (r + 0.5 * (q&1))
         //where 'size' = 1/2 width
         return new Point((cellWidth/2)*(3/2)*col, (int)((cellWidth/2)*Math.sqrt(3)*(row+.5*(col&1))));
-    }
+    }*/
 
     public Point findHexagonTopLeft(int col, int row){
 

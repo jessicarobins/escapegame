@@ -41,7 +41,7 @@ public class MapView extends BasicHexagonGridView {
 
 
     Context context;
-    private int moveWidth;
+    private float moveWidth;
 
 
     //private Sector[][] sectors;
@@ -302,8 +302,8 @@ public class MapView extends BasicHexagonGridView {
         //  so x is (MAX_MOVES/2) moves left of center and y is right on center
         float gridStartX;
         int movesInRow;// = Math.min(moves.size(), MAX_MOVES);
-        int localMoveWidth = 0;
-        int localMoveYOffset = 0;
+        float localMoveWidth = 0;
+        float localMoveYOffset = 0;
         switch(moves.size()){
             case 1: {
                 localMoveWidth = (int)(cellWidth()/2.5);
@@ -391,7 +391,7 @@ public class MapView extends BasicHexagonGridView {
 
 
 
-    private void drawMove(Canvas canvas, Move move, float centerX, float centerY, int size){
+    private void drawMove(Canvas canvas, Move move, float centerX, float centerY, float size){
 
         //get rectangle
         setMoveSquare(centerX, centerY, size);
@@ -417,11 +417,11 @@ public class MapView extends BasicHexagonGridView {
             drawTextInMoveSquare(canvas, move, size);
     }
 
-    private void setMoveSquare(float centerX, float centerY, int size){
+    private void setMoveSquare(float centerX, float centerY, float size){
         moveSquare.set(centerX - size / 2, centerY - size / 2, centerX + size / 2, centerY + size / 2);
     }
 
-    private void drawTextInMoveSquare(Canvas canvas, Move move, int sizeOfMove){
+    private void drawTextInMoveSquare(Canvas canvas, Move move, float sizeOfMove){
         //find the right text color - this is certainty color, should be text
 
         /* doing certainty a different way
