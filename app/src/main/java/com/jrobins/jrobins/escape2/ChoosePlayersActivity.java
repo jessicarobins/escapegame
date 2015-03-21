@@ -230,6 +230,7 @@ public class ChoosePlayersActivity extends Activity implements OnItemSelectedLis
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
+        spinner.setSelection(2); //set 4 players to be selected
         spinner.setOnItemSelectedListener(this);
     }
 
