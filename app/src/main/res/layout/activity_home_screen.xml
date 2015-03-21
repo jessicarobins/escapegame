@@ -101,7 +101,7 @@
             android:text="@string/welcome_button_start"
             android:id="@+id/start"
             android:layout_gravity="center_horizontal"
-
+            android:textColor="@drawable/homescreen_button_text_color"
             android:background="@color/button_color"
             />
 
@@ -113,6 +113,7 @@
             android:layout_gravity="center_horizontal"
             android:background="@color/button_color"
             android:visibility="gone"
+            android:textColor="@drawable/homescreen_button_text_color"
             />
 
         <Button
@@ -123,6 +124,7 @@
             android:id="@+id/create"
             android:layout_gravity="center_horizontal"
             android:visibility="gone"
+            android:textColor="@drawable/homescreen_button_text_color"
             />
         <Button
 
@@ -131,7 +133,7 @@
             android:text="@string/welcome_button_rules"
             android:id="@+id/rules"
             android:layout_gravity="center_horizontal"
-
+            android:textColor="@drawable/homescreen_button_text_color"
             android:background="@color/button_color"
 
 
