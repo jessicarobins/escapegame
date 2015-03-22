@@ -39,6 +39,9 @@ public class MapView extends BasicHexagonGridView {
     private Paint textPaint = new Paint();
     private Paint labelPaint = new Paint();
 
+    //preferences
+    private boolean showDeadPlayerMoves = true;
+    private boolean dimOldMoves = true;
 
     Context context;
     private float moveWidth;
@@ -252,6 +255,23 @@ public class MapView extends BasicHexagonGridView {
 
     }
 
+    //preferences
+    public boolean getPrefShowDeadPlayerMoves(){
+        return showDeadPlayerMoves;
+    }
+
+    public boolean getPrefDimOldMoves(){
+        return dimOldMoves;
+    }
+
+    public void setPrefShowDeadPlayerMoves(boolean showDeadPlayerMoves){
+        this.showDeadPlayerMoves = showDeadPlayerMoves;
+    }
+
+    public void setPrefDimOldMoves(boolean dimOldMoves){
+        this.dimOldMoves = dimOldMoves;
+    }
+
 
     /****** are we drawing the sector names here or in basichexagongridview?*******/
     private void drawSectorName(Canvas canvas, String sectorName, float centerX, float centerY){
@@ -304,7 +324,19 @@ public class MapView extends BasicHexagonGridView {
         int movesInRow;// = Math.min(moves.size(), MAX_MOVES);
         float localMoveWidth = 0;
         float localMoveYOffset = 0;
-        switch(moves.size()){
+
+        int numberOfMoves = moves.size();
+        //the number of moves will change if we aren't showing dead player moves so we have to
+        //  count the number of moves we are showing
+        if(!getPrefShowDeadPlayerMoves()){
+            numberOfMoves = 0;
+            for (Move m : moves){
+                if(!m.player().isDead())
+                    numberOfMoves++;
+            }
+        }
+
+        switch(numberOfMoves){
             case 1: {
                 localMoveWidth = (int)(cellWidth()/2.5);
                 localMoveYOffset = localMoveWidth/4;
@@ -354,7 +386,7 @@ public class MapView extends BasicHexagonGridView {
         //need a for loop with a yoffset for creating rows
         int yOffset = 0;
 
-        for(int i = 0; i<moves.size(); i++){
+        for(int i = 0; i<numberOfMoves; i++){
             //check that we haven't reached the max number of moves in
             //  a row
             if(i > 0 && i%movesInRow==0)
@@ -364,7 +396,13 @@ public class MapView extends BasicHexagonGridView {
 
             //draw the shape in the right place
             //that'll be (i%MAX_MOVES)*moveWidth + gridStartX and then gridStartY+yOffset
-            drawMove(canvas, moves.get(i), (i % movesInRow) * localMoveWidth + gridStartX, gridStartY + yOffset, localMoveWidth);
+
+            //now we need to check if the person is dead and if we are showing dead moves before
+            //  we draw the move
+            if(!moves.get(i).player().isDead() || getPrefShowDeadPlayerMoves()) {
+                drawMove(canvas, moves.get(i), (i % movesInRow) * localMoveWidth + gridStartX,
+                        gridStartY + yOffset, localMoveWidth);
+            }
 
 
         }

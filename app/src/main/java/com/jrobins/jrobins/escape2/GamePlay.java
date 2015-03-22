@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
@@ -63,6 +64,11 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
     //are we editing?
     private boolean editing = false;
 
+    //preferences
+    private boolean showDeadPlayerMoves = true;
+    private boolean dimOldMoves = true;
+    SharedPreferences.OnSharedPreferenceChangeListener listener;
+
     //private LinearLayout sidebar;
 
     //to deal with screen being locked
@@ -91,7 +97,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
 
 
         setUpReceiver();
-
+        getPreferences();
         getPlayerList();
 
         setUpWindow();
@@ -156,6 +162,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
                 initializeHexagonMap();
             }
         }
+
     }
 
     //when pressing the back button, we want to go all the way back to the home screen
@@ -240,6 +247,30 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
 
     }
 
+    private void getPreferences(){
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        showDeadPlayerMoves = sharedPref.getBoolean("show_dead_player_moves",true);
+        dimOldMoves = sharedPref.getBoolean("dim_old_moves", true);
+
+        listener =
+                new SharedPreferences.OnSharedPreferenceChangeListener() {
+                    public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+                        // listener implementation
+                        if(key.equals(SettingsActivity.SHOW_DEAD_PLAYER_MOVES)) {
+                            showDeadPlayerMoves = prefs.getBoolean(key, true);
+                            hexagonMap.setPrefShowDeadPlayerMoves(showDeadPlayerMoves);
+                        }
+                        else if(key.equals(SettingsActivity.DIM_OLD_MOVES)) {
+                            dimOldMoves = prefs.getBoolean(key, true);
+                            hexagonMap.setPrefDimOldMoves(dimOldMoves);
+                        }
+                    }
+                };
+        sharedPref.registerOnSharedPreferenceChangeListener(listener);
+
+
+    }
+
     private void setUpSidebar(){
         playerListView = (ListView) findViewById(R.id.playerList);
         Point size = new Point();
@@ -257,6 +288,10 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         //hexagonMap.initialize(5,10);
         hexagonMap.initialize(map.sectors());
         hexagonMap.setOnCellClickListener(this);
+
+        //get the preferences
+        hexagonMap.setPrefShowDeadPlayerMoves(showDeadPlayerMoves);
+        hexagonMap.setPrefDimOldMoves(dimOldMoves);
     }
 
     private void getPlayerList(){
