@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 
 
@@ -19,8 +21,8 @@ public class HomeScreenActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home_screen);
 
+        setUpWindow();
         setUpPlayButton();
         setUpHelp();
         setUpResume();
@@ -124,5 +126,21 @@ public class HomeScreenActivity extends Activity {
             }
 
         });
+    }
+
+    private void setUpWindow(){
+
+        //Remove title bar
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        //Remove notification bar
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setContentView(R.layout.activity_home_screen);
+
+        //set width of sidebar based on screen width
+
+        //sidebar = (LinearLayout) findViewById(R.id.sidebar);
+
+
     }
 }
