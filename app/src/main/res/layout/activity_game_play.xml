@@ -11,15 +11,15 @@
 
 
 
-        <ListView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="0dp"
-            android:id="@+id/playerList"
-            android:layout_gravity="center"
-            android:background="@android:color/black"
-            />
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp"
+        android:id="@+id/playerList"
+        android:layout_gravity="center"
+        android:background="@android:color/black"
+        />
 
 
 
@@ -135,16 +135,16 @@
                     android:orientation="horizontal"
                     android:background="@drawable/rounded_corners"
                     android:id="@+id/advance_absolute_turn_layout">
-                        <Button
-                            style="?android:attr/buttonStyleInset"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/ic_action_next_item"
-                            android:id="@+id/advance_absolute_turn"
-                            android:layout_gravity="center"
-                            android:gravity="center"
+                    <Button
+                        style="?android:attr/buttonStyleInset"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/ic_action_next_item"
+                        android:id="@+id/advance_absolute_turn"
+                        android:layout_gravity="center"
+                        android:gravity="center"
 
-                            />
+                        />
 
                 </LinearLayout>
 
@@ -168,6 +168,30 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="3dp"
+                    android:orientation="horizontal"
+                    android:background="@drawable/rounded_corners"
+                    android:id="@+id/absolute_turn_box"
+                    android:gravity="center"
+                    android:layout_gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textColor="@android:color/darker_gray"
+
+                        android:textStyle="bold"
+                        android:text="1"
+                        android:id="@+id/turnNumber"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        />
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -175,31 +199,7 @@
 
         </LinearLayout>
 
-        <!-- turn number, button right-->
-        <LinearLayout
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_margin="3dp"
-            android:layout_gravity="bottom|right"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:background="@drawable/turn_number_box"
-            android:id="@+id/absolute_turn_box"
-            >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@android:color/black"
 
-                android:textStyle="bold"
-                android:text="1"
-                android:id="@+id/turnNumber"
-                android:layout_gravity="center"
-                android:gravity="center"
-                />
-
-        </LinearLayout>
 
 
     </FrameLayout>
