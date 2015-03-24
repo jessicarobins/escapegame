@@ -432,8 +432,14 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
     private void advanceEditTurn(){
 
         //if we are at the very end, the right arrow advances the round
-        if(prevTurnNumber == turnNumber)
+        if(prevTurnNumber == turnNumber) {
+            int i = indexOfNextValidPlayer();
+            if (i == currentPlayer) {
+                Toast.makeText(this, "Game over! " + players.get(currentPlayer).name() + " won!", Toast.LENGTH_SHORT).show();
+                return;
+            }
             advanceRound();
+        }
         else{
             prevTurnNumber++;
             prevTurnNumberTextBox.setText(prevTurnNumber+"");
