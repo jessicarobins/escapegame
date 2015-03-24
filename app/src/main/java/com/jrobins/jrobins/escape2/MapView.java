@@ -401,12 +401,11 @@ public class MapView extends BasicHexagonGridView {
 
         //need a for loop with a yoffset for creating rows
         int yOffset = 0;
-
-        for(int i = 0; i<numberOfMoves; i++){
+        int currentMoveNumber = 0;
+        for(int i = 0; i<moves.size(); i++){
             //check that we haven't reached the max number of moves in
             //  a row
-            if(i > 0 && i%movesInRow==0)
-                yOffset+=localMoveWidth;
+
 
 
 
@@ -416,9 +415,11 @@ public class MapView extends BasicHexagonGridView {
             //now we need to check if the person is dead and if we are showing dead moves before
             //  we draw the move
             if(!moves.get(i).player().isDead() || getPrefShowDeadPlayerMoves()) {
-
-                drawMove(canvas, moves.get(i), (i % movesInRow) * localMoveWidth + gridStartX,
+                if(currentMoveNumber > 0 && currentMoveNumber%movesInRow==0)
+                    yOffset+=localMoveWidth;
+                drawMove(canvas, moves.get(i), (currentMoveNumber % movesInRow) * localMoveWidth + gridStartX,
                         gridStartY + yOffset, localMoveWidth);
+                currentMoveNumber++;
             }
 
 
