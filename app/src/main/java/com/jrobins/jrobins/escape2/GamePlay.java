@@ -433,11 +433,8 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
 
         //if we are at the very end, the right arrow advances the round
         if(prevTurnNumber == turnNumber) {
-            int i = indexOfNextValidPlayer();
-            if (i == currentPlayer) {
-                Toast.makeText(this, "Game over! " + players.get(currentPlayer).name() + " won!", Toast.LENGTH_SHORT).show();
+            if(endOfGame())
                 return;
-            }
             advanceRound();
         }
         else{
@@ -446,10 +443,22 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         }
     }
 
+    private boolean endOfGame(){
+        int i = indexOfNextValidPlayer();
+        if (i == currentPlayer) {
+            Toast.makeText(this, "Game over! " + players.get(currentPlayer).name() + " won!", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
+        return false;
+    }
+
     private void advanceTurn(){
         //we need to make sure the next player isn't dead. if they are, move on to the player after
         //  or the next round. if all but one of the players are dead, show some sort of pop up i guess.
-
+        if(endOfGame())
+            return;
+        
         //remove current player's turn
         for (int i = 0; i < players.size(); i++) {
             if(players.get(i).turn())
@@ -457,13 +466,9 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
             players.get(i).setTurn(false);
         }
 
-        int i = indexOfNextValidPlayer();
-        if (i == currentPlayer) {
-            Toast.makeText(this, "Game over! " + players.get(currentPlayer).name() + " won!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        else
-            currentPlayer = i;
+
+
+        currentPlayer = indexOfNextValidPlayer();
 
         //if the player is the last one in the array, increment the turn count
         if (currentPlayer == 0) {
