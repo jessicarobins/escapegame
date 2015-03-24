@@ -40,8 +40,10 @@ public class MapView extends BasicHexagonGridView {
     private Paint labelPaint = new Paint();
 
     //preferences
+    public static final int DIMMED_MOVE_HISTORY = 4; //if moves are more than 4 rounds old, dim them
     private boolean showDeadPlayerMoves = true;
     private boolean dimOldMoves = true;
+    private int currentRound;
 
     Context context;
     private float moveWidth;
@@ -131,6 +133,8 @@ public class MapView extends BasicHexagonGridView {
 
         //origHeight = getHeight();
         //origWidth = getWidth();
+
+        currentRound = 0;
     }
 
     public void newThread(){
@@ -268,6 +272,18 @@ public class MapView extends BasicHexagonGridView {
         this.showDeadPlayerMoves = showDeadPlayerMoves;
     }
 
+    public int currentRound(){
+        return currentRound;
+    }
+
+    public void setCurrentRound(int currentRound){
+        this.currentRound = currentRound;
+    }
+
+    public void nextRound(){
+        currentRound++;
+    }
+
     public void setPrefDimOldMoves(boolean dimOldMoves){
         this.dimOldMoves = dimOldMoves;
     }
@@ -400,6 +416,7 @@ public class MapView extends BasicHexagonGridView {
             //now we need to check if the person is dead and if we are showing dead moves before
             //  we draw the move
             if(!moves.get(i).player().isDead() || getPrefShowDeadPlayerMoves()) {
+
                 drawMove(canvas, moves.get(i), (i % movesInRow) * localMoveWidth + gridStartX,
                         gridStartY + yOffset, localMoveWidth);
             }
@@ -431,12 +448,27 @@ public class MapView extends BasicHexagonGridView {
 
     private void drawMove(Canvas canvas, Move move, float centerX, float centerY, float size){
 
+        //now we need to check if we are dimming past moves. if we are, set the alpha. then we
+        //  have to set it back
+
         //get rectangle
         setMoveSquare(centerX, centerY, size);
 
         //set the fillpaint to be the player color
         fillPaint().setColor(move.color());
         wallPaint().setStrokeWidth(1f);
+
+
+        //now we need to check if we are dimming past moves. if we are, set the alpha. then we
+        //  have to set it back
+
+        if(dimOldMoves && (move.turnNumber() < currentRound() - DIMMED_MOVE_HISTORY)){
+            fillPaint().setAlpha(60);
+        }
+        else if (move.certainty() == Move.UNCERTAIN){
+            fillPaint().setAlpha(150);
+        }
+
 
         //if the move is not a guess, draw a square
         if(move.certainty() == Move.CERTAIN) {
@@ -445,11 +477,12 @@ public class MapView extends BasicHexagonGridView {
             canvas.drawRect(moveSquare, wallPaint());
         }
         else {
-            fillPaint().setAlpha(100);
+            //draw a circle
             canvas.drawCircle(centerX, centerY, size / 2, fillPaint());
             canvas.drawCircle(centerX, centerY, size / 2, wallPaint());
-            fillPaint().setAlpha(255);
         }
+        //reset the alpha for the fillpaint
+        fillPaint().setAlpha(255);
 
         if(size>10)
             drawTextInMoveSquare(canvas, move, size);

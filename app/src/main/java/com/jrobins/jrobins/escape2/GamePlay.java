@@ -511,7 +511,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         //increment the number that's at the top
         turnNumberTextBox.setText(turnNumber+"");
         prevTurnNumberTextBox.setText(prevTurnNumber+"");
-
+        hexagonMap.nextRound();
     }
 
     /******* testing stuff*******/
