@@ -76,16 +76,17 @@ public class MapTxtParser {
     public static List<MapPack> readMapPacksFromInternalStorage(Activity activity){
 
         List<MapPack> mapPacks = new ArrayList<MapPack>();
-        MapPack mapPack;
+        //MapPack mapPack;
         List<Map> maps;
         Map map;
+        String mapPackName = new String();
         int mapPackNumber = 1;
 
         //this returns 0 when id is not found. use that.
         int resId = activity.getResources().getIdentifier("raw/maps_pack_"+mapPackNumber, null, activity.getPackageName());
 
         while (resId != 0){
-            mapPack = new MapPack();
+            //mapPack = new MapPack();
             maps = new ArrayList<Map>();
             InputStream is = activity.getResources().openRawResource(resId);
 
@@ -105,10 +106,10 @@ public class MapTxtParser {
                     Log.d("line", line);
                     //if it's the very first line, it's the name of the maps pack
                     if (lineNumber == 0) {
-                        mapPack.setName(line);
+                        mapPackName = line;
                     }
                     //if line number is odd, it's a name
-                    else if (lineNumber % 1 == 0) {
+                    else if (lineNumber % 2 != 0) {
                         map.setName(line);
                     }
                     //otherwise it's the map data
@@ -121,8 +122,8 @@ public class MapTxtParser {
             } catch (IOException e) {
                 return null;
             }
-            mapPack.setMaps(maps);
-            mapPacks.add(mapPack);
+            //mapPack.setMaps(maps);
+            mapPacks.add(new MapPack(mapPackName, maps));
             mapPackNumber++;
             resId = activity.getResources().getIdentifier("raw/maps_pack_"+mapPackNumber, null, activity.getPackageName());
         }

@@ -15,6 +15,11 @@ public class MapPack {
         //this.maps = new ArrayList<Map>();
     }
 
+    public MapPack (MapPack mp){
+        this.name = mp.name();
+        this.maps = mp.maps();
+    }
+
     public MapPack(String name, List <Map> maps){
         this.name = name;
         this.maps = maps;
