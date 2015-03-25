@@ -112,6 +112,7 @@ public class ChooseMapActivity extends Activity {
     }
 
     private void loadDefaultMaps(){
+        /*
         MapParser parser = new MapParser(this);
 
         try {
@@ -121,7 +122,8 @@ public class ChooseMapActivity extends Activity {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
+        defaultMaps = MapTxtParser.readMapsFromInternalStorage(this);
     }
 
 
