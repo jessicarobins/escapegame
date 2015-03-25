@@ -100,10 +100,10 @@ public class ChooseMapActivity extends Activity {
 
         //noinspection SimplifiableIfStatement
         if (id <mapPacks.size()) {
-            if(!viewingDefaultMaps) {
-                changeMapList(mapPacks.get(id).maps());
-                viewingDefaultMaps = true;
-            }
+
+            changeMapList(mapPacks.get(id).maps());
+
+
             return true;
         }
 

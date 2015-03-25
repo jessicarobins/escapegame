@@ -50,6 +50,7 @@ public class MapChoiceAdapter extends ArrayAdapter<Map> {
         Point size = new Point();
         display.getSize(size);
 
+
         if(convertView == null)
         {
             convertView  = (LinearLayout)inflater.inflate(R.layout.choose_map, parent, false);
