@@ -22,6 +22,7 @@ public class ChooseMapActivity extends Activity {
     //map lists
     List<Map> defaultMaps;
     List<Map> myMaps;
+    List<MapPack> mapPacks;
 
     //adapters
     MapChoiceAdapter mapChoiceAdapter;
@@ -67,12 +68,27 @@ public class ChooseMapActivity extends Activity {
     }
 
 
+    /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_choose_map, menu);
 
         return true;
+    }
+    */
+
+    /**
+     * Gets called every time the user presses the menu button.
+     * Use if your menu is dynamic.
+     */
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.clear();
+        for(int i = 0; i <mapPacks.size(); i++) {
+            menu.add(0, i, Menu.NONE, mapPacks.get(i).name());
+        }
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -83,15 +99,15 @@ public class ChooseMapActivity extends Activity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_default_maps) {
+        if (id <mapPacks.size()) {
             if(!viewingDefaultMaps) {
-                changeMapList(defaultMaps);
+                changeMapList(mapPacks.get(id).maps());
                 viewingDefaultMaps = true;
             }
             return true;
         }
 
-        if (id == R.id.action_my_maps) {
+        else {
             if(viewingDefaultMaps) {
                 if(myMaps != null) {
                     changeMapList(myMaps);
@@ -103,12 +119,12 @@ public class ChooseMapActivity extends Activity {
             return true;
         }
 
-        return super.onOptionsItemSelected(item);
+        //return super.onOptionsItemSelected(item);
     }
 
     private void loadAllMaps(){
         loadDefaultMaps();
-        loadMyMaps();
+        //loadMyMaps();
     }
 
     private void loadDefaultMaps(){
@@ -123,7 +139,8 @@ public class ChooseMapActivity extends Activity {
         } catch (IOException e) {
             e.printStackTrace();
         }*/
-        defaultMaps = MapTxtParser.readMapsFromInternalStorage(this);
+        //defaultMaps = MapTxtParser.readMapsFromInternalStorage(this);
+        mapPacks = MapTxtParser.readMapPacksFromInternalStorage(this);
     }
 
 
@@ -136,7 +153,7 @@ public class ChooseMapActivity extends Activity {
 
 
     private void initializeMapList(){
-        mapChoiceAdapter = new MapChoiceAdapter(this, defaultMaps);
+        mapChoiceAdapter = new MapChoiceAdapter(this, mapPacks.get(0).maps());
         mapListView = (ListView) findViewById(R.id.mapList);
         mapListView.setAdapter(mapChoiceAdapter);
 

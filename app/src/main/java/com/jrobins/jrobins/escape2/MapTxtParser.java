@@ -107,8 +107,8 @@ public class MapTxtParser {
                     if (lineNumber == 0) {
                         mapPack.setName(line);
                     }
-                    //if line number is even, it's a name
-                    else if (lineNumber % 2 == 0) {
+                    //if line number is odd, it's a name
+                    else if (lineNumber % 1 == 0) {
                         map.setName(line);
                     }
                     //otherwise it's the map data
@@ -124,6 +124,7 @@ public class MapTxtParser {
             mapPack.setMaps(maps);
             mapPacks.add(mapPack);
             mapPackNumber++;
+            resId = activity.getResources().getIdentifier("raw/maps_pack_"+mapPackNumber, null, activity.getPackageName());
         }
         return mapPacks;
     }
