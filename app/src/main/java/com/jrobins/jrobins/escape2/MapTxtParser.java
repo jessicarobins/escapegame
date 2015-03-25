@@ -73,6 +73,61 @@ public class MapTxtParser {
         return sectors;
     }
 
+    public static List<MapPack> readMapPacksFromInternalStorage(Activity activity){
+
+        List<MapPack> mapPacks = new ArrayList<MapPack>();
+        MapPack mapPack;
+        List<Map> maps;
+        Map map;
+        int mapPackNumber = 1;
+
+        //this returns 0 when id is not found. use that.
+        int resId = activity.getResources().getIdentifier("raw/maps_pack_"+mapPackNumber, null, activity.getPackageName());
+
+        while (resId != 0){
+            mapPack = new MapPack();
+            maps = new ArrayList<Map>();
+            InputStream is = activity.getResources().openRawResource(resId);
+
+
+            BufferedReader reader = null;
+            try {
+                reader = new BufferedReader(new InputStreamReader(is));
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+            String line;
+            int lineNumber = 0;
+            map = new Map();
+            try {
+                while ((line = reader.readLine()) != null) {
+                    Log.d("line", line);
+                    //if it's the very first line, it's the name of the maps pack
+                    if (lineNumber == 0) {
+                        mapPack.setName(line);
+                    }
+                    //if line number is even, it's a name
+                    else if (lineNumber % 2 == 0) {
+                        map.setName(line);
+                    }
+                    //otherwise it's the map data
+                    else {
+                        map.setSectors(readSectors(line));
+                        maps.add(new Map(map));
+                    }
+                    lineNumber++;
+                }
+            } catch (IOException e) {
+                return null;
+            }
+            mapPack.setMaps(maps);
+            mapPacks.add(mapPack);
+            mapPackNumber++;
+        }
+        return mapPacks;
+    }
+
     public static List<Map> readMapsFromInternalStorage(Activity activity){
 
 
@@ -93,6 +148,7 @@ public class MapTxtParser {
         try {
             while (( line = reader.readLine()) != null) {
                 Log.d("line", line);
+
                 //if line number is even, it's a name
                 if(lineNumber%2 == 0){
                     map.setName(line);
