@@ -6,22 +6,14 @@
     android:layout_gravity="center"
     android:background="@android:color/black">
 
-    <TextView
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/mapLinearLayout">
 
-        android:textColor="@android:color/white"
-        android:background="@android:color/black"
-        android:id="@+id/mapName"
-        android:layout_gravity="center_horizontal" />
+        </LinearLayout>
 
-
-    <com.jrobins.jrobins.escape2.BasicHexagonGridView
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:id="@+id/map"
-        android:layout_gravity="center_horizontal"/>
 
 
 

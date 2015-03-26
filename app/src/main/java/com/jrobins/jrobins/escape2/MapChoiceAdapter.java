@@ -55,8 +55,26 @@ public class MapChoiceAdapter extends ArrayAdapter<Map> {
         {
             convertView  = (LinearLayout)inflater.inflate(R.layout.choose_map, parent, false);
 
-        }
 
+        }
+        LinearLayout mapLinearLayout = (LinearLayout) convertView.findViewById(R.id.mapLinearLayout);
+        mapLinearLayout.removeAllViews();
+        TextView mapName = new TextView(activity);
+        mapName.setTextSize(20);
+        mapName.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        mapName.setText(maps.get(position).name());
+        mapLinearLayout.addView(mapName);
+
+        BasicHexagonGridView mapView = new BasicHexagonGridView(activity);
+        int y = (int)(size.x*(.65));
+        mapView.setMinimumHeight(y);
+        mapView.setMinimumWidth(parent.getWidth());
+        mapView.setLayoutParams(new LinearLayout.LayoutParams(parent.getWidth(), y));
+        mapView.initialize(maps.get(position));
+        mapLinearLayout.addView(mapView);
+
+
+        /*
         mapName = (TextView) convertView.findViewById(R.id.mapName);
         mapName.setText(maps.get(position).name());
         map = (BasicHexagonGridView) convertView.findViewById(R.id.map);
@@ -69,7 +87,7 @@ public class MapChoiceAdapter extends ArrayAdapter<Map> {
 
         map.initialize(maps.get(position));
 
-
+        */
 
         return convertView ;
     }
