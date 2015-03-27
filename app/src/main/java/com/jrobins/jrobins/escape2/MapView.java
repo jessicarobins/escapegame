@@ -470,6 +470,11 @@ public class MapView extends BasicHexagonGridView {
             fillPaint().setAlpha(150);
         }
 
+        //if you're drawing the moves of the current player, we draw a thicker yellow border
+        if(move.player().turn()){
+            setWallPaint(getResources().getColor(R.color.current_turn));
+            wallPaint().setStrokeWidth(2f);
+        }
 
         //if the move is not a guess, draw a square
         if(move.certainty() == Move.CERTAIN) {
@@ -484,6 +489,8 @@ public class MapView extends BasicHexagonGridView {
         }
         //reset the alpha for the fillpaint
         fillPaint().setAlpha(255);
+        setWallPaint(Color.BLACK);
+        wallPaint().setStrokeWidth(1f);
 
         if(size>10)
             drawTextInMoveSquare(canvas, move, size);
