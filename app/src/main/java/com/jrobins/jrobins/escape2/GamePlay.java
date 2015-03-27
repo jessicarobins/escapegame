@@ -67,6 +67,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
     //preferences
     private boolean showDeadPlayerMoves = true;
     private boolean dimOldMoves = true;
+    private boolean dimOtherPlayerMoves = true;
     SharedPreferences.OnSharedPreferenceChangeListener listener;
 
     //private LinearLayout sidebar;
@@ -249,9 +250,9 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
 
     private void getPreferences(){
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        showDeadPlayerMoves = sharedPref.getBoolean("show_dead_player_moves",true);
-        dimOldMoves = sharedPref.getBoolean("dim_old_moves", true);
-
+        showDeadPlayerMoves = sharedPref.getBoolean(SettingsActivity.SHOW_DEAD_PLAYER_MOVES,true);
+        dimOldMoves = sharedPref.getBoolean(SettingsActivity.DIM_OLD_MOVES, true);
+        dimOtherPlayerMoves = sharedPref.getBoolean(SettingsActivity.DIM_OTHER_PLAYER_MOVES, true);
         listener =
                 new SharedPreferences.OnSharedPreferenceChangeListener() {
                     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
@@ -263,6 +264,10 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
                         else if(key.equals(SettingsActivity.DIM_OLD_MOVES)) {
                             dimOldMoves = prefs.getBoolean(key, true);
                             hexagonMap.setPrefDimOldMoves(dimOldMoves);
+                        }
+                        else if(key.equals(SettingsActivity.DIM_OTHER_PLAYER_MOVES)) {
+                            dimOtherPlayerMoves = prefs.getBoolean(key, true);
+                            hexagonMap.setPrefDimOtherPlayerMoves(dimOtherPlayerMoves);
                         }
                     }
                 };
@@ -292,6 +297,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
         //get the preferences
         hexagonMap.setPrefShowDeadPlayerMoves(showDeadPlayerMoves);
         hexagonMap.setPrefDimOldMoves(dimOldMoves);
+        hexagonMap.setPrefShowDeadPlayerMoves(showDeadPlayerMoves);
     }
 
     private void getPlayerList(){

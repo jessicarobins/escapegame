@@ -14,5 +14,9 @@
     <string name="pref_description_dim_old_moves">Dim player moves from more than 4 turns ago.
     </string>
 
+    <string name="pref_title_dim_other_player_moves">Dim other player moves</string>
+    <string name="pref_description_dim_other_player_moves">Dim moves from players other than the currently selected player
+    </string>
+
 
 </resources>

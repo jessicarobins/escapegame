@@ -44,6 +44,7 @@ public class SettingsActivity   extends PreferenceActivity
 
     public static final String SHOW_DEAD_PLAYER_MOVES = "show_dead_player_moves";
     public static final String DIM_OLD_MOVES = "dim_old_moves";
+    public static final String DIM_OTHER_PLAYER_MOVES = "dim_other_player_moves";
 
 
     @Override
@@ -156,6 +157,11 @@ public class SettingsActivity   extends PreferenceActivity
             connectionPref.setSummary(sharedPreferences.getString(key, ""));
         }
         else if(key.equals(SHOW_DEAD_PLAYER_MOVES)){
+            Preference connectionPref = findPreference(key);
+            // Set summary to be the user-description for the selected value
+            connectionPref.setSummary(sharedPreferences.getString(key, ""));
+        }
+        else if(key.equals(DIM_OTHER_PLAYER_MOVES)){
             Preference connectionPref = findPreference(key);
             // Set summary to be the user-description for the selected value
             connectionPref.setSummary(sharedPreferences.getString(key, ""));

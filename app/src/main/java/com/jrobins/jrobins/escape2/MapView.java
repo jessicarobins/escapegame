@@ -43,6 +43,7 @@ public class MapView extends BasicHexagonGridView {
     public static final int DIMMED_MOVE_HISTORY = 4; //if moves are more than 4 rounds old, dim them
     private boolean showDeadPlayerMoves = true;
     private boolean dimOldMoves = true;
+    private boolean dimOtherPlayerMoves = true;
     private int currentRound;
 
     Context context;
@@ -268,8 +269,21 @@ public class MapView extends BasicHexagonGridView {
         return dimOldMoves;
     }
 
+    public boolean getPrefDimOtherPlayerMoves(){
+        return dimOtherPlayerMoves;
+    }
+
     public void setPrefShowDeadPlayerMoves(boolean showDeadPlayerMoves){
         this.showDeadPlayerMoves = showDeadPlayerMoves;
+    }
+
+    public void setPrefDimOtherPlayerMoves(boolean dimOtherPlayerMoves){
+        this.dimOtherPlayerMoves = dimOtherPlayerMoves;
+
+    }
+
+    public void setPrefDimOldMoves(boolean dimOldMoves){
+        this.dimOldMoves = dimOldMoves;
     }
 
     public int currentRound(){
@@ -284,9 +298,7 @@ public class MapView extends BasicHexagonGridView {
         currentRound++;
     }
 
-    public void setPrefDimOldMoves(boolean dimOldMoves){
-        this.dimOldMoves = dimOldMoves;
-    }
+
 
 
     /****** are we drawing the sector names here or in basichexagongridview?*******/
@@ -462,14 +474,14 @@ public class MapView extends BasicHexagonGridView {
 
         //now we need to check if we are dimming past moves. if we are, set the alpha. then we
         //  have to set it back
-
-        if( (dimOldMoves && (move.turnNumber() < currentRound() - DIMMED_MOVE_HISTORY)) ||
-                !move.player().turn()){
+        //also need to check if we are dimming the other player moves
+        if( (getPrefDimOldMoves() && (move.turnNumber() < currentRound() - DIMMED_MOVE_HISTORY)) ||
+                (!move.player().turn() && getPrefDimOtherPlayerMoves()) ){
             fillPaint().setAlpha(60);
             wallPaint().setAlpha(60);
         }
         else if (move.certainty() == Move.UNCERTAIN){
-            fillPaint().setAlpha(150);
+            fillPaint().setAlpha(200);
         }
 
         //if you're drawing the moves of the current player, we draw a thicker yellow border

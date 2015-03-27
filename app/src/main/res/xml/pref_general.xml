@@ -12,4 +12,10 @@
         android:summary="@string/pref_description_dim_old_moves"
         android:defaultValue="true" />
 
+    <CheckBoxPreference
+        android:key="dim_other_player_moves"
+        android:title="@string/pref_title_dim_other_player_moves"
+        android:summary="@string/pref_description_dim_other_player_moves"
+        android:defaultValue="true" />
+
 </PreferenceScreen>
