@@ -463,8 +463,10 @@ public class MapView extends BasicHexagonGridView {
         //now we need to check if we are dimming past moves. if we are, set the alpha. then we
         //  have to set it back
 
-        if(dimOldMoves && (move.turnNumber() < currentRound() - DIMMED_MOVE_HISTORY)){
+        if( (dimOldMoves && (move.turnNumber() < currentRound() - DIMMED_MOVE_HISTORY)) ||
+                !move.player().turn()){
             fillPaint().setAlpha(60);
+            wallPaint().setAlpha(60);
         }
         else if (move.certainty() == Move.UNCERTAIN){
             fillPaint().setAlpha(150);
@@ -489,6 +491,7 @@ public class MapView extends BasicHexagonGridView {
         }
         //reset the alpha for the fillpaint
         fillPaint().setAlpha(255);
+        wallPaint().setAlpha(255);
         setWallPaint(Color.BLACK);
         wallPaint().setStrokeWidth(1f);
 
