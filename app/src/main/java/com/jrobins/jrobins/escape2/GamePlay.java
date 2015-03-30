@@ -38,6 +38,9 @@ import java.util.List;
 
 public class GamePlay extends Activity implements MapView.OnCellClickListener {
 
+    //max round number constant
+    private final int MAX_ROUNDS = 39;
+
     //data structures
     private ArrayList<Player> players;
     private Map map;
@@ -478,6 +481,7 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
 
         //if the player is the last one in the array, increment the turn count
         if (currentPlayer == 0) {
+            /*
             //increment turn number
             turnNumber++;
             prevTurnNumber = turnNumber;
@@ -487,7 +491,9 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
 
             //increment the number that's at the top
             turnNumberTextBox.setText(turnNumber + "");
-
+            */
+            advanceRound();
+            
         }
 
         //set next player's turn
@@ -516,6 +522,13 @@ public class GamePlay extends Activity implements MapView.OnCellClickListener {
 
     //if we are at the very end, the right arrow advances the round
     private void advanceRound() {
+
+        //check to see if we reached the max number of rounds
+        if(turnNumber == MAX_ROUNDS){
+            Toast.makeText(this, "Game over! Aliens win!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         resetAllPlayerTurns();
 
         //reset the boolean values in the map
